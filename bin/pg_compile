@@ -1,0 +1,60 @@
+#!/bin/sh
+#--------------------------------------------------------------------------
+# pg_compile
+#	Compile PostgreSQL or Postgres-XC code
+#	Copyright (c) 2010-2012, Michael Paquier
+#	Run regressions if necessary or enforce debug flag
+#--------------------------------------------------------------------------
+
+# Take and check options
+EXPECTED_ARGS=0
+FLAG_DEBUG=0
+FLAG_REGRESS=0
+
+#Treat options
+while getopts 'dr' OPTION
+do
+	case $OPTION in
+	d)	# Enforce debug flag
+		FLAG_DEBUG=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		;;
+	r)	# Run regressions
+		FLAG_REGRESS=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		;;
+	?)	# Help
+		echo "Usage: `basename $0` [-d] [-r]\n"
+		echo "Example: `basename $0` -d"
+		exit 1
+		;;
+	esac
+done
+
+# Check number of arguments
+if [ $# -ne $EXPECTED_ARGS ]
+then
+	echo "Usage: `basename $0` [-d] [-r]\n"
+	echo "Example: `basename $0` -d"
+	exit 1
+fi
+
+# Install Postgres-XC binaries
+if [ "$FLAG_DEBUG" == 1 ]
+then
+	./configure --prefix=$HOME/pgsql --enable-depend --enable-debug --disable-rpath --enable-cassert --with-libxml CFLAGS="-DG"
+else
+	./configure --prefix=$HOME/pgsql --enable-depend --enable-debug --disable-rpath --enable-cassert --with-libxml
+fi
+
+# Compile
+make
+
+# Run regressions if necessary
+if [ "$FLAG_REGRESS" == 1 ]
+then
+	make check
+fi
+
+# Install
+make install

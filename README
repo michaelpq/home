@@ -1,0 +1,26 @@
+Home, Michael Paquier
+=====================
+
+Home is a project allowing you to set up a Linux/Unix-based environment with a simple
+GIT fetch. No more thinking about setting a hundred times the same things in virtual
+machines or similar.
+
+The environments are all based on the core features located on branch master. This
+branch ignores all the settings done in all the other environments so it can be
+fetched freely whatever the environment used. It also maintains consistent all the
+features and folder structures that are shared among all the environments.
+Each other branch (XFCE, MacOSX, etc.) is based on the core features in master. Each
+branch is maintained respecting the specificities of each environment. In this case,
+each branch orientated to a given OS or desktop environment is set up so as to ignore
+all the settings and all the OS/desktop/environment dependent files of all the other
+environments so you can check out freely each branch without impacting the environment
+you are using.
+
+Copyright information can be found in the file COPYRIGHT and license terms
+can be found in the file LICENSE.
+
+=====================
+Follow-ups:
+=====================
+- Development blog: http://michael.otacoo.com/
+- Twitter: http://twitter.com/michaelpq

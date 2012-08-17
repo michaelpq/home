@@ -1,0 +1,235 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# start_postgres
+#	Start a PostgreSQL cluster
+#	Copyright (c) 2010-2012, Michael Paquier
+#
+#	Build a PostgreSQL cluster from scratch
+#	A method-based on pg_basebackup is used to set up the slaves
+#--------------------------------------------------------------------------
+
+# Take and check options
+EXPECTED_ARGS=0
+NUM_SLAVES=0
+FLAG_CASCADING=0
+
+# Treat options
+while getopts 'cs:' OPTION
+do
+	case $OPTION in
+	c)	# Cascading - single layer
+		FLAG_CASCADING=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		;;
+	s)	# Number of slaves attached to the main node
+		NUM_SLAVES="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	?)	echo "Usage: `basename $0` [-c] [-s num_slaves]\n"
+		echo "Example: `basename $0` -s 2"
+		exit 0
+		;;
+	esac
+done
+
+# Check number of arguments
+if [ $# -ne $EXPECTED_ARGS ]
+then
+	echo "Usage: `basename $0` [-c] [-s num_slaves]\n"
+	echo "Example: `basename $0` -s 2"
+	exit 1
+fi
+
+# Stop cascading for he time being
+if [ "$FLAG_CASCADING" == 1 ]
+then
+	echo "Cascading is not yet supported"
+	exit 1
+fi
+
+# Setup Default values
+# Master port begins at $MASTER_PORT_START
+# Slave ports begin at $SLAVE_PORT_START
+# All the machines run on local host
+MASTER_PORT=5432
+SLAVE_PORT_START=5531
+SLAVE_PORTS[1]=$SLAVE_PORT_START
+for i in $(seq 1 $NUM_SLAVES)
+do
+	SLAVE_PORTS[$i]=$(($SLAVE_PORT_START + $i))
+done
+PSQL_FOLDER=$HOME/pgsql
+
+# Finish calculating dependencies between folders
+PSQL_SHARE=$PSQL_FOLDER/share
+PSQL_BIN=$PSQL_FOLDER/bin
+LOG_DATA=$PSQL_FOLDER/log
+ARCHIVE_DATA=$PSQL_FOLDER/archive
+
+# Setup data folders for all the nodes
+MASTER_DATA=$PSQL_FOLDER/master
+MASTER_ARCHIVE=$ARCHIVE_DATA/master
+
+# Setup data folders for slave
+# It might be possible to use cascading replication
+# So set up also archive for slave nodes
+for i in $(seq 1 $NUM_SLAVES)
+do
+	SLAVE_DATAS[$i]=$PSQL_FOLDER/slave$i
+
+	# Setup archive folders for slaves if cascading is activated
+	if [ "$FLAG_CASCADING" == 1 ]
+	then
+		SLAVE_ARCHIVE[$i]=$ARCHIVE_DATA/slave$i
+	fi
+done
+
+# Kill all the processes that may remain
+# in the most atrocious way possible as they meritated it
+# OK this is not very clean but here the goal is efficiency...
+echo "Take out Postgres processes"
+kill -9 `ps ux | grep "bin/gtm" | cut -d " " -f 2-3`
+killall postgres gtm psql
+sleep 2
+
+# Check if data folders exist or not and create them
+echo "Creating data folders"
+for folder in $LOG_DATA $ARCHIVE_DATA ${SLAVE_DATAS[@]} ${SLAVE_ARCHIVE[@]} $MASTER_DATA $MASTER_ARCHIVE
+do
+	if [ ! -d $folder ]
+	then
+		mkdir $folder
+		chmod 700 $folder
+	fi
+done
+
+# Clean up all the data folders
+echo "Clean up data folders"
+for folder in $LOG_DATA ${SLAVE_DATAS[@]} ${SLAVE_ARCHIVE[@]} $MASTER_DATA $MASTER_ARCHIVE
+do
+	rm -r $folder/*
+done
+sleep 1
+
+# Setup master node
+echo "Initializing master node"
+$PSQL_BIN/initdb -D $MASTER_DATA
+
+# Node common settings
+OPTIONS_POSTGRESQL="logging_collector = on\n"\
+"log_statement = 'all'\n"\
+"log_min_messages = debug1\n"\
+"log_min_error_statement = debug1\n"\
+"log_autovacuum_min_duration = -1\n"\
+"max_prepared_transactions = 20\n"\
+"work_mem = 100MB"
+
+# Additional options to activate hot-standby on master
+OPTIONS_POSTGRESQL_MASTER="wal_level = hot_standby\n"\
+"archive_mode = on\n"
+
+# Archive WAL for master into archive folder
+OPTIONS_ARCHIVE_MASTER="archive_command = 'cp -i %p $MASTER_ARCHIVE/%f'\n"
+# Activate WAL sender only if there are slaves
+if [ "$NUM_SLAVES" -gt 0 ]
+then
+	OPTIONS_POSTGRESQL_MASTER="$OPTIONS_POSTGRESQL_MASTER"\
+"max_wal_senders = 10\n"
+fi
+
+# Do the same for slave nodes if cascading is activated
+if [ "$FLAG_CASCADING" == 1 ]
+then
+	for i in $(seq 1 $NUM_SLAVES)
+	do
+		ARCHIVE_LOCAL=${SLAVE_ARCHIVE[$i]}
+		OPTIONS_ARCHIVE_SLAVE[$i]="archive_command = 'cp -i %p $ARCHIVE_LOCAL/%f'\n"
+	done
+fi
+OPTIONS_POSTGRESQL_SLAVE="hot_standby = on"
+
+# Node slave additional settings
+# This option in pg_hba.conf allows master node to trust replication protocol when slave
+# tries to connect
+OPTIONS_PGHBA="host replication $USER 127.0.0.1/32 trust\n"\
+"host replication $USER ::1/128 trust\n"\
+"local replication $USER trust\n"
+
+# Build options in recovery.conf for each slave node
+for i in $(seq 1 $NUM_SLAVES)
+do
+	NODE_PORT=$MASTER_PORT
+	ARCHIVE_LOCAL=$MASTER_ARCHIVE
+	OPTIONS_SLAVE_RECOVERY[$i]="restore_command = 'cp -i $ARCHIVE_LOCAL/%f %p'\n"\
+"standby_mode = on\n"\
+"primary_conninfo = 'host=localhost port=$NODE_PORT application_name=slave$i'\n"
+done
+# Then do the same for each cascading slave
+if [ "$FLAG_CASCADING" == 1 ]
+then
+	for i in $(seq 1 $NUM_SLAVES)
+	do
+		ARCHIVE_LOCAL=${SLAVE_ARCHIVE[$i]}
+		OPTIONS_CASCADE_RECOVERY[$i]="restore_command = 'cp -i $ARCHIVE_LOCAL/%f %p'\n"\
+"standby_mode = on\n"\
+"primary_conninfo = 'host=localhost port=$NODE_PORT application_name=cascade_$i'\n"		
+	done
+fi
+
+# Master settings
+echo -e $OPTIONS_POSTGRESQL_MASTER >> $MASTER_DATA/postgresql.conf
+# WALs are archived even if there are no slaves
+echo -e $OPTIONS_ARCHIVE_MASTER >> $MASTER_DATA/postgresql.conf
+# Allow replication protocol only if there are slaves
+if [ "$NUM_SLAVES" -gt 0 ]
+then
+	echo -e $OPTIONS_PGHBA >> $MASTER_DATA/pg_hba.conf
+fi
+
+# Launch master node
+echo "launching master..."
+COMMAND=$PSQL_BIN"/pg_ctl start -o \"-i -p "$MASTER_PORT\"" -D "$MASTER_DATA" -l "$LOG_DATA/master.log
+eval $COMMAND
+sleep 2
+
+# Take a backup for slave nodes
+if [ "$NUM_SLAVES" -gt 0 ]
+then
+	#Start backup
+	echo "launching pg_start_backup..."
+	$PSQL_BIN/psql postgres -p $MASTER_PORT -c "SELECT pg_start_backup('backup')"
+
+	#Stop Backup
+	echo "launching pg_stop_backup..."
+	$PSQL_BIN/psql postgres -p $MASTER_PORT -c "SELECT pg_stop_backup()"
+
+	#Initialize slaves by taking a base backup from master
+	echo "Initializing slave nodes..."
+	for i in $(seq 1 $NUM_SLAVES)
+	do
+		$PSQL_BIN/pg_basebackup -D ${SLAVE_DATAS[$i]} -p $MASTER_PORT
+		# Activate the HOT-standby on slave nodes
+		echo -e $OPTIONS_POSTGRESQL_SLAVE >> ${SLAVE_DATAS[$i]}/postgresql.conf
+		# Then customize recovery.conf for each node
+		echo -e ${OPTIONS_SLAVE_RECOVERY[$i]} >> ${SLAVE_DATAS[$i]}/recovery.conf
+	done
+
+	# Setup synchronize for master node, simply take the 1st slave
+	echo "synchronous_standby_names = 'slave1'" >> $MASTER_DATA/postgresql.conf
+	$PSQL_BIN/pg_ctl reload -D $MASTER_DATA
+	sleep 1
+
+	#Launch Slaves
+	echo "launching Slave nodes..."
+	for i in $(seq 1 $NUM_SLAVES)
+	do
+		COMMAND=$PSQL_BIN"/pg_ctl start -o \"-i -p "${SLAVE_PORTS[$i]}\"" -D "${SLAVE_DATAS[$i]}" -l "$LOG_DATA/slave$i.log
+		eval $COMMAND
+	done
+
+	# TODO: here a lot of things are missing for cascading replication
+	# Do that later...
+fi
+
+# Output result
+exit `echo $?`

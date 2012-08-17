@@ -1,0 +1,54 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# dump_extra
+#	dump the extra setting files
+#	Copyright (c) 2010-2012, Michael Paquier
+#
+#	Create a copy of the extra setting files (private settings) to
+#	a given folder
+#--------------------------------------------------------------------------
+
+EXPECTED_ARGS=0
+FLAG_FOLDER=0
+
+# Treat options
+while getopts 'D:' OPTION
+do
+	case $OPTION in
+	D)	# Target folder where backup is done 
+		FOLDER="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	?)	# Incorrect option
+		echo "Usage: `basename $0` [-D folder]\n"
+		echo "Example: `basename $0` -D ~/desktop/extra"
+		exit 1
+		;;
+	esac
+done
+
+if [ $# -ne $EXPECTED_ARGS ]
+then
+	echo "Usage: `basename $0` [-D folder]\n"
+	echo "Example: `basename $0` -D ~/desktop/extra"
+	exit 1
+fi
+
+# Check existence of target folder
+if [ ! -d $FOLDER ]
+then
+	echo "Target folder $FOLDER does not exist"
+	exit 1
+fi
+
+# List of files to be saved
+FILES="$HOME/.gitconfig_extra $HOME/.bash_alias_extra $HOME/.bash_extra"
+
+# Then copy the files to the wanted destination
+for file in $FILES
+do
+	cp $file $FOLDER
+done
+
+# Output result
+exit `echo $?`

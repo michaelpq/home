@@ -1,0 +1,26 @@
+#!/bin/bash
+#Replace string in file of given extension
+#argument 1, extension type
+#argument 2, old string
+#argument 3, new string
+
+EXPECTED_ARGS=3
+
+if [ $# -ne $EXPECTED_ARGS ]
+then
+	echo "Usage: `basename $0` [extension] [old_str] [new_str]"
+	echo "Exemple: `basename $0` php old_text new_text"
+	exit 1
+fi
+
+EXTENSION=$1
+OLDSTR=$2
+NEWSTR=$3
+
+#Simply replace string with sed and erase old file
+for file in `find . -name "*.$EXTENSION"`
+do
+	sed -i "s/$OLDSTR/$NEWSTR/g" $file
+done
+
+exit $?

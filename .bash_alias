@@ -1,0 +1,32 @@
+#--------------------------------------------------------------------------
+# .bash_alias
+#	bash alias settings
+#	Copyright (c) 2010-2012, Michael Paquier
+#
+#	Place to define  public alias definitions
+#--------------------------------------------------------------------------
+
+# Enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    eval "`dircolors -b`"
+    alias ls='ls --color=auto -h '
+    alias dir='dir --color=auto'
+    alias vdir='vdir --color=auto'
+    alias grep='grep --color=auto --directories=skip'
+    alias xgrep="xargs grep --color -d skip"
+else
+    # Add defaults if colors are not supported
+    alias ls='ls -h'
+    alias grep='grep --directories=skip'
+    alias xgrep="xargs grep -d skip"
+fi
+
+# General aliases
+alias rm='rm -f'
+alias du='du -h'
+alias df='df -h'
+alias vi='vim'
+alias emacs='emacs -nw'
+alias emasc='emacs'
+alias diff='diff -uNrp'
+alias python="python2.7"

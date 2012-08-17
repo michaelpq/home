@@ -1,0 +1,405 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# start_cluster
+#	Start a Postgres-XC cluster
+#	Copyright (c) 2010-2012, Michael Paquier
+#
+#	Build the XC cluster: 1GTM with Coordinators (default 1) and
+#	Datanodes (default 2) defined
+#--------------------------------------------------------------------------
+
+#Take and check options
+EXPECTED_ARGS=0
+FLAG_SLAVES=0
+FLAG_OLD_FORMAT=0
+NUM_COORDS=1
+NUM_DATANODES=2
+
+#Treat options
+while getopts 'c:n:os' OPTION
+do
+	case $OPTION in
+	c)	#Number of Coordinators
+		NUM_COORDS="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	n)	#Number of Datanodes
+		NUM_DATANODES="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	o)	#Old format or not for EXECUTE DIRECT
+		FLAG_OLD_FORMAT=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		;;
+	s)	#Run architecture with slaves nodes? 1 sync slave per datanode/coordinator
+		FLAG_SLAVES=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		;;
+	?)	echo "Usage: `basename $0` [-c num_coords] [-n num datanodes] [-o] [-s]\n"
+		echo "Example: `basename $0` -c 4 -n 4"
+		exit 0
+		;;
+	esac
+done
+
+#Check number of arguments
+if [ $# -ne $EXPECTED_ARGS ]
+then
+	echo "Usage: `basename $0` [-c num_coords] [-n num datanodes] [-o] [-s]\n"
+	echo "Example: `basename $0` -c 4 -n 4"
+	exit 1
+fi
+
+#Setup Default values
+#GTM has a unique value
+#Coordinator ports are mapped from 5432
+#Datanode ports are mapped from 15432
+#All the machines run on local host
+COORD_PORT_START=5431
+COORD_SLAVE_PORT_START=5531
+DN_PORT_START=15431
+DN_SLAVE_PORT_START=25431
+COORD_PORTS[1]=$COORD_PORT_START
+COORD_SLAVE_PORTS[1]=$COORD_SLAVE_PORT_START
+DN_PORTS[1]=$DN_PORT_START
+DN_SLAVE_PORTS[1]=$DN_SLAVE_PORT_START
+for i in $(seq 1 $NUM_COORDS)
+do
+	COORD_PORTS[$i]=$(($COORD_PORT_START + $i))
+	COORD_SLAVE_PORTS[$i]=$(($COORD_SLAVE_PORT_START + $i))
+done
+for i in $(seq 1 $NUM_DATANODES)
+do
+	DN_PORTS[$i]=$(($DN_PORT_START + $i))
+	DN_SLAVE_PORTS[$i]=$(($DN_SLAVE_PORT_START + $i))
+done
+GTM_PORT=7777
+PSQL_FOLDER=$HOME/pgsql
+
+#Finish calculating dependencies between folders
+PSQL_SHARE=$PSQL_FOLDER/share
+PSQL_BIN=$PSQL_FOLDER/bin
+GTM_DATA=$PSQL_FOLDER/gtm
+LOG_DATA=$PSQL_FOLDER/log
+ARCHIVE_DATA=$PSQL_FOLDER/archive
+
+#Setup data folders
+for i in $(seq 1 $NUM_COORDS)
+do
+	COORD_DATAS[$i]=$PSQL_FOLDER/coord$i
+	COORD_SLAVE_DATAS[$i]=$PSQL_FOLDER/coord_slave$i
+	COORD_SLAVE_ARCHIVE[$i]=$ARCHIVE_DATA/coord_slave$i
+done
+for i in $(seq 1 $NUM_DATANODES)
+do
+	DN_DATAS[$i]=$PSQL_FOLDER/datanode$i
+	DN_SLAVE_DATAS[$i]=$PSQL_FOLDER/datanode_slave$i
+	DN_SLAVE_ARCHIVE[$i]=$ARCHIVE_DATA/datanode_slave$i
+done
+
+#Kill all the processes that may remain
+#in the most atrocious way possible as they meritated it
+#OK this is not very clean...
+echo "Take out Postgres-XC processes"
+kill -9 `ps ux | grep "bin/gtm" | cut -d " " -f 2-3`
+killall postgres gtm psql
+sleep 2
+
+#Check log folder
+echo "Creating log folder"
+if [ ! -d $LOG_DATA ]
+then
+	mkdir $LOG_DATA
+	chmod 700 $LOG_DATA
+fi
+
+#Check if data folders exist or not and create them
+echo "Creating data folders"
+for folder in $GTM_DATA $LOG_DATA $ARCHIVE_DATA ${COORD_DATAS[@]} ${COORD_SLAVE_DATAS[@]} ${COORD_SLAVE_ARCHIVE[@]} ${DN_DATAS[@]} ${DN_SLAVE_DATAS[@]} ${DN_SLAVE_ARCHIVE[@]}
+do
+	if [ ! -d $folder ]
+	then
+		mkdir $folder
+		chmod 700 $folder
+	fi
+done
+
+#Clean up all the data folders
+echo "Clean up data folders"
+for folder in $GTM_DATA $LOG_DATA ${COORD_DATAS[@]} ${COORD_SLAVE_DATAS[@]} ${COORD_SLAVE_ARCHIVE[@]} ${DN_DATAS[@]} ${DN_SLAVE_DATAS[@]} ${DN_SLAVE_ARCHIVE[@]}
+do
+	rm -r $folder/*
+done
+sleep 1
+
+#OK, let's begin the show...
+
+#make initialization
+echo "Initializing PGXC nodes"
+for i in $(seq 1 $NUM_DATANODES)
+do
+	$PSQL_BIN/initdb --nodename dn$i -D ${DN_DATAS[$i]}
+done
+for i in $(seq 1 $NUM_COORDS)
+do
+	$PSQL_BIN/initdb --nodename coord$i -D ${COORD_DATAS[$i]}
+done
+
+#copy all configuration files to remote machin
+echo "Copy of configuration files"
+#Create an empty GTM conf file and add host/port data
+$PSQL_BIN/initgtm -D $GTM_DATA -Z gtm
+#Add the port number for GTM
+echo "port = $GTM_PORT" >> $GTM_DATA/gtm.conf
+
+#Node common settings
+OPTIONS_POSTGRESQL="logging_collector = on\n"\
+"gtm_port = $GTM_PORT\n"\
+"log_statement = 'all'\n"\
+"log_line_prefix = '%p '\n"\
+"log_min_messages = debug1\n"\
+"log_min_error_statement = debug1\n"\
+"log_autovacuum_min_duration = -1\n"\
+"autovacuum_freeze_max_age = 100000000\n"\
+"max_prepared_transactions = 20\n"\
+"work_mem = 100MB\n"\
+"enforce_two_phase_commit = off"
+
+#Additional options to activate hot-standby on master datanodes
+#This is once again node-based
+#Important, the same additional options are used for Datanode slaves and masters
+OPTIONS_POSTGRESQL_MASTER="wal_level = hot_standby\n"\
+"archive_mode = on\n"\
+"max_wal_senders = 10\n"
+for i in $(seq 1 $NUM_DATANODES)
+do
+	ARCHIVE_LOCAL=${DN_SLAVE_ARCHIVE[$i]}
+	OPTIONS_ARCHIVE_DN_MASTER[$i]="archive_command = 'cp -i %p $ARCHIVE_LOCAL/%f'\n"
+done
+for i in $(seq 1 $NUM_COORDS)
+do
+	ARCHIVE_LOCAL=${COORD_SLAVE_ARCHIVE[$i]}
+	OPTIONS_ARCHIVE_CO_MASTER[$i]="archive_command = 'cp -i %p $ARCHIVE_LOCAL/%f'\n"
+done
+OPTIONS_POSTGRESQL_SLAVE="hot_standby = on"
+
+#Node slave additional settings
+#This option in pg_hba.conf allows master node to trust replication protocol when slave
+#tries to connect
+OPTIONS_PGHBA="host replication $USER 127.0.0.1/32 trust\n"\
+"host replication $USER ::1/128 trust\n"
+
+#Build options in recovery.conf for each slave node
+for i in $(seq 1 $NUM_DATANODES) #Each slave Datanode
+do
+	NODE_PORT=${DN_PORTS[$i]}
+	ARCHIVE_LOCAL=${DN_SLAVE_ARCHIVE[$i]}
+	OPTIONS_DN_RECOVERY[$i]="restore_command = 'cp -i $ARCHIVE_LOCAL/%f %p'\n"\
+"standby_mode = on\n"\
+"primary_conninfo = 'host=localhost port=$NODE_PORT application_name=dn_slave$i'\n"
+done
+for i in $(seq 1 $NUM_COORDS) #Each slave Coordinator
+do
+	NODE_PORT=${COORD_PORTS[$i]}
+	ARCHIVE_LOCAL=${COORD_SLAVE_ARCHIVE[$i]}
+	OPTIONS_CO_RECOVERY[$i]="restore_command = 'cp -i $ARCHIVE_LOCAL/%f %p'\n"\
+"standby_mode = on\n"\
+"primary_conninfo = 'host=localhost port=$NODE_PORT application_name=co_slave$i'\n"
+done
+
+
+#Pooler options
+POOLER_BASE_PORT=6667 # Base value for master Coordinators
+POOLER_SLAVE_BASE_PORT=7200 # Base value for slave Coordinators
+#Coordinator settings
+for i in $(seq 1 $NUM_COORDS)
+do
+	echo -e $OPTIONS_POSTGRESQL >> ${COORD_DATAS[$i]}/postgresql.conf
+	echo -e $OPTIONS_PGHBA >> ${COORD_DATAS[$i]}/pg_hba.conf
+	POOLER_NUM=$(($POOLER_BASE_PORT + $i))
+	echo -e "pooler_port = $POOLER_NUM\n" >> ${COORD_DATAS[$i]}/postgresql.conf
+	if [ "$FLAG_SLAVES" == 1 ]
+	then
+		echo -e $OPTIONS_POSTGRESQL_MASTER >> ${COORD_DATAS[$i]}/postgresql.conf
+		echo -e ${OPTIONS_ARCHIVE_CO_MASTER[$i]} >> ${COORD_DATAS[$i]}/postgresql.conf
+	fi
+done
+#Datanode settings
+for i in $(seq 1 $NUM_DATANODES)
+do
+	echo -e $OPTIONS_POSTGRESQL >> ${DN_DATAS[$i]}/postgresql.conf
+	echo -e $OPTIONS_PGHBA >> ${DN_DATAS[$i]}/pg_hba.conf
+	if [ "$FLAG_SLAVES" == 1 ]
+	then
+		echo -e $OPTIONS_POSTGRESQL_MASTER >> ${DN_DATAS[$i]}/postgresql.conf
+		echo -e ${OPTIONS_ARCHIVE_DN_MASTER[$i]} >> ${DN_DATAS[$i]}/postgresql.conf
+	fi
+done
+
+#launch gtm
+echo "launching GTM..."
+$PSQL_BIN/gtm -x 700 -D $GTM_DATA &
+sleep 1
+
+#launch datanodes
+echo "launching Datanodes..."
+for i in $(seq 1 $NUM_DATANODES)
+do
+	COMMAND=$PSQL_BIN"/pg_ctl start -Z datanode -o \"-i -p "${DN_PORTS[$i]}\"" -D "${DN_DATAS[$i]}" -l "$LOG_DATA/datanode$i.log
+	eval $COMMAND
+done
+sleep 2
+
+#launch coordinators
+echo "launching Coordinators..."
+for i in $(seq 1 $NUM_COORDS)
+do
+	COMMAND=$PSQL_BIN"/pg_ctl start -Z coordinator -o \"-i -p "${COORD_PORTS[$i]}\"" -D "${COORD_DATAS[$i]}" -l "$LOG_DATA/coord$i.log
+	eval $COMMAND
+done
+sleep 2
+
+#Initialize Coordinators with cluster data
+echo "initializing Coordinators..."
+for i in $(seq 1 $NUM_COORDS)
+do
+	#Datanode connection info
+	for j in $(seq 1 $NUM_DATANODES)
+	do
+		NODE_NAME=dn$j
+		NODE_PORT=${DN_PORTS[$j]}
+		$PSQL_BIN/psql -p ${COORD_PORTS[$i]} -c "CREATE NODE $NODE_NAME WITH (HOST = 'localhost', type = 'datanode', PORT = $NODE_PORT);" postgres
+	done
+	#Other Coordinator info
+	for j in $(seq 1 $NUM_COORDS)
+	do
+		if [ "$i" -eq "$j" ]
+		then
+			continue
+		fi
+		NODE_NAME=coord$j
+		NODE_PORT=${COORD_PORTS[$j]}
+		$PSQL_BIN/psql -p ${COORD_PORTS[$i]} -c "CREATE NODE $NODE_NAME WITH (HOST = 'localhost', type = 'coordinator', PORT = $NODE_PORT);" postgres
+	done
+	#reload data
+	$PSQL_BIN/psql -p ${COORD_PORTS[$i]} -c "SELECT pgxc_pool_reload();" postgres
+done
+
+# Launch backups for slave nodes
+if [ "$FLAG_SLAVES" == 1 ]
+then
+	#Start backup
+	echo "launching pg_start_backup..."
+	for i in $(seq 1 $NUM_DATANODES)
+	do
+		# Respect old grammar of EXECUTE DIRECT if necessary
+		if [ "$FLAG_OLD_FORMAT" == 1 ]
+		then
+			NODE_LIST="dn$i"
+		else
+			NODE_LIST="(dn$i)"
+		fi
+		$PSQL_BIN/psql postgres -p ${COORD_PORTS[1]} -c "EXECUTE DIRECT ON $NODE_LIST 'SELECT pg_start_backup(''backup'')'"
+	done
+
+	#Launch backup to the first Coordinator
+	$PSQL_BIN/psql postgres -p ${COORD_PORTS[1]} -c "SELECT pg_start_backup('backup')"
+	#Then the rest
+	for i in $(seq 2 $NUM_COORDS)
+	do
+		# Respect old grammar of EXECUTE DIRECT if necessary
+		if [ "$FLAG_OLD_FORMAT" == 1 ]
+		then
+			NODE_LIST="coord$i"
+		else
+			NODE_LIST="(coord$i)"
+		fi
+		$PSQL_BIN/psql postgres -p ${COORD_PORTS[1]} -c "EXECUTE DIRECT ON $NODE_LIST 'SELECT pg_start_backup(''backup'')'"
+	done
+
+	#Stop Backup
+	echo "launching pg_stop_backup..."
+	for i in $(seq 1 $NUM_DATANODES)
+	do
+		# Respect old grammar of EXECUTE DIRECT if necessary
+		if [ "$FLAG_OLD_FORMAT" == 1 ]
+		then
+			NODE_LIST="dn$i"
+		else
+			NODE_LIST="(dn$i)"
+		fi
+		$PSQL_BIN/psql postgres -p ${COORD_PORTS[1]} -c "EXECUTE DIRECT ON $NODE_LIST 'SELECT pg_stop_backup()'"
+	done
+	$PSQL_BIN/psql postgres -p ${COORD_PORTS[1]} -c "SELECT pg_stop_backup()"
+	for i in $(seq 2 $NUM_COORDS)
+	do
+		# Respect old grammar of EXECUTE DIRECT if necessary
+		if [ "$FLAG_OLD_FORMAT" == 1 ]
+		then
+			NODE_LIST="coord$i"
+		else
+			NODE_LIST="(coord$i)"
+		fi
+		$PSQL_BIN/psql postgres -p ${COORD_PORTS[1]} -c "EXECUTE DIRECT ON $NODE_LIST 'SELECT pg_stop_backup()'"
+	done
+
+	#Initialize slaves by taking a hot backup from masters
+	echo "Initializing slave Datanodes..."
+	for i in $(seq 1 $NUM_DATANODES)
+	do
+		cp -r ${DN_DATAS[$i]}/* ${DN_SLAVE_DATAS[$i]}
+		echo -e $OPTIONS_POSTGRESQL >> ${DN_SLAVE_DATAS[$i]}/postgresql.conf
+		echo -e $OPTIONS_POSTGRESQL_MASTER >> ${DN_SLAVE_DATAS[$i]}/postgresql.conf
+		echo -e ${OPTIONS_ARCHIVE_DN_MASTER[$i]} >> ${DN_SLAVE_DATAS[$i]}/postgresql.conf
+		echo -e $OPTIONS_POSTGRESQL_SLAVE >> ${DN_SLAVE_DATAS[$i]}/postgresql.conf
+		echo -e ${OPTIONS_DN_RECOVERY[$i]} >> ${DN_SLAVE_DATAS[$i]}/recovery.conf
+		#Erase XLOG and postmaster files
+		rm ${DN_SLAVE_DATAS[$i]}/postmaster.pid
+		rm -r ${DN_SLAVE_DATAS[$i]}/pg_xlog/*
+	done
+	echo "Initializing slave Coordinators..."
+	for i in $(seq 1 $NUM_COORDS)
+	do
+		cp -r ${COORD_DATAS[$i]}/* ${COORD_SLAVE_DATAS[$i]}
+		echo -e $OPTIONS_POSTGRESQL >> ${COORD_SLAVE_DATAS[$i]}/postgresql.conf
+		echo -e $OPTIONS_POSTGRESQL_MASTER >> ${COORD_SLAVE_DATAS[$i]}/postgresql.conf
+		echo -e ${OPTIONS_ARCHIVE_CO_MASTER[$i]} >> ${COORD_SLAVE_DATAS[$i]}/postgresql.conf
+		echo -e $OPTIONS_POSTGRESQL_SLAVE >> ${COORD_SLAVE_DATAS[$i]}/postgresql.conf
+		echo -e ${OPTIONS_CO_RECOVERY[$i]} >> ${COORD_SLAVE_DATAS[$i]}/recovery.conf
+		#Add correct port number to Coordinator slave
+		POOLER_NUM=$(($POOLER_SLAVE_BASE_PORT + $i))
+		echo -e "pooler_port = $POOLER_NUM\n" >> ${COORD_SLAVE_DATAS[$i]}/postgresql.conf
+		#Erase XLOG and postmaster files
+		rm ${COORD_SLAVE_DATAS[$i]}/postmaster.pid
+		rm -r ${COORD_SLAVE_DATAS[$i]}/pg_xlog/*
+	done
+
+	# Setup synchronize for masters
+	for i in $(seq 1 $NUM_DATANODES)
+	do
+		echo "synchronous_standby_names = 'dn_slave$i'" >> ${DN_DATAS[$i]}/postgresql.conf
+		$PSQL_BIN/pg_ctl reload -D ${DN_DATAS[$i]}
+	done
+	for i in $(seq 1 $NUM_COORDS)
+	do
+		echo "synchronous_standby_names = 'co_slave$i'" >> ${COORD_DATAS[$i]}/postgresql.conf
+		$PSQL_BIN/pg_ctl reload -D ${COORD_DATAS[$i]}
+	done
+	sleep 1
+
+	#Launch Slaves
+	echo "launching Slave Datanodes..."
+	for i in $(seq 1 $NUM_DATANODES)
+	do
+		COMMAND=$PSQL_BIN"/pg_ctl start -Z datanode -o \"-i -p "${DN_SLAVE_PORTS[$i]}\"" -D "${DN_SLAVE_DATAS[$i]}" -l "$LOG_DATA/datanode_slave$i.log
+		eval $COMMAND
+	done
+	echo "launching Slave Coordinators..."
+	for i in $(seq 1 $NUM_COORDS)
+	do
+		COMMAND=$PSQL_BIN"/pg_ctl start -Z coordinator -o \"-i -p "${COORD_SLAVE_PORTS[$i]}\"" -D "${COORD_SLAVE_DATAS[$i]}" -l "$LOG_DATA/coord_slave$i.log
+		eval $COMMAND
+	done
+fi
+
+exit `echo $?`

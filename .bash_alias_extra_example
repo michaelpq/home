@@ -1,0 +1,11 @@
+#--------------------------------------------------------------------------
+# .bash_alias_extra_example
+#	Example of extra settings for aliases
+#	Copyright (c) 2010-2012, Michael Paquier
+#--------------------------------------------------------------------------
+
+# Shortcut to machine "server"
+alias server="ssh server"
+
+# Add your other private settings here and then copy this file as
+# .bash_alias_extra

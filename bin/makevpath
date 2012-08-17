@@ -1,0 +1,23 @@
+#!/bin/bash
+# Script for automatic vpath installation
+# In the case of a VPATH installation, configure is run from an external
+# folder and then built as-is.
+
+#List of parameters
+BASE_CODE=$HOME/git/postgres
+BASE_MAKE=$HOME/make
+BASE_BIN=$HOME/bin
+BASE_BIN_SCRIPTS=$BASE_BIN/scripts
+
+# First clean up everything in make folder
+rm -rf $BASE_MAKE
+
+# Copy all the necessary content into make folder
+# The make itself has to be done inside make repository
+mkdir $BASE_MAKE
+cd $BASE_MAKE
+
+# Configure and build
+$BASE_CODE/configure --prefix=$HOME/pgsql --enable-depend --enable-debug --disable-rpath --enable-cassert --with-libxml
+make
+make install

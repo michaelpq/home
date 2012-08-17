@@ -1,0 +1,13 @@
+#--------------------------------------------------------------------------
+# .gitconfig_extra_example
+#	example of global extra settings for GIT
+#	Copyright (c) 2010-2012, Michael Paquier
+#--------------------------------------------------------------------------
+[user]
+	name = John Doe
+	email = john@example.com
+[http]
+	proxy = http://proxy.example.co.jp:8080/
+
+# Add your other settings here, then copy this file
+# as .gitconfig_extra

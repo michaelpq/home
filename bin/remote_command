@@ -1,0 +1,127 @@
+#!/bin/bash
+
+#Permits to launch a command
+#based on a sudo mode or a su mode
+# on a remote server as root.
+
+#In both modes, it is supposed that the user has already
+#set a correct ssh-keygen environment in the cluster of servers used
+
+#Connection to remote server is made with ssh with the user name speciafied
+#a user name can also be chosen as option
+#For security purposes, the password is asked only as input
+#of this script and it doesn't print on screen.
+
+#Option flag
+SFLAG=0
+KFLAG=0
+
+while getopts 'c:km:su:' OPTION
+do
+case $OPTION in
+	c)	#command to be sent
+		COMMAND="$OPTARG"
+		;;
+	k)	#If activated, ssh keygen environment is set in cluster
+		KFLAG=1
+		;;
+	m)	#Machine name to launch the command to
+		REMOTE_MACHINE="$OPTARG"
+		;;
+	s)	#sudo or su mode
+		SFLAG=1
+		;;
+	u)	#username chosen to connect to remote, by default the user's one
+		BRANCH_NAME="$OPTARG"
+		;;
+	?)      printf "Usage: %s:\n" $(basename $0) >&2
+		printf "	[-s (sudo mode if indicated)] [-u username] [-k (keygen configured)] [-m remote machine name]\n"
+		exit 0
+		;;
+	esac
+done
+
+#A couple of checks
+if [ "$COMMAND" = "" ]
+then
+	echo "Command is not set"
+	exit 1;
+fi
+
+if [ "$REMOTE_MACHINE" = "" ]
+then
+	echo "Remote machine name is not set"
+	exit 1
+fi
+
+if [ "$SFLAG" = "1" ]
+then
+	echo "sudo mode activated"
+	MODE="sudo "
+else
+	MODE="su -c "
+fi
+
+#Build the command the command
+COMMAND_LAUNCHED="$MODE'$COMMAND'"
+echo $COMMAND_LAUNCHED
+#Optional, to be combined with pgxc_install.conf
+#Get the list of servers where to launch the command
+#Don't do anything for the moment...
+
+if [ "$KFLAG" = "0" ]
+then
+	#keygen environement not set, need also the user password
+	stty -echo
+	echo -n "Type the user password:"
+	read USER_PASSWORD
+	echo " "
+fi
+#Lastly ask for password from user for root access
+stty -echo
+echo -n "Type the root password:"
+read ROOT_PASSWORD
+echo " "
+
+#Finally launch the command to remote servers
+for MACHINE in $REMOTE_MACHINE
+do
+	#Launch commands
+	SSH_COMMAND="ssh $USERNAME@$MACHINE"
+	echo "$SSH_COMMAND"
+
+	if [ "$KFLAG" = "1" ]
+	then
+		#ssh environment set for user, just need root password
+		expect -c "
+			set timeout 10;
+			spawn ${SSH_COMMAND};
+			sleep 2;
+			send \"$COMMAND_LAUNCHED\r\";
+			sleep 2;
+			expect \"password:\";
+			send \"${ROOT_PASSWORD}\r\";
+			sleep 2;
+			send \"exit\r\";
+			interact
+		"
+	else
+		expect -c "
+			set timeout 10;
+			spawn ${SSH_COMMAND};
+			sleep 2;
+			expect \"password:\";
+			send \"${USER_PASSWORD}\r\";
+			sleep 2;
+			send \"$COMMAND_LAUNCHED\r\";
+			sleep 2;
+			expect \"password:\";
+			send \"${ROOT_PASSWORD}\r\";
+			sleep 2;
+			send \"exit\r\";
+			interact
+		"
+	fi
+done
+
+exit 0

@@ -1,0 +1,14 @@
+#--------------------------------------------------------------------------
+# .gitconfig
+#	GIT global settings
+#	Copyright (c) 2010-2012, Michael Paquier
+#--------------------------------------------------------------------------
+[alias]
+	graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
+	menage = clean -d -x -f
+[color]
+	ui = auto
+[core]
+	editor = emacs -nw
+[include]
+	path = .gitconfig_extra

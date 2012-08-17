@@ -1,0 +1,5 @@
+# Ignore all the files in this repository
+*
+
+# Do not ignore myself
+!.gitignore

@@ -16,6 +16,13 @@ all the settings and all the OS/desktop/environment dependent files of all the o
 environments so you can check out freely each branch without impacting the environment
 you are using.
 
+When a commit impacts several branches, commit is done respecting the following order
+priority:
+- master
+- linux
+- macosx
+This allows to keep the commit tree readable.
+
 Copyright information can be found in the file COPYRIGHT and license terms
 can be found in the file LICENSE.
 

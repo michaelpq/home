@@ -18,9 +18,9 @@ you are using.
 
 When a commit impacts several branches, commit is done respecting the following order
 priority:
-- master
-- linux
-- macosx
+- master, for core features
+- linux, for Linux related features
+- osx, for OS X features
 This allows to keep the commit tree readable.
 
 Copyright information can be found in the file COPYRIGHT and license terms

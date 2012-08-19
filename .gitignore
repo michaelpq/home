@@ -47,8 +47,9 @@ VirtualBox VMs
 .vboxclient*
 # Ignore default development repositories
 make
-workspace
 pgsql
+postgres
+workspace
 # Ignore all the MacOSX-related files and folders
 .CFUserTextEncoding
 .DS_Store
@@ -66,6 +67,6 @@ desktop
 doc
 download
 media
-postgres
 .xinitrc
 .config
+

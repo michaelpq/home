@@ -7,10 +7,11 @@
 ;;--------------------------------------------------------------------------
 ;; Upload initialization packages
 ;;--------------------------------------------------------------------------
-(let* ((my-lisp-dir "~/.emacs.d/")
+(when (file-exists-p "~/.emacs.d")
+  (when (let* ((my-lisp-dir "~/.emacs.d/")
         (default-directory my-lisp-dir))
-  (setq load-path (cons my-lisp-dir load-path))
-  (normal-top-level-add-subdirs-to-load-path))
+    (setq load-path (cons my-lisp-dir load-path))
+    (normal-top-level-add-subdirs-to-load-path))))
 (when (file-exists-p "~/.emacs.d/elpa/package.el")
   (when (load (expand-file-name "~/.emacs.d/elpa/package.el"))
     (package-initialize)))

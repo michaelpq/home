@@ -238,7 +238,7 @@ done
 
 #launch gtm
 echo "launching GTM..."
-$PSQL_BIN/gtm -x 700 -D $GTM_DATA -h localhost &
+$PSQL_BIN/gtm -x 1005 -D $GTM_DATA -h localhost &
 sleep 1
 
 #launch datanodes

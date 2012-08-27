@@ -145,3 +145,6 @@
 
 ;; Special handling for TAB
 (global-set-key (kbd "TAB") 'tab-to-tab-stop)
+
+;; Rectangular selection area, activate a mark to begin selection
+(global-set-key "\C-@" 'set-mark-command)

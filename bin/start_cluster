@@ -304,18 +304,22 @@ then
 
 	#Launch backup to the first Coordinator
 	$PSQL_BIN/psql postgres -p ${COORD_PORTS[1]} -c "SELECT pg_start_backup('backup')"
-	#Then the rest
-	for i in $(seq 2 $NUM_COORDS)
-	do
-		# Respect old grammar of EXECUTE DIRECT if necessary
-		if [ "$FLAG_OLD_FORMAT" == 1 ]
-		then
-			NODE_LIST="coord$i"
-		else
-			NODE_LIST="(coord$i)"
-		fi
-		$PSQL_BIN/psql postgres -p ${COORD_PORTS[1]} -c "EXECUTE DIRECT ON $NODE_LIST 'SELECT pg_start_backup(''backup'')'"
-	done
+	#Then the rest, only if there is more than 1 Coordinator
+	if [ "$NUM_COORDS" -gt 1 ]
+	then
+		for i in $(seq 2 $NUM_COORDS)
+		do
+			echo "Hey I'm here! $i"
+			# Respect old grammar of EXECUTE DIRECT if necessary
+			if [ "$FLAG_OLD_FORMAT" == 1 ]
+			then
+				NODE_LIST="coord$i"
+			else
+				NODE_LIST="(coord$i)"
+			fi
+			$PSQL_BIN/psql postgres -p ${COORD_PORTS[1]} -c "EXECUTE DIRECT ON $NODE_LIST 'SELECT pg_start_backup(''backup'')'"
+		done
+	fi
 
 	#Stop Backup
 	echo "launching pg_stop_backup..."
@@ -331,17 +335,21 @@ then
 		$PSQL_BIN/psql postgres -p ${COORD_PORTS[1]} -c "EXECUTE DIRECT ON $NODE_LIST 'SELECT pg_stop_backup()'"
 	done
 	$PSQL_BIN/psql postgres -p ${COORD_PORTS[1]} -c "SELECT pg_stop_backup()"
-	for i in $(seq 2 $NUM_COORDS)
-	do
-		# Respect old grammar of EXECUTE DIRECT if necessary
-		if [ "$FLAG_OLD_FORMAT" == 1 ]
-		then
-			NODE_LIST="coord$i"
-		else
-			NODE_LIST="(coord$i)"
-		fi
-		$PSQL_BIN/psql postgres -p ${COORD_PORTS[1]} -c "EXECUTE DIRECT ON $NODE_LIST 'SELECT pg_stop_backup()'"
-	done
+
+	if [ "$NUM_COORDS" -gt 1 ]
+	then
+		for i in $(seq 2 $NUM_COORDS)
+		do
+			# Respect old grammar of EXECUTE DIRECT if necessary
+			if [ "$FLAG_OLD_FORMAT" == 1 ]
+			then
+				NODE_LIST="coord$i"
+			else
+				NODE_LIST="(coord$i)"
+			fi
+			$PSQL_BIN/psql postgres -p ${COORD_PORTS[1]} -c "EXECUTE DIRECT ON $NODE_LIST 'SELECT pg_stop_backup()'"
+		done
+	fi
 
 	#Initialize slaves by taking a hot backup from masters
 	echo "Initializing slave Datanodes..."

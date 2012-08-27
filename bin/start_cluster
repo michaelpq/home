@@ -181,7 +181,8 @@ OPTIONS_POSTGRESQL_SLAVE="hot_standby = on"
 #Node slave additional settings
 #This option in pg_hba.conf allows master node to trust replication protocol when slave
 #tries to connect
-OPTIONS_PGHBA="host replication $USER 127.0.0.1/32 trust\n"\
+OPTIONS_PGHBA="local replication michael trust\n"\
+"host replication $USER 127.0.0.1/32 trust\n"\
 "host replication $USER ::1/128 trust\n"
 
 #Build options in recovery.conf for each slave node
@@ -309,31 +310,23 @@ then
 	echo "Initializing slave Datanodes..."
 	for i in $(seq 1 $NUM_DATANODES)
 	do
-		cp -r ${DN_DATAS[$i]}/* ${DN_SLAVE_DATAS[$i]}
-		echo -e $OPTIONS_POSTGRESQL >> ${DN_SLAVE_DATAS[$i]}/postgresql.conf
-		echo -e $OPTIONS_POSTGRESQL_MASTER >> ${DN_SLAVE_DATAS[$i]}/postgresql.conf
-		echo -e ${OPTIONS_ARCHIVE_DN_MASTER[$i]} >> ${DN_SLAVE_DATAS[$i]}/postgresql.conf
+		$PSQL_BIN/pg_basebackup -D ${DN_SLAVE_DATAS[$i]} -p ${DN_PORTS[$i]}
+		# Activate Hot-standby on slave node
 		echo -e $OPTIONS_POSTGRESQL_SLAVE >> ${DN_SLAVE_DATAS[$i]}/postgresql.conf
+		# Add options for recovery.conf
 		echo -e ${OPTIONS_DN_RECOVERY[$i]} >> ${DN_SLAVE_DATAS[$i]}/recovery.conf
-		#Erase XLOG and postmaster files
-		rm ${DN_SLAVE_DATAS[$i]}/postmaster.pid
-		rm -r ${DN_SLAVE_DATAS[$i]}/pg_xlog/*
 	done
 	echo "Initializing slave Coordinators..."
 	for i in $(seq 1 $NUM_COORDS)
 	do
-		cp -r ${COORD_DATAS[$i]}/* ${COORD_SLAVE_DATAS[$i]}
-		echo -e $OPTIONS_POSTGRESQL >> ${COORD_SLAVE_DATAS[$i]}/postgresql.conf
-		echo -e $OPTIONS_POSTGRESQL_MASTER >> ${COORD_SLAVE_DATAS[$i]}/postgresql.conf
-		echo -e ${OPTIONS_ARCHIVE_CO_MASTER[$i]} >> ${COORD_SLAVE_DATAS[$i]}/postgresql.conf
+		$PSQL_BIN/pg_basebackup -D ${COORD_SLAVE_DATAS[$i]} -p ${COORD_PORTS[$i]}
+		# Activate Hot-standby on slave node
 		echo -e $OPTIONS_POSTGRESQL_SLAVE >> ${COORD_SLAVE_DATAS[$i]}/postgresql.conf
+		# Add options for recovery.conf
 		echo -e ${OPTIONS_CO_RECOVERY[$i]} >> ${COORD_SLAVE_DATAS[$i]}/recovery.conf
 		#Add correct port number to Coordinator slave
 		POOLER_NUM=$(($POOLER_SLAVE_BASE_PORT + $i))
 		echo -e "pooler_port = $POOLER_NUM\n" >> ${COORD_SLAVE_DATAS[$i]}/postgresql.conf
-		#Erase XLOG and postmaster files
-		rm ${COORD_SLAVE_DATAS[$i]}/postmaster.pid
-		rm -r ${COORD_SLAVE_DATAS[$i]}/pg_xlog/*
 	done
 
 	# Setup synchronize for masters

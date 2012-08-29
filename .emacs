@@ -55,6 +55,13 @@
 ;; Code formatting
 ;;--------------------------------------------------------------------------
 
+;; Shell scripting
+(defun private-sh-mode ()
+  "Personal settings for shell scripting"
+  (interactive)
+  (setq tab-width 4))
+(add-hook 'sh-mode-hook 'private-sh-mode)
+
 ;; PostgreSQL settings
 ;; Use of a named style makes it easy to use the style elsewhere
 (c-add-style "pgsql"

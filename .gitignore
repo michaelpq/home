@@ -3,6 +3,7 @@
 .bash_alias_extra
 .bash_history
 .gitconfig_extra
+.git-credentials
 .viminfo
 .ICEauthority
 .Xauthority

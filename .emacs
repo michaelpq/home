@@ -59,7 +59,9 @@
 (defun private-sh-mode ()
   "Personal settings for shell scripting"
   (interactive)
-  (setq tab-width 8))
+  (setq tab-width 4)
+  ;; Add personal settings here
+)
 (add-hook 'sh-mode-hook 'private-sh-mode)
 
 ;; PostgreSQL settings
@@ -130,9 +132,13 @@
   (setq tab-width 4) ;; change this to taste, this is what K&R uses :)
   (private-build-tab-stop-list tab-width)
   (setq c-basic-offset tab-width))
-
+(defun sh-tab-mode-common-hook ()
+  (setq tab-width 4) ;; change this to taste, this is what K&R uses :)
+  (private-build-tab-stop-list tab-width)
+  (setq c-basic-offset tab-width))
 ;; Finally add this hook for necessary languages
-(add-hook 'c-mode-common-hook 'c-tab-mode-common-hook)
+(add-hook 'c-mode-common-hook 'c-tab-mode-common-hook)	;; C language
+(add-hook 'sh-mode-hook 'sh-tab-mode-common-hook)	;; Shell-script
 
 ;; Delete trailing whitespaces for C, C++ and Python
 (add-hook 'c-mode-hook '(lambda ()

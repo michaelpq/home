@@ -59,7 +59,7 @@
 (defun private-sh-mode ()
   "Personal settings for shell scripting"
   (interactive)
-  (setq tab-width 4))
+  (setq tab-width 8))
 (add-hook 'sh-mode-hook 'private-sh-mode)
 
 ;; PostgreSQL settings

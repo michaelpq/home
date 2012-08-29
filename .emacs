@@ -136,6 +136,8 @@
   (add-hook 'write-contents-hooks 'delete-trailing-whitespace nil t)))
 (add-hook 'python-mode-hook '(lambda ()
   (add-hook 'write-contents-hooks 'delete-trailing-whitespace nil t)))
+(add-hook 'sh-mode-hook '(lambda ()
+  (add-hook 'write-contents-hooks 'delete-trailing-whitespace nil t)))
 
 ;;--------------------------------------------------------------------------
 ;; Navigation

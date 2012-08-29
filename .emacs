@@ -31,6 +31,8 @@
 ;; Stop at the end of the file, not just add lines
 (setq next-line-add-newlines nil)
 (setq c-tab-always-indent nil)
+;; Delete complete TAB when using backward delete and not convert into spaces
+(setq backward-delete-char-untabify-method nil)
 ;; Cursor color
 (set-cursor-color "blue")
 ;; Set the font
@@ -74,7 +76,7 @@
 (setq auto-mode-alist
   (cons '("\\(postgres\\|pgsql\\).*\\.cc\\'" . pgsql-c-mode)
         auto-mode-alist))
-;;; PostgreSQL sgml documentation
+;; SGML documentation
 (defun pgsql-sgml-mode ()
   "SGML mode adjusted for PostgreSQL project"
   (interactive)
@@ -90,9 +92,25 @@
 (setq auto-mode-alist
   (cons '("\\(postgres\\|pgsql\\).*\\.sgmlin\\'" . pgsql-sgml-mode)
         auto-mode-alist))
+;; Perl settings
+(defun pgsql-perl-mode ()
+  "Perl style adjusted for PostgreSQL project"
+  (interactive)
+  (setq tab-width 4)
+  (setq perl-indent-level 4)
+  (setq indent-tabs-mode nil)
+  (setq perl-continued-statement-offset 4)
+  (setq perl-brace-offset 0)
+  (setq perl-brace-imaginary-offset 0)
+  (setq perl-label-offset -2)
+)
+(add-hook 'perl-mode-hook
+           (lambda ()
+             (if (string-match "postgres" buffer-file-name)
+                 (pgsql-perl-mode))))
 
 ;; Manage TAB entry to 4-width tabs
-(defun my-build-tab-stop-list (width)
+(defun private-build-tab-stop-list (width)
   (let ((num-tab-stops (/ 80 width))
         (counter 1)
         (ls nil))
@@ -100,17 +118,21 @@
       (setq ls (cons (* width counter) ls))
       (setq counter (1+ counter)))
       (set (make-local-variable 'tab-stop-list) (nreverse ls))))
-(defun my-c-mode-common-hook ()
+;; This is essential to change the behaviour of backspace for a tab...
+(defun c-tab-mode-common-hook ()
   (setq tab-width 4) ;; change this to taste, this is what K&R uses :)
-  (my-build-tab-stop-list tab-width)
+  (private-build-tab-stop-list tab-width)
   (setq c-basic-offset tab-width))
-  (setq c-backspace-function 'backward-delete-char) ;;essential to change the behaviour of backspace for a tab...
-(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+;; Finally add this hook for necessary languages
+(add-hook 'c-mode-common-hook 'c-tab-mode-common-hook)
 
 ;; Delete trailing whitespaces for C, C++ and Python
 (add-hook 'c-mode-hook '(lambda ()
   (add-hook 'write-contents-hooks 'delete-trailing-whitespace nil t)))
 (add-hook 'c++-mode-hook '(lambda ()
+  (add-hook 'write-contents-hooks 'delete-trailing-whitespace nil t)))
+(add-hook 'perl-mode-hook '(lambda ()
   (add-hook 'write-contents-hooks 'delete-trailing-whitespace nil t)))
 (add-hook 'python-mode-hook '(lambda ()
   (add-hook 'write-contents-hooks 'delete-trailing-whitespace nil t)))

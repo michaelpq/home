@@ -172,11 +172,12 @@ then
 		ARCHIVE_LOCAL=${SLAVE_ARCHIVE[$i]}
 		OPTIONS_CASCADE_RECOVERY[$i]="restore_command = 'cp -i $ARCHIVE_LOCAL/%f %p'\n"\
 "standby_mode = on\n"\
-"primary_conninfo = 'host=localhost port=$NODE_PORT application_name=cascade_$i'\n"		
+"primary_conninfo = 'host=localhost port=$NODE_PORT application_name=cascade_$i'\n"
 	done
 fi
 
 # Master settings
+echo -e $OPTIONS_POSTGRESQL >> $MASTER_DATA/postgresql.conf
 echo -e $OPTIONS_POSTGRESQL_MASTER >> $MASTER_DATA/postgresql.conf
 # WALs are archived even if there are no slaves
 echo -e $OPTIONS_ARCHIVE_MASTER >> $MASTER_DATA/postgresql.conf

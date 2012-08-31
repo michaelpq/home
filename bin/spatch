@@ -149,6 +149,13 @@ command_confrm()
 		exit 1
 	fi
 
+	# Block removal of configuration default
+	if [ $OLD_CONF = "default" -o $OLD_CONF = "example" ]
+	then
+		echo "Cannot remove configuration $OLD_CONF"
+		exit 1
+	fi
+
 	# Check if really exists
 	if [ ! -d $CONFIG_FOLDER/$NEW_CONF ]
 	then

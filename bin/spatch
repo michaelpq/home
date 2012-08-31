@@ -28,6 +28,7 @@ show_help ()
 	echo "";
 	echo "The commands usable with `basename $0` are:";
 	echo "   conf       Switch configuration set";
+	echo "   conf-new   Create new configuration set";
 	echo "   conf-list  List possible configuration sets";
 	echo "   conf-desc  Describe given configuration set";
 	echo "   conf-reset Reset current configuration";
@@ -78,6 +79,13 @@ check_args ()
 		then
 			ERROR=1
 		fi
+	elif [ "$COMMAND" = "conf-new" ]
+	then
+		# Here we need a config set as argument
+		if [ "$NUM_ARGS" -gt 2 ]
+		then
+			ERROR=1
+		fi
 	elif [ "$COMMAND" = "conf-reset" ]
 	then
 		# No argument needed here
@@ -95,6 +103,30 @@ check_args ()
 		show_help
 		exit 1
 	fi
+}
+
+# Execute command conf-new
+command_confnew()
+{
+	NEW_CONF=$1
+
+	# Check definition existence
+	if [ -z $NEW_CONF ]
+	then
+		echo "No configuration defined"
+		exit 1
+	fi
+
+	# Check if already exists
+	if [ -d $CONFIG_FOLDER/$NEW_CONF ]
+	then
+		echo "Configuration already defined"
+		exit 1
+	fi
+
+	# Now create the new configuration
+	echo "Created new configuration in $CONFIG_FOLDER/$NEW_CONF"
+	cp -r $CONFIG_FOLDER/default $CONFIG_FOLDER/$NEW_CONF
 }
 
 # Execute command conf-list
@@ -276,23 +308,21 @@ then
 	show_help
 elif [ "$COMMAND_TYPE" = "env" ]
 then
-	# List the possible configurations
 	command_env $2
 elif [ "$COMMAND_TYPE" = "env-list" ]
 then
-	# List the possible configurations
 	command_envlist
+elif [ "$COMMAND_TYPE" = "conf-new" ]
+then
+	command_confnew $2
 elif [ "$COMMAND_TYPE" = "conf-list" ]
 then
-	# List the possible configurations
 	command_conflist
 elif [ "$COMMAND_TYPE" = "conf-desc" ]
 then
-	# Show description of given configuration
 	command_confdesc $2
 elif [ "$COMMAND_TYPE" = "conf-reset" ]
 then
-	# Reset current configuration
 	command_confreset
 else
 	# Report incorrect command

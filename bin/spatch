@@ -13,7 +13,7 @@ COMMAND_TYPE=$1
 NUM_ARGS=$#
 
 # Default parameters
-CONFIG_FOLDER=$HOME/.spatch.d/ # General config folder
+CONFIG_FOLDER=$HOME/.spatch.d # General config folder
 CURRENT_CONFIG_FILE_MARKER=$CONFIG_FOLDER/current # Where is stored current config
 VERSION="spatch version 1.0"
 
@@ -173,9 +173,9 @@ command_confreset ()
 	# Remove all the files if they exit
 	for file in ${FILES[@]}
 	do
-		if [ -f $HOME/.$file ]
+		if [ -h $HOME/.$file ]
 		then
-			echo "Removed file $file"
+			echo "Removed link $file"
 			rm $HOME/.$file
 		fi
 	done
@@ -201,6 +201,13 @@ get_current_conf_name ()
 command_conf ()
 {
 	NEW_CONF=$1
+
+	# Error if no new conf defined
+	if [ -z $NEW_CONF ]
+	then
+		echo "No configuration defined"
+		exit 1
+	fi
 
 	# Check presence of new configuration
 	if [ ! -d $CONFIG_FOLDER/$NEW_CONF ]

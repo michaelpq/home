@@ -29,6 +29,7 @@ show_help ()
 	echo "The commands usable with `basename $0` are:";
 	echo "   conf       Switch configuration set";
 	echo "   conf-new   Create new configuration set";
+	echo "   conf-rm    Remove configuration set";
 	echo "   conf-list  List possible configuration sets";
 	echo "   conf-desc  Describe given configuration set";
 	echo "   conf-reset Reset current configuration";
@@ -86,6 +87,13 @@ check_args ()
 		then
 			ERROR=1
 		fi
+	elif [ "$COMMAND" = "conf-rm" ]
+	then
+		# Here we need a config set as argument
+		if [ "$NUM_ARGS" -gt 2 ]
+		then
+			ERROR=1
+		fi
 	elif [ "$COMMAND" = "conf-reset" ]
 	then
 		# No argument needed here
@@ -120,13 +128,37 @@ command_confnew()
 	# Check if already exists
 	if [ -d $CONFIG_FOLDER/$NEW_CONF ]
 	then
-		echo "Configuration already defined"
+		echo "Configuration already existing"
 		exit 1
 	fi
 
 	# Now create the new configuration
-	echo "Created new configuration in $CONFIG_FOLDER/$NEW_CONF"
+	echo "Created new configuration $NEW_CONF"
 	cp -r $CONFIG_FOLDER/default $CONFIG_FOLDER/$NEW_CONF
+}
+
+# Execute command conf-rm
+command_confrm()
+{
+	OLD_CONF=$1
+
+	# Check definition existence
+	if [ -z $OLD_CONF ]
+	then
+		echo "No configuration defined"
+		exit 1
+	fi
+
+	# Check if really exists
+	if [ ! -d $CONFIG_FOLDER/$NEW_CONF ]
+	then
+		echo "Configuration not existing"
+		exit 1
+	fi
+
+	# Now remove the configuration
+	echo "Remove configuration $OLD_CONF"
+	rm -r $CONFIG_FOLDER/$OLD_CONF
 }
 
 # Execute command conf-list
@@ -315,6 +347,9 @@ then
 elif [ "$COMMAND_TYPE" = "conf-new" ]
 then
 	command_confnew $2
+elif [ "$COMMAND_TYPE" = "conf-rm" ]
+then
+	command_confrm $2
 elif [ "$COMMAND_TYPE" = "conf-list" ]
 then
 	command_conflist

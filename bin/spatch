@@ -30,7 +30,6 @@ show_help ()
 	echo "   conf       Switch configuration set";
 	echo "   conf-list  List possible configuration sets";
 	echo "   conf-desc  Describe given configuration set";
-	echo "   conf-show  Show current configuration set";
 	echo "   conf-reset Reset current configuration";
 	echo "   env        Switch environment";
 	echo "   env-list   List available environments";
@@ -86,13 +85,6 @@ check_args ()
 		then
 			ERROR=1
 		fi
-	elif [ "$COMMAND" = "conf-show" ]
-	then
-		# Here we do not need extra arguments
-		if [ "$NUM_ARGS" -gt 1 ]
-		then
-			ERROR=1
-		fi
 	fi
 
 	if [ "$ERROR" = 1 ]
@@ -108,12 +100,21 @@ check_args ()
 # Execute command conf-list
 command_conflist ()
 {
+	CURRENT_FOLDER=`get_current_conf_name`
+
 	for folder in `ls $CONFIG_FOLDER`
 	do
+		if [ "$CURRENT_FOLDER" = "$folder" ]
+		then
+			PREFIX="*"
+		else
+			PREFIX=" "
+		fi
+
 		# Print only the folder names
 		if [ -d "$CONFIG_FOLDER/$folder" ]
 		then
-			echo $folder
+			echo "$PREFIX $folder"
 		fi
 	done
 }
@@ -230,18 +231,6 @@ command_conf ()
 	echo $NEW_CONF > $CURRENT_CONFIG_FILE_MARKER
 }
 
-# Execute command conf-show
-command_confshow ()
-{
-	CONF_NAME=`get_current_conf_name`
-
-	if [ -z $CONF_NAME ]
-	then
-		echo "No configuration available"
-	else
-		echo "$CONF_NAME"
-	fi
-}
 
 # Execute command env
 command_env ()
@@ -305,9 +294,6 @@ elif [ "$COMMAND_TYPE" = "conf-reset" ]
 then
 	# Reset current configuration
 	command_confreset
-elif [ "$COMMAND_TYPE" = "conf-show" ]
-then
-	command_confshow
 else
 	# Report incorrect command
 	echo "Incorrect command"

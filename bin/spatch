@@ -1,7 +1,7 @@
 #!/bin/bash
 #--------------------------------------------------------------------------
 # spatch
-#	Configuration file switch utility
+#	Configuration manager for Home
 #
 #	Copyright (c) 2010-2012, Michael Paquier
 #
@@ -15,16 +15,19 @@ NUM_ARGS=$#
 # Default parameters
 CONFIG_FOLDER=$HOME/.spatch.d/ # General config folder
 CURRENT_CONFIG=$CONFIG_FOLDER/current # Where is stored current config
+VERSION="spatch version 1.0"
 
 show_help ()
 {
-	echo "usage: `basename $0` <command> [args]";
+	echo "usage: `basename $0` [--version] [--help] <command> [args]";
 	echo "";
 	echo "The commands usable with `basename $0` are:";
-	echo "   switch     Switch configuration set";
-	echo "   list       List possible configuration sets";
-	echo "   desc       Describe given configuration set";
-	echo "   current    Show current configuration set";
+	echo "   conf       Switch configuration set";
+	echo "   conf-list  List possible configuration sets";
+	echo "   conf-desc  Describe given configuration set";
+	echo "   conf-show  Show current configuration set";
+	echo "   env        Switch environment"
+	echo "   env-list   List available environments"
 }
 
 # Check number of arguments for command
@@ -35,28 +38,42 @@ check_args ()
 	COMMAND=$1
 	NUM_ARGS=$2
 	ERROR=0
-	if [ "$COMMAND" = "switch" ]
+	if [ "$COMMAND" = "conf" ]
 	then
 		# Here we need new config type
 		if [ "$NUM_ARGS" -gt 2 ]
 		then
 			ERROR=1
 		fi
-	elif [ "$COMMAND" = "list" ]
+	elif [ "$COMMAND" = "env" ]
+	then
+		# We need new environment name
+		if [ "$NUM_ARGS" -gt 2 ]
+		then
+			ERROR=1
+		fi
+	elif [ "$COMMAND" = "env-list" ]
 	then
 		# Here we do not need extra arguments
 		if [ "$NUM_ARGS" -gt 1 ]
 		then
 			ERROR=1
 		fi
-	elif [ "$COMMAND" = "desc" ]
+	elif [ "$COMMAND" = "conf-list" ]
+	then
+		# Here we do not need extra arguments
+		if [ "$NUM_ARGS" -gt 1 ]
+		then
+			ERROR=1
+		fi
+	elif [ "$COMMAND" = "conf-desc" ]
 	then
 		# Here we need a config set as argument
 		if [ "$NUM_ARGS" -gt 2 ]
 		then
 			ERROR=1
 		fi
-	elif [ "$COMMAND" = "current" ]
+	elif [ "$COMMAND" = "conf-show" ]
 	then
 		# Here we do not need extra arguments
 		if [ "$NUM_ARGS" -gt 1 ]
@@ -75,8 +92,8 @@ check_args ()
 	fi
 }
 
-# Execute command list
-command_list ()
+# Execute command conf-list
+command_conflist ()
 {
 	for folder in `ls $CONFIG_FOLDER`
 	do
@@ -88,8 +105,8 @@ command_list ()
 	done
 }
 
-# Execute command desc
-command_desc ()
+# Execute command conf-desc
+command_confdesc ()
 {
 	CONFIG_NAME=$1
 
@@ -131,39 +148,83 @@ command_desc ()
 	echo `cat $DESC_FILE`
 }
 
-# Execute command switch
-command_switch ()
+# Execute command conf
+command_conf ()
 {
-	echo "new branch: $1"
+	echo "new configuration: $1"
 	echo "Not implemented yet"
 	exit 1
 }
 
-# Execute command current
-command_current ()
+# Execute command conf-show
+command_confshow ()
 {
-	echo "current branch"
+	echo "current configuration"
 	echo "Not implemented yet"
 	exit 1
+}
+
+# Execute command env
+command_env ()
+{
+	NEW_ENV=$1
+	if [ -z $NEW_ENV ]
+	then
+		echo "Environment not specified"
+		show_help
+		exit 1
+	fi
+
+	# OK to switch environment
+	cd $HOME
+	git checkout $NEW_ENV > /dev/null 2>&1
+	ERROR=$?
+	if [ "$ERROR" = 0 ]
+	then
+		echo "Switched to environment $NEW_ENV"
+	else
+		echo "Incorrect environment $NEW_ENV"
+	fi
+}
+
+command_envlist ()
+{
+	echo "List of Home environments:"
+	cd $HOME
+	git branch
 }
 
 # Check the list of arguments
 check_args $COMMAND_TYPE $NUM_ARGS
 
-if [ "$COMMAND_TYPE" = "switch" ]
+if [ "$COMMAND_TYPE" = "conf" ]
 then
-	command_switch $2
-elif [ "$COMMAND_TYPE" = "list" ]
+	command_conf $2
+elif [ "$COMMAND_TYPE" = "--version" ]
+then
+	echo $VERSION
+elif [ "$COMMAND_TYPE" = "--help" ]
+then
+	show_help
+elif [ "$COMMAND_TYPE" = "env" ]
 then
 	# List the possible configurations
-	command_list
-elif [ "$COMMAND_TYPE" = "desc" ]
+	command_env $2
+elif [ "$COMMAND_TYPE" = "env-list" ]
+then
+	# List the possible configurations
+	command_envlist
+elif [ "$COMMAND_TYPE" = "conf-list" ]
+then
+	# List the possible configurations
+	command_conflist
+elif [ "$COMMAND_TYPE" = "conf-desc" ]
 then
 	# Show description of given configuration
-	command_desc $2
-elif [ "$COMMAND_TYPE" = "current" ]
+	command_confdesc $2
+elif [ "$COMMAND_TYPE" = "conf-show" ]
 then
-	command_current
+	command_confshow
 else
 	# Report incorrect command
 	echo "Incorrect command"

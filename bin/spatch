@@ -1,0 +1,175 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# spatch
+#	Configuration file switch utility
+#
+#	Copyright (c) 2010-2012, Michael Paquier
+#
+#--------------------------------------------------------------------------
+
+# First check the keyword used as command
+COMMAND_TYPE=$1
+# Take the number of arguments
+NUM_ARGS=$#
+
+# Default parameters
+CONFIG_FOLDER=$HOME/.spatch.d/ # General config folder
+CURRENT_CONFIG=$CONFIG_FOLDER/current # Where is stored current config
+
+show_help ()
+{
+	echo "usage: `basename $0` <command> [args]";
+	echo "";
+	echo "The commands usable with `basename $0` are:";
+	echo "   switch     Switch configuration set";
+	echo "   list       List possible configuration sets";
+	echo "   desc       Describe given configuration set";
+	echo "   current    Show current configuration set";
+}
+
+# Check number of arguments for command
+# $1 = command type
+# $2 = number of arguments
+check_args ()
+{
+	COMMAND=$1
+	NUM_ARGS=$2
+	ERROR=0
+	if [ "$COMMAND" = "switch" ]
+	then
+		# Here we need new config type
+		if [ "$NUM_ARGS" -gt 2 ]
+		then
+			ERROR=1
+		fi
+	elif [ "$COMMAND" = "list" ]
+	then
+		# Here we do not need extra arguments
+		if [ "$NUM_ARGS" -gt 1 ]
+		then
+			ERROR=1
+		fi
+	elif [ "$COMMAND" = "desc" ]
+	then
+		# Here we need a config set as argument
+		if [ "$NUM_ARGS" -gt 2 ]
+		then
+			ERROR=1
+		fi
+	elif [ "$COMMAND" = "current" ]
+	then
+		# Here we do not need extra arguments
+		if [ "$NUM_ARGS" -gt 1 ]
+		then
+			ERROR=1
+		fi
+	fi
+
+	if [ "$ERROR" = 1 ]
+	then
+		# Report error
+		echo "Incorrect number of arguments"
+		# Show help in case of error and leave
+		show_help
+		exit 1
+	fi
+}
+
+# Execute command list
+command_list ()
+{
+	for folder in `ls $CONFIG_FOLDER`
+	do
+		# Print only the folder names
+		if [ -d "$CONFIG_FOLDER/$folder" ]
+		then
+			echo $folder
+		fi
+	done
+}
+
+# Execute command desc
+command_desc ()
+{
+	CONFIG_NAME=$1
+
+	# If name is empty, fallback to current
+	if [ -z "$CONFIG_NAME" ]
+	then
+		# Be sure that current config exists
+		if [  -f "$CURRENT_CONFIG" ]
+		then
+			CONFIG_NAME=`cat $CURRENT_CONFIG`
+		fi
+	fi
+
+	# Error if still empty
+	if [ -z "$CONFIG_NAME" ]
+	then
+		echo "No configuration set found"
+		exit 1
+	fi
+
+	# Now we are sure that the current configuration has been read or that
+	# There is a configuration defined, but we are not sure if it exists,
+	# So check it.
+	if [ ! -d $CONFIG_FOLDER/$CONFIG_NAME ]
+	then
+		echo "Incorrect configuration set"
+		exit 1
+	fi
+
+	DESC_FILE=$CONFIG_FOLDER/$CONFIG_NAME/DESCRIPTION
+	# Check presence of a description file
+	if [ ! -f $DESC_FILE ]
+	then
+		echo "No description available"
+		exit 1
+	fi
+
+	# OK now print description of configuration set
+	echo `cat $DESC_FILE`
+}
+
+# Execute command switch
+command_switch ()
+{
+	echo "new branch: $1"
+	echo "Not implemented yet"
+	exit 1
+}
+
+# Execute command current
+command_current ()
+{
+	echo "current branch"
+	echo "Not implemented yet"
+	exit 1
+}
+
+# Check the list of arguments
+check_args $COMMAND_TYPE $NUM_ARGS
+
+if [ "$COMMAND_TYPE" = "switch" ]
+then
+	command_switch $2
+elif [ "$COMMAND_TYPE" = "list" ]
+then
+	# List the possible configurations
+	command_list
+elif [ "$COMMAND_TYPE" = "desc" ]
+then
+	# Show description of given configuration
+	command_desc $2
+elif [ "$COMMAND_TYPE" = "current" ]
+then
+	command_current
+else
+	# Report incorrect command
+	echo "Incorrect command"
+	# Show help and return error
+	show_help
+	exit 1
+fi
+
+exit 0

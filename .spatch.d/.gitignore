@@ -1,0 +1,8 @@
+# Ignore all the sets of configuration
+*
+
+# Those files need to remain
+!/.gitignore
+!/README
+!/example
+!/default

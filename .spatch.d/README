@@ -1,0 +1,31 @@
+Spatch, Michael Paquier
+=======================
+
+Spatch is a switcher for configuration files in Linux environments. The purpose
+of spatch is to give the user the possibility to change a set of configuration
+files with a single command.
+
+The sets of configuration files are located in folders of the type:
+$HOME/.spatch.d/$CONFIG_NAME
+where $CONFIG_NAME is the name of the folder containing all the configuration
+files to be copied to your home repository.
+
+You can refer to the example set in $HOME/.spatch.d/example giving a model of
+how to set a configuration set. The set "default" can also be used as a base.
+Except "default" and "example", all the other sets of configuration are ignored
+by Home.
+
+Spatch has been created to be implemented in Home and respects the same license,
+so feel free to use and contribute to it.
+
+For the time being spatch has only basic functionalities.
+- Switch a set of files:
+spatch switch $CONFIG_NAME
+- Show the description of a set of files:
+spatch desc $CONFIG_NAME
+- List the configuration files of a set:
+spatch list $CONFIG_NAME
+- Show current configuration
+spatch show
+
+When no configuration name is specified, the current configuration is used.

@@ -1,0 +1,10 @@
+#--------------------------------------------------------------------------
+# bash_extra
+#	Extra private settings for bash
+#	Copyright (c) 2010-2012, Michael Paquier
+#--------------------------------------------------------------------------
+
+# This is a default configuration file, so empty by default...
+
+# Add your extra settings here and then copy or link this file
+# as $HOME/.bash_extra to make it effective.

@@ -1,0 +1,10 @@
+#--------------------------------------------------------------------------
+# bash_alias_extra
+#	Extra settings for aliases
+#	Copyright (c) 2010-2012, Michael Paquier
+#--------------------------------------------------------------------------
+
+# This is a default configuration file, so empty by default...
+
+# Add your other private settings here and then copy or link this file as
+# $HOME/.bash_alias_extra to make it effective.

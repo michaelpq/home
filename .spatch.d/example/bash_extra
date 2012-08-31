@@ -1,0 +1,22 @@
+#--------------------------------------------------------------------------
+# .bash_extra
+#	Extra private settings for bash
+#	Copyright (c) 2010-2012, Michael Paquier
+#--------------------------------------------------------------------------
+
+# Settings related to proxy
+no_proxy=localhost,127.0.0.1
+NO_PROXY=localhost,127.0.0.1
+all_proxy=http://proxy.example.com:8080/
+ALL_PROXY=http://proxy.example.com:8080/
+http_proxy=http://proxy.example.com:8080/
+HTTP_PROXY=http://proxy.example.com:8080/
+https_proxy=http://proxy.example.com:8080/
+HTTPS_PROXY=http://proxy.example.com:8080/
+ftp_proxy=http://proxy.example.com:8080/
+FTP_PROXY=http://proxy.example.com:8080/
+ftps_proxy=http://proxy.example.com:8080/
+FTPS_PROXY=http://proxy.example.com:8080/
+
+# Add your extra settings here and then copy or link this file
+# as $HOME/.bash_extra to make it effective.

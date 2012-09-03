@@ -24,6 +24,7 @@ fi
 # General aliases
 alias rm='rm -f'
 alias du='du -h'
+alias dc='cd'
 alias df='df -h'
 alias vi='vim'
 alias emacs='emacs -nw'

@@ -345,10 +345,28 @@ command_envlist ()
 # Execute command env-update
 command_envupdate ()
 {
-	echo "Updating environments"
 	cd $HOME
+
+	# Check environment status
+	git status | grep "nothing to commit" > /dev/null 2>&1
+	NOTHING_TO_COMMIT=$?
+	if [ "$NOTHING_TO_COMMIT" != 0 ]
+	then
+		# Stash things that are not desired during pull
+		echo "Environment modifications detected, stashing them..."
+		git stash
+	fi
+
+	echo "Updating environments"
 	# Simply do a pull on all the branches
 	git pull
+
+	# Reapply stashed things
+	if [ "$NOTHING_TO_COMMIT" != 0 ]
+	then
+		echo "Reapplying stashed stuff"
+		git stash pop
+	fi
 }
 
 # Check the list of arguments

@@ -140,7 +140,7 @@
 (add-hook 'c-mode-common-hook 'c-tab-mode-common-hook)	;; C language
 (add-hook 'sh-mode-hook 'sh-tab-mode-common-hook)	;; Shell-script
 
-;; Delete trailing whitespaces for C, C++ and Python
+;; Delete trailing whitespaces for several languages
 (add-hook 'c-mode-hook '(lambda ()
   (add-hook 'write-contents-hooks 'delete-trailing-whitespace nil t)))
 (add-hook 'c++-mode-hook '(lambda ()
@@ -150,6 +150,8 @@
 (add-hook 'python-mode-hook '(lambda ()
   (add-hook 'write-contents-hooks 'delete-trailing-whitespace nil t)))
 (add-hook 'sh-mode-hook '(lambda ()
+  (add-hook 'write-contents-hooks 'delete-trailing-whitespace nil t)))
+(add-hook 'sgml-mode-hook '(lambda ()
   (add-hook 'write-contents-hooks 'delete-trailing-whitespace nil t)))
 
 ;;--------------------------------------------------------------------------

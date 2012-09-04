@@ -35,6 +35,7 @@ show_help ()
 	echo "   conf-reset Reset current configuration";
 	echo "   env        Switch environment";
 	echo "   env-list   List available environments";
+	echo "   env-update Update environments with latest data";
 }
 
 # Check number of arguments for command
@@ -60,6 +61,13 @@ check_args ()
 			ERROR=1
 		fi
 	elif [ "$COMMAND" = "env-list" ]
+	then
+		# Here we do not need extra arguments
+		if [ "$NUM_ARGS" -gt 1 ]
+		then
+			ERROR=1
+		fi
+	elif [ "$COMMAND" = "env-update" ]
 	then
 		# Here we do not need extra arguments
 		if [ "$NUM_ARGS" -gt 1 ]
@@ -326,11 +334,21 @@ command_env ()
 	fi
 }
 
+# Execute command env-list
 command_envlist ()
 {
 	echo "List of Home environments:"
 	cd $HOME
 	git branch
+}
+
+# Execute command env-update
+command_envupdate ()
+{
+	echo "Updating environments"
+	cd $HOME
+	# Simply do a pull on all the branches
+	git pull
 }
 
 # Check the list of arguments
@@ -351,6 +369,9 @@ then
 elif [ "$COMMAND_TYPE" = "env-list" ]
 then
 	command_envlist
+elif [ "$COMMAND_TYPE" = "env-update" ]
+then
+	command_envupdate
 elif [ "$COMMAND_TYPE" = "conf-new" ]
 then
 	command_confnew $2

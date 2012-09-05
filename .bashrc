@@ -106,7 +106,7 @@ fi
 # PostgreSQL library path
 export LD_LIBRARY_PATH=$HOME/pgsql/lib
 # To SGML catalogs for PostgreSQL documentation
-export SGML_CATALOG_FILES=/etc/sgml/catalog
+export SGML_CATALOG_FILES=/etc/sgml/catalog:/usr/share/sgml/jade/catalog
 
 # Enable core files
 ulimit -c unlimited

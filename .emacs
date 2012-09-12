@@ -154,6 +154,15 @@
 (add-hook 'sgml-mode-hook '(lambda ()
   (add-hook 'write-contents-hooks 'delete-trailing-whitespace nil t)))
 
+;; Highlight lines with strictly more than 80 characters
+(defun 80-col-limit nil
+  (defface line-overflow
+    '((t (:background "orange" :foreground "black")))
+    "Face to use for `hl-line-face'.")
+  (highlight-regexp "^.\\{81,\\}$" 'line-overflow)
+)
+(add-hook 'find-file-hook '80-col-limit)
+
 ;;--------------------------------------------------------------------------
 ;; Navigation
 ;;--------------------------------------------------------------------------

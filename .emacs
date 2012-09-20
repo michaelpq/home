@@ -161,7 +161,18 @@
     "Face to use for `hl-line-face'.")
   (highlight-regexp "^.\\{81,\\}$" 'line-overflow)
 )
-(add-hook 'find-file-hook '80-col-limit)
+(add-hook 'c-mode-hook '(lambda ()
+  (add-hook 'find-file-hook '80-col-limit)))
+(add-hook 'c++-mode-hook '(lambda ()
+  (add-hook 'find-file-hook '80-col-limit)))
+(add-hook 'perl-mode-hook '(lambda ()
+  (add-hook 'find-file-hook '80-col-limit)))
+(add-hook 'python-mode-hook '(lambda ()
+  (add-hook 'find-file-hook '80-col-limit)))
+(add-hook 'sh-mode-hook '(lambda ()
+  (add-hook 'find-file-hook '80-col-limit)))
+(add-hook 'sgml-mode-hook '(lambda ()
+  (add-hook 'find-file-hook '80-col-limit)))
 
 ;;--------------------------------------------------------------------------
 ;; Navigation

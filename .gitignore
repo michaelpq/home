@@ -18,6 +18,7 @@
 /.filezilla
 /.fontconfig
 /.gconf
+/.gem
 /.gimp*
 /.gnupg
 /.gstreamer*

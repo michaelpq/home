@@ -28,7 +28,16 @@ then
 		GIT_BRANCH="(unnamed branch)"
 		GIT_BRANCH=${GIT_BRANCH##refs/heads/}
 
-		# Check the status of repository
+		# Check if repository is a bare one
+		# Such repositories have no status so no real work branch
+		CORE_BARE=`git config core.bare`
+		if [ "$CORE_BARE" == "true" ]
+		then
+			echo "(bare-repo)"
+			exit
+		fi
+
+		# Print current branch and its status
 		git status | grep "nothing to commit" > /dev/null 2>&1
 		NOTHING_TO_COMMIT=$?
 		if [ "$NOTHING_TO_COMMIT" == 0 ]

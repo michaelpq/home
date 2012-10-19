@@ -10,23 +10,44 @@
 EXPECTED_ARGS=0
 FLAG_DEBUG=0
 FLAG_REGRESS=0
+FLAG_PATH=0
+
+# Show help
+show_help()
+{
+	ERROR_NUM=$1
+	echo "Usage: `basename $0` [OPTION]..."
+	echo " "
+	echo "Options:"
+	echo "  -d                  Compile with debug flag"
+	echo "  -h                  Show this help"
+	echo "  -p PATH             Define installation folder"
+	echo "  -r                  Run regressions"
+	exit $ERROR_NUM
+}
 
 #Treat options
-while getopts 'dr' OPTION
+while getopts 'dhp:r' OPTION
 do
 	case $OPTION in
 	d)	# Enforce debug flag
 		FLAG_DEBUG=1
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
 		;;
+	h)	# Help
+		show_help 0
+		;;
+	p)	# Installation folder
+		FLAG_PATH=1
+		USER_INSTALL_FOLDER="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
 	r)	# Run regressions
 		FLAG_REGRESS=1
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
 		;;
 	?)	# Help
-		echo "Usage: `basename $0` [-d] [-r]\n"
-		echo "Example: `basename $0` -d"
-		exit 1
+		show_help 1
 		;;
 	esac
 done
@@ -34,17 +55,24 @@ done
 # Check number of arguments
 if [ $# -ne $EXPECTED_ARGS ]
 then
-	echo "Usage: `basename $0` [-d] [-r]\n"
-	echo "Example: `basename $0` -d"
-	exit 1
+	show_help 1
+fi
+
+# Define installation folder
+if [ "$FLAG_PATH" == 1 ]
+then
+	PSQL_INSTALL_FOLDER=$USER_INSTALL_FOLDER
+else
+	PSQL_INSTALL_FOLDER=$HOME/pgsql
+	echo "Using default installation folder $PSQL_INSTALL_FOLDER"
 fi
 
 # Install Postgres-XC binaries
 if [ "$FLAG_DEBUG" == 1 ]
 then
-	./configure --prefix=$HOME/pgsql --enable-depend --enable-debug --disable-rpath --enable-cassert --with-libxml CFLAGS="-DG"
+	./configure --prefix=$PSQL_INSTALL_FOLDER --enable-depend --enable-debug --disable-rpath --enable-cassert --with-libxml CFLAGS="-DG"
 else
-	./configure --prefix=$HOME/pgsql --enable-depend --enable-debug --disable-rpath --enable-cassert --with-libxml
+	./configure --prefix=$PSQL_INSTALL_FOLDER --enable-depend --enable-debug --disable-rpath --enable-cassert --with-libxml
 fi
 
 # Compile

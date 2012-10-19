@@ -12,22 +12,100 @@
 EXPECTED_ARGS=0
 NUM_SLAVES=0
 FLAG_CASCADING=0
+FLAG_PATH=0
+FLAG_VERSION=0
+
+# Show utility help
+show_help()
+{
+	ERROR_NUM=$1
+	echo "Usage: `basename $0` [OPTION]..."
+	echo " "
+	echo "Options:"
+	echo "  -c                  Cascading replication"
+	echo "  -h                  Show this help"
+	echo "  -p PATH             Path to Postgres install folder"
+	echo "                      The same folder is used to store data folders"
+	echo "  -s number_slaves    Choose number of slaves behind a node"
+	echo "  -v                  Output installation version and leave"
+	exit $ERROR_NUM
+}
+
+# Check installation for given folder
+check_install()
+{
+	PSQL_INSTALL_PATH=$1
+
+	# Check presence of bin
+	if [ ! -d $PSQL_INSTALL_PATH/bin ]
+	then
+		echo "Missing folder $PSQL_INSTALL_PATH/bin in installation"
+		exit 1
+	fi
+	# Check presence of lib
+	if [ ! -d $PSQL_INSTALL_PATH/lib ]
+	then
+		echo "Missing folder $PSQL_INSTALL_PATH/lib in installation"
+		exit 1
+	fi
+	# Check presence of share
+	if [ ! -d $PSQL_INSTALL_PATH/share ]
+	then
+		echo "Missing folder $PSQL_INSTALL_PATH/share in installation"
+		exit 1
+	fi
+	# Check presence of lib
+	if [ ! -d $PSQL_INSTALL_PATH/include ]
+	then
+		echo "Missing folder $PSQL_INSTALL_PATH/include in installation"
+		exit 1
+	fi
+}
+
+# Show installation version and leave
+show_version()
+{
+	PSQL_INSTALL_PATH=$1
+
+	# Check that postgres binary exists
+	if [ ! -x $PSQL_INSTALL_PATH/bin/postgres ]
+	then
+		echo "Unexisting $PSQL_INSTALL_PATH/bin/postgres binary"
+		echo "You should check your installation"
+		exit 1
+	fi
+
+	# Output version
+	echo `$PSQL_INSTALL_PATH/bin/postgres --version`
+	exit 0
+}
 
 # Treat options
-while getopts 'cs:' OPTION
+while getopts 'chp:s:v' OPTION
 do
 	case $OPTION in
 	c)	# Cascading - single layer
 		FLAG_CASCADING=1
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
 		;;
+	h)  # Show this help
+		show_help 0
+		;;
+	p)	# Path to postgres install folder
+		FLAG_PATH=1
+		PSQL_USER_PATH="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
 	s)	# Number of slaves attached to the main node
 		NUM_SLAVES="$OPTARG"
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
 		;;
-	?)	echo "Usage: `basename $0` [-c] [-s num_slaves]\n"
-		echo "Example: `basename $0` -s 2"
-		exit 0
+	v)	# Version output
+		FLAG_VERSION=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		;;
+	?)	#Leave without an error code
+		show_help 0
 		;;
 	esac
 done
@@ -35,12 +113,11 @@ done
 # Check number of arguments
 if [ $# -ne $EXPECTED_ARGS ]
 then
-	echo "Usage: `basename $0` [-c] [-s num_slaves]\n"
-	echo "Example: `basename $0` -s 2"
-	exit 1
+	# Leave with an error code
+	show_help 1
 fi
 
-# Stop cascading for he time being
+# Stop cascading for the time being
 if [ "$FLAG_CASCADING" == 1 ]
 then
 	echo "Cascading is not yet supported"
@@ -58,7 +135,25 @@ for i in $(seq 1 $NUM_SLAVES)
 do
 	SLAVE_PORTS[$i]=$(($SLAVE_PORT_START + $i))
 done
-PSQL_FOLDER=$HOME/pgsql
+
+#Set default PSQL install folder to the one wanted by user
+if [ "$FLAG_PATH" == 1 ]
+then
+	PSQL_FOLDER=$PSQL_USER_PATH
+else
+	# Set up default
+	PSQL_FOLDER=$HOME/pgsql
+	echo "Installation folder set to default $PSQL_FOLDER"
+fi
+
+# Check installation on this folder
+check_install $PSQL_FOLDER
+
+# Show up version if requested
+if [ "$FLAG_VERSION" == 1 ]
+then
+	show_version $PSQL_FOLDER
+fi
 
 # Finish calculating dependencies between folders
 PSQL_SHARE=$PSQL_FOLDER/share
@@ -88,8 +183,8 @@ done
 # in the most atrocious way possible as they meritated it
 # OK this is not very clean but here the goal is efficiency...
 echo "Take out Postgres processes"
-kill -9 `ps ux | grep "bin/gtm" | cut -d " " -f 2-3`
-killall postgres gtm psql
+kill -9 `ps ux | grep "bin/gtm" | cut -d " " -f 2-3` > /dev/null 2>&1
+killall postgres gtm psql > /dev/null 2>&1
 sleep 2
 
 # Check if data folders exist or not and create them
@@ -107,7 +202,7 @@ done
 echo "Clean up data folders"
 for folder in $LOG_DATA ${SLAVE_DATAS[@]} ${SLAVE_ARCHIVE[@]} $MASTER_DATA $MASTER_ARCHIVE
 do
-	rm -r $folder/*
+	rm -r $folder/* > /dev/null 2>&1
 done
 sleep 1
 

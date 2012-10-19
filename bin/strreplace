@@ -1,8 +1,14 @@
 #!/bin/bash
-#Replace string in file of given extension
-#argument 1, extension type
-#argument 2, old string
-#argument 3, new string
+#--------------------------------------------------------------------------
+# strreplace
+#	Replace string in file of given extension
+#	Copyright (c) 2010-2012, Michael Paquier
+#
+#	List of arguments:
+#	1) file extension type
+#	2) old string
+#	3) new string
+#--------------------------------------------------------------------------
 
 EXPECTED_ARGS=3
 

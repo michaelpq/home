@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #--------------------------------------------------------------------------
 # pg_compile
 #	Copy and compile PostgreSQL or Postgres-XC code

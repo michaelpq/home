@@ -1,10 +1,11 @@
 #!/bin/bash
-#Bash scripts used for git developement
-#It is supposed that user has already defined his git conf environment correctly
-#It is possible to do the following things
-#Find the list of possible branches in the repository defined with option -l
-#Find the files that have to be developped for this branch one in a row with option -b
-#by entering a branch name and open windows in accordance to the files wanted
+#--------------------------------------------------------------------------
+# gitdiff
+#	Utility to facilitate development with GIT
+#	Copyright (c) 2010-2012, Michael Paquier
+#
+#	See the help to get an idea of the possibilities...
+#--------------------------------------------------------------------------
 
 #TODO:
 #1) add compatibility for kde and xterm
@@ -158,7 +159,7 @@ then
 			echo "Patch defined, but no branch defined (-b option)"
 			exit 2
 		fi
-		
+
 		#Change branch first
 		git checkout $BRANCH_NAME;err=$?
 		if [ "$err" -ne "0" ]

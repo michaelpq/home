@@ -1,16 +1,17 @@
 #!/bin/bash
-
-#Permits to launch a command
-#based on a sudo mode or a su mode
-# on a remote server as root.
-
-#In both modes, it is supposed that the user has already
-#set a correct ssh-keygen environment in the cluster of servers used
-
-#Connection to remote server is made with ssh with the user name speciafied
-#a user name can also be chosen as option
-#For security purposes, the password is asked only as input
-#of this script and it doesn't print on screen.
+#--------------------------------------------------------------------------
+# remote_command
+#	Permits to launch a command based on sudo mode or su mode
+#	on a remote server as root.
+#	Copyright (c) 2010-2012, Michael Paquier
+#
+#	In both modes, it is supposed that the user has already	set a correct
+#	ssh-keygen environment in the cluster of servers used.
+#	Connection to remote server is made with ssh with the user name
+#	specified a user name can also be chosen as option. For security
+#	purposes, the password is asked only as input of this script and
+#	it doesn't print on screen.
+#--------------------------------------------------------------------------
 
 #Option flag
 SFLAG=0

@@ -2,9 +2,7 @@
 #--------------------------------------------------------------------------
 # spatch
 #	Configuration manager for Home
-#
 #	Copyright (c) 2010-2012, Michael Paquier
-#
 #--------------------------------------------------------------------------
 
 # First check the keyword used as command

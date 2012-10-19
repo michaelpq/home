@@ -129,7 +129,10 @@ then
 	PSQL_INPUT_FOLDER=$USER_INPUT_FOLDER
 else
 	PSQL_INPUT_FOLDER=$HOME/git/postgres
-	echo "Using default input folder $PSQL_INPUT_FOLDER"
+	if [ "$FLAG_VPATH" == 1 -o "$FLAG_NORMAL" == 1 ]
+	then
+		echo "Using default input folder $PSQL_INPUT_FOLDER"
+	fi
 fi
 # Set output folder value
 if [ "$FLAG_OUTPUT_FOLDER" == 1 ]
@@ -137,7 +140,10 @@ then
 	PSQL_OUTPUT_FOLDER=$USER_OUTPUT_FOLDER
 else
 	PSQL_OUTPUT_FOLDER=$HOME/make
-	echo "Using default output folder $PSQL_OUTPUT_FOLDER"
+	if [ "$FLAG_VPATH" == 1 -o "$FLAG_NORMAL" == 1 ]
+	then
+		echo "Using default output folder $PSQL_OUTPUT_FOLDER"
+	fi
 fi
 
 # Define installation folder

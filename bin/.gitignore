@@ -1,3 +1,0 @@
-#Ignore only certain repositories
-#This is used to setup a local Postgres server
-/pgsql

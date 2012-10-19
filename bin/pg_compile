@@ -33,6 +33,7 @@ show_help()
 	echo "  -r       Run regressions"
 	echo " "
 	echo "Code copy for installation:"
+	echo "  -c       Copy only code, no installation"
 	echo "  -i PATH  Original code folder (input)"
 	echo "  -o PATH  install folder (output)"
 	echo "  -n       Normal installation"
@@ -41,9 +42,13 @@ show_help()
 }
 
 #Treat options
-while getopts 'dhi:no:p:rv' OPTION
+while getopts 'cdhi:no:p:rv' OPTION
 do
 	case $OPTION in
+	c)	# Copy only code, no installation
+		FLAG_COPY_ONLY=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		;;
 	d)	# Enforce debug flag
 		FLAG_DEBUG=1
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
@@ -108,6 +113,15 @@ then
 	echo "Cannot define input folder without installation flag activated"
 	exit 1
 fi
+# No installation flags can be used when copy-only is activated
+if [ "$FLAG_COPY_ONLY" == 1 ]
+then
+	if [ "$FLAG_VPATH" == 1 -o "$FLAG_NORMAL" == 1 ]
+	then
+		echo "Cannot do install when copy-only is activated"
+		exit 1
+	fi
+fi
 
 # Set input folder value
 if [ "$FLAG_INPUT_FOLDER" == 1 ]
@@ -170,6 +184,23 @@ then
 	else
 		$CONFIGURE_CALL_FOLDER/configure --prefix=$PSQL_INSTALL_FOLDER --enable-depend --enable-debug --disable-rpath --enable-cassert --with-libxml
 	fi
+elif [ "$FLAG_COPY_ONLY" == 1 ]
+then
+	# Perform a copy-only
+
+	# Clean up the output folder if it already exists
+	if [ -d $PSQL_OUTPUT_FOLDER ]
+	then
+		rm -rf $PSQL_OUTPUT_FOLDER
+		echo "Deleting existing output folder $PSQL_OUTPUT_FOLDER"
+	fi
+
+	# Then do the copy
+	cp -r $PSQL_INPUT_FOLDER $PSQL_OUTPUT_FOLDER
+	echo "Copying source folder $PSQL_INPUT_FOLDER to $PSQL_OUTPUT_FOLDER"
+
+	# exit, no installation is necessary
+	exit 0
 else
 	# We do here a normal install, so do not worry about anything with code copy
 	if [ "$FLAG_DEBUG" == 1 ]

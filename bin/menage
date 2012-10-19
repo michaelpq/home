@@ -1,7 +1,12 @@
 #!/bin/bash
-#Clean up Postgres-XC environment
-
-PSQL_FOLDER=$HOME/pgsql
+#--------------------------------------------------------------------------
+# menage
+#	Clean up PostgreSQL/Postgres-XC folder
+#	Copyright (c) 2010-2012, Michael Paquier
+#
+#	A simple way to clean up a development environment in one single
+#	command by killing atrociously all the processes related to PG and XC.
+#--------------------------------------------------------------------------
 
 #Take out all processes
 echo "Killing atrociously Postgres processes"

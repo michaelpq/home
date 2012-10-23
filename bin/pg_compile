@@ -183,6 +183,13 @@ then
 		CONFIGURE_CALL_FOLDER="."
 	fi
 
+	# Check the presence of configure in given folder
+	if [ ! -x $CONFIGURE_CALL_FOLDER/configure ]
+	then
+		echo "No configure in folder $CONFIGURE_CALL_FOLDER"
+		exit 1
+	fi
+
 	# Configure Postgres install folder
 	if [ "$FLAG_DEBUG" == 1 ]
 	then
@@ -208,6 +215,13 @@ then
 	# exit, no installation is necessary
 	exit 0
 else
+	# Check the presence of configure in given folder
+	if [ ! -x $CONFIGURE_CALL_FOLDER/configure ]
+	then
+		echo "No configure in folder $CONFIGURE_CALL_FOLDER"
+		exit 1
+	fi
+
 	# We do here a normal install, so do not worry about anything with code copy
 	if [ "$FLAG_DEBUG" == 1 ]
 	then

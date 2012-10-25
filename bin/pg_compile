@@ -152,7 +152,12 @@ then
 	PSQL_INSTALL_FOLDER=$USER_INSTALL_FOLDER
 else
 	PSQL_INSTALL_FOLDER=$HOME/pgsql
-	echo "Using default installation folder $PSQL_INSTALL_FOLDER"
+
+	# Print message only if installation method is specified
+	if [ "$FLAG_VPATH" == 1 -o "$FLAG_NORMAL" == 1 ]
+	then
+		echo "Using default installation folder $PSQL_INSTALL_FOLDER"
+	fi
 fi
 
 # If normal or vpath install flags are activated, we need to copy the code first

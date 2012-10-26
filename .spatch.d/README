@@ -1,21 +1,21 @@
 Spatch, Michael Paquier
 =======================
 
-Spatch is an environment manager for Home. It can manipulate dinamically
+Spatch is an environment manager for Home. It can manipulate dynamically
 configuration files and environments available with simple commands.
 
-Please refer to the help for more information on functionalities.
+Please refer to the help for more information about functionalities.
 
-Regarding the sets of configuration files that spatch can manipulate.
-They are located in folders of the type:
+The configuration sets files that spatch can manipulate are located in folders
+of the type:
 $HOME/.spatch.d/$CONFIG_NAME
 where $CONFIG_NAME is the name of the folder containing all the configuration
 files to be copied to your home repository.
 
 You can refer to the example set in $HOME/.spatch.d/example giving a model of
 how to set a configuration set. The set "default" can also be used as a base.
-Except "default" and "example", all the other sets of configuration are ignored
+Except "default" and "example", all the other configuration sets of are ignored
 by Home.
 
-Spatch has been created to be implemented in Home and respects the same license,
-so feel free to use and contribute to it.
+Spatch has been created to be implemented in Home and respects the same
+license, so feel free to use it and contribute to it.

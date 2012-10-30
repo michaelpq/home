@@ -220,6 +220,9 @@ then
 	# exit, no installation is necessary
 	exit 0
 else
+	# Configure folder is the current folder here
+	CONFIGURE_CALL_FOLDER="."
+
 	# Check the presence of configure in given folder
 	if [ ! -x $CONFIGURE_CALL_FOLDER/configure ]
 	then

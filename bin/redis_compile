@@ -40,7 +40,7 @@ show_help()
 }
 
 #Treat options
-while getopts 'cdhi:no:p:rv' OPTION
+while getopts 'cdhi:no:p:r' OPTION
 do
 	case $OPTION in
 	c)	# Copy only code, no installation

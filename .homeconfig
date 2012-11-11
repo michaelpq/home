@@ -9,6 +9,11 @@ export HOME_POSTGRES_SRC=$HOME/git/postgres
 export HOME_POSTGRES_MAKE=$HOME/make/postgres
 export HOME_POSTGRES_INSTALL=$HOME/bin/pgsql
 
+# Redis development parameters
+export HOME_REDIS_SRC=$HOME/git/redis
+export HOME_REDIS_MAKE=$HOME/make/redis
+export HOME_REDIS_INSTALL=$HOME/bin/redis
+
 # Add Postgres binaries to path
 export PATH=$HOME_POSTGRES_INSTALL/bin:$PATH
 

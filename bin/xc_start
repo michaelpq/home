@@ -1,10 +1,10 @@
 #!/bin/bash
 #--------------------------------------------------------------------------
-# start_cluster
+# xc_start
 #	Start a Postgres-XC cluster
 #	Copyright (c) 2010-2012, Michael Paquier
 #
-#	Build the XC cluster: 1GTM with Coordinators (default 1) and
+#	Build the XC cluster: 1 GTM with Coordinators (default 1) and
 #	Datanodes (default 2) defined
 #--------------------------------------------------------------------------
 

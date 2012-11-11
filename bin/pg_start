@@ -1,6 +1,6 @@
 #!/bin/bash
 #--------------------------------------------------------------------------
-# start_postgres
+# pg_start
 #	Start a PostgreSQL cluster
 #	Copyright (c) 2010-2012, Michael Paquier
 #

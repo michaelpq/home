@@ -1,0 +1,8 @@
+#--------------------------------------------------------------------------
+# .homeconfig_extra_example
+#	Extra private settings for Home
+#	Copyright (c) 2010-2012, Michael Paquier
+#--------------------------------------------------------------------------
+
+# Add your extra settings here and then copy this file as .homeconfig_extra,
+# which is ignored by Home so its parameters are kept private.

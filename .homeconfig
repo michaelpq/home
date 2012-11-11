@@ -1,0 +1,11 @@
+#--------------------------------------------------------------------------
+# .homeconfig
+#	Public environment variables of Home
+#	Copyright (c) 2010-2012, Michael Paquier
+#--------------------------------------------------------------------------
+
+# PostgreSQL development parameters
+HOME_POSTGRES_SRC=$HOME/git/postgres
+HOME_POSTGRES_MAKE=$HOME/make/postgres
+
+# Add other parameters publicly visible here if necessary

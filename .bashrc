@@ -128,3 +128,15 @@ fi
 if [ -f ~/.bash_extra ]; then
 	. ~/.bash_extra
 fi
+
+# Load global public parameters of Home
+# Those parameters are visible in the GIT repository of Home.
+if [ -f ~/.homeconfig ]; then
+	. ~/.homeconfig
+fi
+
+# Load global private parameters of Home
+# Those parameters are not visible in the GIT repository of Home.
+if [ -f ~/.homeconfig_extra ]; then
+	. ~/.homeconfig_extra
+fi

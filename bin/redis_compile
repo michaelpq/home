@@ -1,0 +1,232 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# redis_compile
+#	Copy and compile Redis code
+#	Copyright (c) 2010-2012, Michael Paquier
+#
+#	The code used for compilation is a copy of an original code.
+#	Run regressions if necessary or enforce debug flag.
+#--------------------------------------------------------------------------
+
+# Take and check options
+EXPECTED_ARGS=0
+FLAG_DEBUG=0
+FLAG_REGRESS=0
+FLAG_PATH=0
+# code copy flags
+FLAG_INPUT_FOLDER=0
+FLAG_OUTPUT_FOLDER=0
+FLAG_NORMAL=0
+FLAG_COPY_ONLY=0
+
+# Show help
+show_help()
+{
+	ERROR_NUM=$1
+	echo "Usage: `basename $0` [OPTION]..."
+	echo " "
+	echo "Options:"
+	echo "  -d       Compile with debug flag"
+	echo "  -h       Show this help"
+	echo "  -p PATH  Define installation folder"
+	echo "  -r       Run tests"
+	echo " "
+	echo "Code copy for installation:"
+	echo "  -c       Copy only code, no installation"
+	echo "  -i PATH  Original code folder (input)"
+	echo "  -o PATH  install folder (output)"
+	echo "  -n       Normal installation"
+	exit $ERROR_NUM
+}
+
+#Treat options
+while getopts 'cdhi:no:p:rv' OPTION
+do
+	case $OPTION in
+	c)	# Copy only code, no installation
+		FLAG_COPY_ONLY=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		;;
+	d)	# Enforce debug flag
+		FLAG_DEBUG=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		;;
+	h)	# Help
+		show_help 0
+		;;
+	i)	# Folder where the original code is located, for code copy
+		FLAG_INPUT_FOLDER=1
+		USER_INPUT_FOLDER="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	n)	# Normal installation flag
+		FLAG_NORMAL=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		;;
+	o)	# Folder where to original code is copied
+		FLAG_OUTPUT_FOLDER=1
+		USER_OUTPUT_FOLDER="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	p)	# Installation folder
+		FLAG_PATH=1
+		USER_INSTALL_FOLDER="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	r)	# Run regressions
+		FLAG_REGRESS=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		;;
+	?)	# Help
+		show_help 1
+		;;
+	esac
+done
+
+# Check number of arguments
+if [ $# -ne $EXPECTED_ARGS ]
+then
+	show_help 1
+fi
+
+# Check option compatibility
+# Leave error if input and output are precised without an installation flag
+if [ "$FLAG_OUTPUT_FOLDER" == 1 -a "$FLAG_NORMAL" == 0 ]
+then
+	echo "Cannot define output folder without installation flag activated"
+	exit 1
+fi
+if [ "$FLAG_INPUT_FOLDER" == 1 -a "$FLAG_NORMAL" == 0 ]
+then
+	echo "Cannot define input folder without installation flag activated"
+	exit 1
+fi
+# No installation flags can be used when copy-only is activated
+if [ "$FLAG_COPY_ONLY" == 1 -a "$FLAG_NORMAL" == 1 ]
+then
+	echo "Cannot do install when copy-only is activated"
+	exit 1
+fi
+
+# Set input folder value
+if [ "$FLAG_INPUT_FOLDER" == 1 ]
+then
+	REDIS_INPUT_FOLDER=$USER_INPUT_FOLDER
+else
+	# Use global source folder as default
+	REDIS_INPUT_FOLDER=$HOME_REDIS_SRC
+	if [ "$FLAG_NORMAL" == 1 ]
+	then
+		echo "Using default input folder $REDIS_INPUT_FOLDER"
+	fi
+fi
+# Set output folder value
+if [ "$FLAG_OUTPUT_FOLDER" == 1 ]
+then
+	REDIS_OUTPUT_FOLDER=$USER_OUTPUT_FOLDER
+else
+	# Use global make folder as default
+	REDIS_OUTPUT_FOLDER=$HOME_REDIS_MAKE
+	if [ "$FLAG_NORMAL" == 1 ]
+	then
+		echo "Using default output folder $REDIS_OUTPUT_FOLDER"
+	fi
+fi
+
+# Define installation folder
+if [ "$FLAG_PATH" == 1 ]
+then
+	REDIS_INSTALL_FOLDER=$USER_INSTALL_FOLDER
+else
+	# Use global install folder as default
+	REDIS_INSTALL_FOLDER=$HOME_REDIS_INSTALL
+
+	# Print message only if installation method is specified
+	if [ "$FLAG_NORMAL" == 1 ]
+	then
+		echo "Using default installation folder $REDIS_INSTALL_FOLDER"
+	fi
+fi
+
+# If normal install flag is activated, we need to copy the code first
+if [ "$FLAG_NORMAL" == 1 ]
+then
+	# Clean up the output folder if it already exists
+	if [ -d $REDIS_OUTPUT_FOLDER ]
+	then
+		rm -rf $REDIS_OUTPUT_FOLDER
+		echo "Deleting existing output folder $REDIS_OUTPUT_FOLDER"
+	fi
+
+	# Case of a normal installation, here calling configure from the local
+	# folder is enough. But first copy code.
+	cp -r $REDIS_INPUT_FOLDER $REDIS_OUTPUT_FOLDER
+	cd $REDIS_OUTPUT_FOLDER
+	MAKE_CALL_FOLDER="."
+
+	# Check the presence of configure in given folder
+	if [ ! -f $MAKE_CALL_FOLDER/Makefile ]
+	then
+		echo "No Makefile in folder $MAKE_CALL_FOLDER"
+		exit 1
+	fi
+elif [ "$FLAG_COPY_ONLY" == 1 ]
+then
+	# Perform a copy-only
+
+	# Clean up the output folder if it already exists
+	if [ -d $REDIS_OUTPUT_FOLDER ]
+	then
+		rm -rf $REDIS_OUTPUT_FOLDER
+		echo "Deleting existing output folder $REDIS_OUTPUT_FOLDER"
+	fi
+
+	# Then do the copy
+	cp -r $REDIS_INPUT_FOLDER $REDIS_OUTPUT_FOLDER
+	echo "Copying source folder $REDIS_INPUT_FOLDER to $REDIS_OUTPUT_FOLDER"
+
+	# exit, no installation is necessary
+	exit 0
+else
+	# Configure folder is the current folder here
+	MAKE_CALL_FOLDER="."
+
+	# Check the presence of configure in given folder
+	if [ ! -f $MAKE_CALL_FOLDER/Makefile ]
+	then
+		echo "No Makefile in folder $MAKE_CALL_FOLDER"
+		exit 1
+	fi
+fi
+
+# Compile, by being here we certify that we are already in the compilation
+# folder
+
+# First compile the dependencies if they exist
+# TODO: authorize debug compilation for all the dependencies
+for lib in hiredis jemalloc linenoise lua
+do
+	if [ -d $REDIS_OUTPUT_FOLDER/deps/$lib ]
+	then
+		cd deps
+		make $COMPILE_DEBUG_OPT $lib
+		cd ..
+	fi
+done
+
+# Compile the main code
+if [ "$FLAG_DEBUG" == 1 ]
+then
+	make noopt
+else
+	make
+fi
+
+# Run regressions if necessary
+if [ "$FLAG_REGRESS" == 1 ]
+then
+	make test
+fi
+
+# Install
+make PREFIX=$REDIS_INSTALL_FOLDER install

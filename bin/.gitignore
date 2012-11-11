@@ -1,2 +1,4 @@
 # Ignore Postgres install folder
 /pgsql
+# Ignore Redis install folder
+/redis

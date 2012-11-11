@@ -142,7 +142,7 @@ then
 	PSQL_FOLDER=$PSQL_USER_PATH
 else
 	# Set up default
-	PSQL_FOLDER=$HOME/pgsql
+	PSQL_FOLDER=$HOME_POSTGRES_INSTALL
 	echo "Installation folder set to default $PSQL_FOLDER"
 fi
 

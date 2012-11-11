@@ -128,7 +128,8 @@ if [ "$FLAG_INPUT_FOLDER" == 1 ]
 then
 	PSQL_INPUT_FOLDER=$USER_INPUT_FOLDER
 else
-	PSQL_INPUT_FOLDER=$HOME/git/postgres
+	# Use global source folder as default
+	PSQL_INPUT_FOLDER=$HOME_POSTGRES_SRC
 	if [ "$FLAG_VPATH" == 1 -o "$FLAG_NORMAL" == 1 ]
 	then
 		echo "Using default input folder $PSQL_INPUT_FOLDER"
@@ -139,7 +140,8 @@ if [ "$FLAG_OUTPUT_FOLDER" == 1 ]
 then
 	PSQL_OUTPUT_FOLDER=$USER_OUTPUT_FOLDER
 else
-	PSQL_OUTPUT_FOLDER=$HOME/make
+	# Use global make folder as default
+	PSQL_OUTPUT_FOLDER=$HOME_POSTGRES_MAKE
 	if [ "$FLAG_VPATH" == 1 -o "$FLAG_NORMAL" == 1 ]
 	then
 		echo "Using default output folder $PSQL_OUTPUT_FOLDER"
@@ -151,7 +153,8 @@ if [ "$FLAG_PATH" == 1 ]
 then
 	PSQL_INSTALL_FOLDER=$USER_INSTALL_FOLDER
 else
-	PSQL_INSTALL_FOLDER=$HOME/pgsql
+	# Use global install folder as default
+	PSQL_INSTALL_FOLDER=$HOME_POSTGRES_INSTALL
 
 	# Print message only if installation method is specified
 	if [ "$FLAG_VPATH" == 1 -o "$FLAG_NORMAL" == 1 ]

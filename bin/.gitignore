@@ -1,0 +1,2 @@
+# Ignore Postgres install folder
+/pgsql

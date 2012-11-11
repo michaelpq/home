@@ -69,7 +69,8 @@ do
 	DN_SLAVE_PORTS[$i]=$(($DN_SLAVE_PORT_START + $i))
 done
 GTM_PORT=7777
-PSQL_FOLDER=$HOME/pgsql
+# Set up default as global pgsql install folder
+PSQL_FOLDER=$HOME_POSTGRES_INSTALL
 
 #Finish calculating dependencies between folders
 PSQL_SHARE=$PSQL_FOLDER/share

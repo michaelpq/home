@@ -10,5 +10,7 @@
 	ui = auto
 [core]
 	editor = emacs -nw
+[push]
+	default = matching
 [include]
 	path = .gitconfig_extra

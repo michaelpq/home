@@ -1,0 +1,166 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# redis_start
+#	Start a Redis cluster
+#	Copyright (c) 2010-2012, Michael Paquier
+#
+#	Build a Redis cluster from scratch. Slaves can be called on demand.
+#--------------------------------------------------------------------------
+
+# Take and check options
+EXPECTED_ARGS=0
+NUM_SLAVES=0
+FLAG_PATH=0
+FLAG_VERSION=0
+
+# Show utility help
+show_help()
+{
+	ERROR_NUM=$1
+	echo "Usage: `basename $0` [OPTION]..."
+	echo " "
+	echo "Options:"
+	echo "  -h                  Show this help"
+	echo "  -p PATH             Path to Redis install folder"
+	echo "                      The same folder is used to store data folders"
+	echo "  -s number_slaves    Choose number of slaves behind a master node"
+	echo "  -v                  Output installation version and leave"
+	exit $ERROR_NUM
+}
+
+# Check installation for given folder
+check_install()
+{
+	REDIS_INSTALL_PATH=$1
+
+	# Check presence of bin
+	if [ ! -d $REDIS_INSTALL_PATH/bin ]
+	then
+		echo "Missing folder $REDIS_INSTALL_PATH/bin in installation"
+		exit 1
+	fi
+}
+
+# Show installation version and leave
+show_version()
+{
+	REDIS_INSTALL_PATH=$1
+
+	# Check that redis binary exists
+	if [ ! -x $REDIS_INSTALL_PATH/bin/redis-server ]
+	then
+		echo "Unexisting $REDIS_INSTALL_PATH/bin/redis-server binary"
+		echo "You should check your installation"
+		exit 1
+	fi
+
+	# Output version
+	echo `$REDIS_INSTALL_PATH/bin/redis-server --version`
+	exit 0
+}
+
+# Treat options
+while getopts 'hp:s:v' OPTION
+do
+	case $OPTION in
+	h)  # Show this help
+		show_help 0
+		;;
+	p)	# Path to redis install folder
+		FLAG_PATH=1
+		REDIS_USER_PATH="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	s)	# Number of slaves attached to the main node
+		NUM_SLAVES="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	v)	# Version output
+		FLAG_VERSION=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		;;
+	?)	#Leave without an error code
+		show_help 0
+		;;
+	esac
+done
+
+# Check number of arguments
+if [ $# -ne $EXPECTED_ARGS ]
+then
+	# Leave with an error code
+	show_help 1
+fi
+
+# Setup Default values
+# Master port begins at $MASTER_PORT_START
+# Slave ports begin at $SLAVE_PORT_START
+# All the machines run on local host
+MASTER_PORT=6379
+SLAVE_PORT_START=6380
+SLAVE_PORTS[1]=$SLAVE_PORT_START
+for i in $(seq 1 $NUM_SLAVES)
+do
+	SLAVE_PORTS[$i]=$(($SLAVE_PORT_START + $i))
+done
+
+# Set default REDIS install folder to the one wanted by user
+if [ "$FLAG_PATH" == 1 ]
+then
+	REDIS_FOLDER=$REDIS_USER_PATH
+else
+	# Set up default
+	REDIS_FOLDER=$HOME_REDIS_INSTALL
+	echo "Installation folder set to default $REDIS_FOLDER"
+fi
+
+# Check installation on this folder
+check_install $REDIS_FOLDER
+
+# Show up version if requested
+if [ "$FLAG_VERSION" == 1 ]
+then
+	show_version $REDIS_FOLDER
+fi
+
+# Finish calculating dependencies between folders
+REDIS_BIN=$REDIS_FOLDER/bin
+REDIS_LOG=$REDIS_FOLDER/log
+
+# Delete existing log directory is any
+if [ -d $REDIS_LOG ]
+then
+	echo "Deleting log directory $REDIS_LOG"
+	rm -r $REDIS_LOG
+fi
+
+# Create new log directory
+echo "Creating new log directory $REDIS_LOG"
+mkdir $REDIS_LOG
+
+# Kill all the processes that may remain
+# in the most atrocious way possible as they meritated it
+# OK this is not very clean but here the goal is efficiency...
+echo "Take out Redis processes"
+killall redis-server redis-cli > /dev/null 2>&1
+sleep 2
+
+# Launch master node
+echo "launching master..."
+COMMAND=$REDIS_BIN"/redis-server --port "$MASTER_PORT" > "$REDIS_LOG"/master.log &"
+eval $COMMAND
+sleep 2
+
+# Launch slaves if any
+if [ "$NUM_SLAVES" -gt 0 ]
+then
+	#Launch Slaves one by one
+	echo "launching Slave nodes..."
+	for i in $(seq 1 $NUM_SLAVES)
+	do
+		COMMAND=$REDIS_BIN"/redis-server --port "${SLAVE_PORTS[$i]}" --slaveof 127.0.0.1 "$MASTER_PORT" > "$REDIS_LOG"/slave"$i".log &"
+		eval $COMMAND
+	done
+fi
+
+exit 0

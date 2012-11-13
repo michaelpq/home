@@ -41,6 +41,23 @@ check_install()
 	fi
 }
 
+# Enfore folder creation
+enforce_create_folder()
+{
+	REDIS_NEW_FOLDER=$1
+
+	# Enforce folder creation
+	if [ -d $REDIS_NEW_FOLDER ]
+	then
+		echo "Deleting directory $REDIS_NEW_FOLDER"
+		rm -r $REDIS_NEW_FOLDER
+	fi
+
+	# Now create the new folder
+	echo "Creating new log directory $REDIS_NEW_FOLDER"
+	mkdir $REDIS_NEW_FOLDER
+}
+
 # Show installation version and leave
 show_version()
 {
@@ -126,29 +143,21 @@ fi
 # Finish calculating dependencies between folders
 REDIS_BIN=$REDIS_FOLDER/bin
 REDIS_LOG=$REDIS_FOLDER/log
-REDIS_DUMP=$REDIS_FOLDER/dump
+REDIS_DATA=$REDIS_FOLDER/data
 
-# Delete existing log directory if any
-if [ -d $REDIS_LOG ]
-then
-	echo "Deleting log directory $REDIS_LOG"
-	rm -r $REDIS_LOG
-fi
+# Delete existing directories if any
+enforce_create_folder $REDIS_LOG
+enforce_create_folder $REDIS_DATA
 
-# Create new log directory
-echo "Creating new log directory $REDIS_LOG"
-mkdir $REDIS_LOG
-
-# Delete existing dump directory is any
-if [ -d $REDIS_DUMP ]
-then
-	echo "Deleting log directory $REDIS_DUMP"
-	rm -r $REDIS_DUMP
-fi
-
-# Create new dump directory
-echo "Creating new log directory $REDIS_DUMP"
-mkdir $REDIS_DUMP
+# Calculate the data folders of master and each slave
+# Those folders are used to store logs and database snapshots.
+REDIS_DATA_MASTER=$REDIS_DATA/master
+enforce_create_folder $REDIS_DATA_MASTER
+for i in $(seq 1 $NUM_SLAVES)
+do
+	REDIS_DATA_SLAVE[$i]=$REDIS_DATA/slave$i
+	enforce_create_folder ${REDIS_DATA_SLAVE[$i]}
+done
 
 # Kill all the processes that may remain
 # in the most atrocious way possible as they meritated it
@@ -162,7 +171,10 @@ cd $REDIS_DUMP
 
 # Launch master node
 echo "launching master..."
-COMMAND=$REDIS_BIN"/redis-server --dbfilename master.rdb --port "$MASTER_PORT" > "$REDIS_LOG"/master.log &"
+COMMAND="$REDIS_BIN/redis-server "\
+"--dir $REDIS_DATA_MASTER "\
+"--logfile log.txt "\
+"--port $MASTER_PORT &"
 eval $COMMAND
 sleep 2
 
@@ -173,7 +185,14 @@ then
 	echo "launching Slave nodes..."
 	for i in $(seq 1 $NUM_SLAVES)
 	do
-		COMMAND=$REDIS_BIN"/redis-server --dbfilename slave"$i".rdb --port "${SLAVE_PORTS[$i]}" --slaveof 127.0.0.1 "$MASTER_PORT" > "$REDIS_LOG"/slave"$i".log &"
+		REDIS_LOCAL_FOLDER=${REDIS_DATA_SLAVE[$i]}
+		REDIS_LOCAL_PORT=${SLAVE_PORTS[$i]}
+
+		# Build and launch the command
+		COMMAND="$REDIS_BIN/redis-server "\
+"--dir $REDIS_LOCAL_FOLDER "\
+"--logfile log.txt --port $REDIS_LOCAL_PORT "\
+"--slaveof 127.0.0.1 $MASTER_PORT &"
 		eval $COMMAND
 	done
 fi

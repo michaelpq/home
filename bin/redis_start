@@ -126,8 +126,9 @@ fi
 # Finish calculating dependencies between folders
 REDIS_BIN=$REDIS_FOLDER/bin
 REDIS_LOG=$REDIS_FOLDER/log
+REDIS_DUMP=$REDIS_FOLDER/dump
 
-# Delete existing log directory is any
+# Delete existing log directory if any
 if [ -d $REDIS_LOG ]
 then
 	echo "Deleting log directory $REDIS_LOG"
@@ -138,6 +139,17 @@ fi
 echo "Creating new log directory $REDIS_LOG"
 mkdir $REDIS_LOG
 
+# Delete existing dump directory is any
+if [ -d $REDIS_DUMP ]
+then
+	echo "Deleting log directory $REDIS_DUMP"
+	rm -r $REDIS_DUMP
+fi
+
+# Create new dump directory
+echo "Creating new log directory $REDIS_DUMP"
+mkdir $REDIS_DUMP
+
 # Kill all the processes that may remain
 # in the most atrocious way possible as they meritated it
 # OK this is not very clean but here the goal is efficiency...
@@ -145,9 +157,12 @@ echo "Take out Redis processes"
 killall redis-server redis-cli > /dev/null 2>&1
 sleep 2
 
+# Dump files are generated in folder where redis-server is launched
+cd $REDIS_DUMP
+
 # Launch master node
 echo "launching master..."
-COMMAND=$REDIS_BIN"/redis-server --port "$MASTER_PORT" > "$REDIS_LOG"/master.log &"
+COMMAND=$REDIS_BIN"/redis-server --dbfilename master.rdb --port "$MASTER_PORT" > "$REDIS_LOG"/master.log &"
 eval $COMMAND
 sleep 2
 
@@ -158,7 +173,7 @@ then
 	echo "launching Slave nodes..."
 	for i in $(seq 1 $NUM_SLAVES)
 	do
-		COMMAND=$REDIS_BIN"/redis-server --port "${SLAVE_PORTS[$i]}" --slaveof 127.0.0.1 "$MASTER_PORT" > "$REDIS_LOG"/slave"$i".log &"
+		COMMAND=$REDIS_BIN"/redis-server --dbfilename slave"$i".rdb --port "${SLAVE_PORTS[$i]}" --slaveof 127.0.0.1 "$MASTER_PORT" > "$REDIS_LOG"/slave"$i".log &"
 		eval $COMMAND
 	done
 fi

@@ -8,6 +8,10 @@
 export HOME_POSTGRES_SRC=$HOME/git/postgres
 export HOME_POSTGRES_MAKE=$HOME/make/postgres
 export HOME_POSTGRES_INSTALL=$HOME/bin/pgsql
+# PostgreSQL library path
+export LD_LIBRARY_PATH=$HOME_POSTGRES_INSTALL/lib
+# To SGML catalogs for PostgreSQL documentation
+export SGML_CATALOG_FILES=/etc/sgml/catalog:/usr/share/sgml/jade/catalog
 
 # Redis development parameters
 export HOME_REDIS_SRC=$HOME/git/redis

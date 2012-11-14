@@ -100,15 +100,10 @@ if [ -f ~/.bash_alias_extra ]; then
 fi
 
 #--------------------------------------------------------------------------
-# PostgreSQL related and development
+# Development
 #--------------------------------------------------------------------------
 
-# PostgreSQL library path
-export LD_LIBRARY_PATH=$HOME/pgsql/lib
-# To SGML catalogs for PostgreSQL documentation
-export SGML_CATALOG_FILES=/etc/sgml/catalog:/usr/share/sgml/jade/catalog
-
-# Enable core files
+# Enable core files for all sizes
 ulimit -c unlimited
 
 #--------------------------------------------------------------------------

@@ -210,7 +210,17 @@ do
 	then
 		cd deps
 		make $COMPILE_DEBUG_OPT $lib
-		cd ..
+		cd $lib
+
+		# Each library may use a different prefix to define install dir
+		if [ "$lib" == "lua" ]
+		then
+			make INSTALL_TOP=$REDIS_INSTALL_FOLDER install
+		elif [ "$lib" == "hiredis" ]
+		then
+			make PREFIX=$REDIS_INSTALL_FOLDER install
+		fi
+		cd ../..
 	fi
 done
 

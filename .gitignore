@@ -10,8 +10,10 @@
 /.Xauthority
 # Remove some system repositories that need to be kept private
 /.adobe
+/.account
 /.anthy
 /.cache
+/.cups
 /.dbus
 /.dropbox
 /.eclipse
@@ -35,10 +37,12 @@
 /.nexuiz
 /.nv
 /.pki
+/.prism
 /.psql_history
 /.pulse-cookie
 /.pulse
 /.putty
+/.RSA
 /.rediscli_history
 /.smb*
 /.swt

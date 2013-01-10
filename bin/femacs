@@ -29,7 +29,7 @@ FILE_PATH=`find . -name "$1"`
 if [ ! -z $FILE_PATH ]
 then
 	# Launch the command as the file has been found
-	emacs $FILE_PATH
+	emacs -nw $FILE_PATH
 else
 	echo "\"$FILE_NAME\" does not exist from current repository"
 fi

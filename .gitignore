@@ -23,6 +23,7 @@
 /.gconf
 /.gem
 /.gimp*
+/.gitp4*
 /.gnupg
 /.gstreamer*
 /.gtk-bookmarks
@@ -36,6 +37,7 @@
 /.netrc
 /.nexuiz
 /.nv
+/.p4*
 /.pki
 /.prism
 /.psql_history

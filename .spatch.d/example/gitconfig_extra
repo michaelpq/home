@@ -6,6 +6,8 @@
 [user]
 	name = John Doe
 	email = john@example.com
+[credential]
+	helper = store
 [http]
 	proxy = http://proxy.example.co.jp:8080/
 

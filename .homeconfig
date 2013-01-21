@@ -4,9 +4,12 @@
 #	Copyright (c) 2010-2012, Michael Paquier
 #--------------------------------------------------------------------------
 
+# Global make path for all binaries
+export HOME_GLOBAL_MAKE=$HOME/make
+
 # PostgreSQL development parameters
 export HOME_POSTGRES_SRC=$HOME/git/postgres
-export HOME_POSTGRES_MAKE=$HOME/make/postgres
+export HOME_POSTGRES_MAKE=$HOME_GLOBAL_MAKE/postgres
 export HOME_POSTGRES_INSTALL=$HOME/bin/pgsql
 # PostgreSQL library path
 export LD_LIBRARY_PATH=$HOME_POSTGRES_INSTALL/lib
@@ -15,7 +18,7 @@ export SGML_CATALOG_FILES=/etc/sgml/catalog:/usr/share/sgml/jade/catalog
 
 # Redis development parameters
 export HOME_REDIS_SRC=$HOME/git/redis
-export HOME_REDIS_MAKE=$HOME/make/redis
+export HOME_REDIS_MAKE=$HOME_GLOBAL_MAKE/redis
 export HOME_REDIS_INSTALL=$HOME/bin/redis
 
 # Add Postgres binaries to path

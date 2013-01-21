@@ -140,6 +140,13 @@ if [ "$FLAG_OUTPUT_FOLDER" == 1 ]
 then
 	PSQL_OUTPUT_FOLDER=$USER_OUTPUT_FOLDER
 else
+	# Enforce creation of global make folder if it does not exist
+	if [ ! -d $HOME_GLOBAL_MAKE ]
+	then
+		mkdir $HOME_GLOBAL_MAKE
+		echo "Creating global make folder $HOME_GLOBAL_MAKE"
+	fi
+
 	# Use global make folder as default
 	PSQL_OUTPUT_FOLDER=$HOME_POSTGRES_MAKE
 	if [ "$FLAG_VPATH" == 1 -o "$FLAG_NORMAL" == 1 ]

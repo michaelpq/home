@@ -257,6 +257,7 @@ do
 	ARCHIVE_LOCAL=$MASTER_ARCHIVE
 	OPTIONS_SLAVE_RECOVERY[$i]="restore_command = 'cp -i $ARCHIVE_LOCAL/%f %p'\n"\
 "standby_mode = on\n"\
+"recovery_target_timeline = 'latest'\n"\
 "primary_conninfo = 'host=localhost port=$NODE_PORT application_name=slave$i'\n"
 done
 # Then do the same for each cascading slave

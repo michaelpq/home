@@ -328,5 +328,8 @@ then
 	# Do that later...
 fi
 
+echo "Creating database $USER"
+$PSQL_BIN/createdb $USER -p $MASTER_PORT
+
 # Output result
 exit `echo $?`

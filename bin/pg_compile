@@ -38,13 +38,19 @@ show_help()
 	echo "  -i PATH  Original code folder (input)"
 	echo "  -o PATH  install folder (output)"
 	echo "  -n       Normal installation"
+	echo "  -v       VPATH installation"
+	echo " "
+	echo "Code synchronization options"
+	echo "  -b BRANCH"
+	echo "           Sync output code at latest point of given branch"
+	echo "           This is incompatible with VPATH installation"
 	echo "  -t SHA1 or TAG"
-	echo "           Update output code up to given Git tag or commit"
+	echo "           Sync output code up to given Git tag or commit"
 	echo "           If nothing is specified current code of"
 	echo "           input directory is used. This gives priority"
 	echo "           to commit/tag so modified code is removed."
 	echo "           This is incompatible with VPATH installation"
-	echo "  -v       VPATH installation"
+
 	exit $ERROR_NUM
 }
 
@@ -83,10 +89,42 @@ update_code_to_commit()
 	git checkout tmp_$UPDATE_TO_COMMIT &> /dev/null
 }
 
+# Update local Git repository to latest point of given branch
+# This could actually use update_code_to_commit but it looks cleaner
+# to check if the branch specified actually exists and then check it out
+# without creating a new one.
+update_code_to_branch()
+{
+	UPDATE_TO_BRANCH=$1
+
+	git show-ref --quiet $UPDATE_TO_BRANCH
+	RES=$?
+	# Branch does not exist
+	if [ "$RES" != 0 ]
+	then
+		echo "$UPDATE_TO_BRANCH is not an existing local branch"
+		exit $RES
+	fi
+
+	echo "Aligning code with latest commit in branch $UPDATE_TO_BRANCH"
+
+	# Store existing code if any
+	git stash -q
+	git stash clear &> /dev/null
+
+	# Then checkout the stuff
+	git checkout $UPDATE_TO_BRANCH &> /dev/null
+}
+
 #Treat options
-while getopts 'cdhi:no:p:rt:v' OPTION
+while getopts 'b:cdhi:no:p:rt:v' OPTION
 do
 	case $OPTION in
+	b)	# Branch to sync code with
+		FLAG_BRANCH=1
+		USER_GIT_BRANCH="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
 	c)	# Copy only code, no installation
 		FLAG_COPY_ONLY=1
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
@@ -169,14 +207,28 @@ then
 		exit 1
 	fi
 fi
-# VPATH installation is incompatible with commit settings as the output
-# folder is updated in this case, but VPATH has actually no GIT tree to use.
-if [ "$FLAG_VPATH" == 1 -a "$FLAG_TAG" == 1 ]
+# VPATH installation is incompatible with commit and branch settings as the
+# output folder is updated in this case, but VPATH has actually no GIT tree
+# to use.
+if [ "$FLAG_VPATH" == 1 ]
 then
-	echo "Cannot use TAG/COMMIT specification on VPATH install"
+	if [ "$FLAG_TAG" == 1 ]
+	then
+		echo "Cannot use tag/commit specification on VPATH install"
+		exit 1
+	fi
+	if [ "$FLAG_BRANCH" == 1 ]
+	then
+		echo "Cannot use branch specification on VPATH install"
+		exit 1
+	fi
+fi
+# Branch and commit specifications cannot be used at the same time
+if [ "$FLAG_TAG" == 1 -a "$FLAG_BRANCH" == 1 ]
+then
+	echo "Cannot specify both branch and commit/tag specification"
 	exit 1
 fi
-
 
 # Set input folder value
 if [ "$FLAG_INPUT_FOLDER" == 1 ]
@@ -256,6 +308,11 @@ then
 		then
 			update_code_to_commit $USER_GIT_COMMIT_TAG
 		fi
+		# Update code to given branch
+		if [ "$FLAG_BRANCH" == 1 ]
+		then
+			update_code_to_branch $USER_GIT_BRANCH
+		fi
 
 		CONFIGURE_CALL_FOLDER="."
 	fi
@@ -306,6 +363,11 @@ else
 	if [ "$FLAG_TAG" == 1 ]
 	then
 		update_code_to_commit $USER_GIT_COMMIT_TAG
+	fi
+	# Update code to given branch
+	if [ "$FLAG_BRANCH" == 1 ]
+	then
+		update_code_to_branch $USER_GIT_BRANCH
 	fi
 
 	# We do here a normal install, so do not worry about anything with code copy

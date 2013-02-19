@@ -19,6 +19,7 @@ FLAG_OUTPUT_FOLDER=0
 FLAG_VPATH=0
 FLAG_NORMAL=0
 FLAG_COPY_ONLY=0
+FLAG_TAG=0
 
 # Show help
 show_help()
@@ -37,12 +38,53 @@ show_help()
 	echo "  -i PATH  Original code folder (input)"
 	echo "  -o PATH  install folder (output)"
 	echo "  -n       Normal installation"
+	echo "  -t SHA1 or TAG"
+	echo "           Update output code up to given Git tag or commit"
+	echo "           If nothing is specified current code of"
+	echo "           input directory is used. This gives priority"
+	echo "           to commit/tag so modified code is removed."
+	echo "           This is incompatible with VPATH installation"
 	echo "  -v       VPATH installation"
 	exit $ERROR_NUM
 }
 
+# Update local Git repository to commit or tag
+update_code_to_commit()
+{
+	UPDATE_TO_COMMIT=$1
+
+	# First check if given entry given by user is a valid tag
+	CHECKED_COMMIT_ID=`git show-ref --hash $UPDATE_TO_COMMIT`
+	RES=$?
+	if [ "$RES" != 0 ]
+	then
+		echo "$UPDATE_TO_COMMIT is not a valid tag, falling back to SHA1 commit check"
+		CHECKED_COMMIT_ID=$UPDATE_TO_COMMIT
+	fi
+
+	# Now check if the converted commit exists, in the case of a tag already
+	# validated, this cannot happen, but the 1st step might fail, so double
+	# check
+	git log $CHECKED_COMMIT_ID &> /dev/null
+	RES=$?
+	if [ "$RES" != 0 ]
+	then
+		echo "$UPDATE_TO_COMMIT is not a valid commit ID"
+		exit $RES
+	fi
+
+	echo "Aligning code with commit $CHECKED_COMMIT_ID"
+
+	# Store existing code if any
+	git stash -q
+	git stash clear &> /dev/null
+
+	git branch tmp_$UPDATE_TO_COMMIT $CHECKED_COMMIT_ID &> /dev/null
+	git checkout tmp_$UPDATE_TO_COMMIT &> /dev/null
+}
+
 #Treat options
-while getopts 'cdhi:no:p:rv' OPTION
+while getopts 'cdhi:no:p:rt:v' OPTION
 do
 	case $OPTION in
 	c)	# Copy only code, no installation
@@ -78,6 +120,11 @@ do
 	r)	# Run regressions
 		FLAG_REGRESS=1
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		;;
+	t)	# Get code up to tag or commit ID
+		FLAG_TAG=1
+		USER_GIT_COMMIT_TAG="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
 		;;
 	v)	# VPATH flag
 		FLAG_VPATH=1
@@ -122,6 +169,14 @@ then
 		exit 1
 	fi
 fi
+# VPATH installation is incompatible with commit settings as the output
+# folder is updated in this case, but VPATH has actually no GIT tree to use.
+if [ "$FLAG_VPATH" == 1 -a "$FLAG_TAG" == 1 ]
+then
+	echo "Cannot use TAG/COMMIT specification on VPATH install"
+	exit 1
+fi
+
 
 # Set input folder value
 if [ "$FLAG_INPUT_FOLDER" == 1 ]
@@ -195,6 +250,13 @@ then
 		# folder is enough. But first copy code.
 		cp -r $PSQL_INPUT_FOLDER $PSQL_OUTPUT_FOLDER
 		cd $PSQL_OUTPUT_FOLDER
+
+		# Update code to given tag
+		if [ "$FLAG_TAG" == 1 ]
+		then
+			update_code_to_commit $USER_GIT_COMMIT_TAG
+		fi
+
 		CONFIGURE_CALL_FOLDER="."
 	fi
 
@@ -238,6 +300,12 @@ else
 	then
 		echo "No configure in folder $CONFIGURE_CALL_FOLDER"
 		exit 1
+	fi
+
+	# Update code to given tag
+	if [ "$FLAG_TAG" == 1 ]
+	then
+		update_code_to_commit $USER_GIT_COMMIT_TAG
 	fi
 
 	# We do here a normal install, so do not worry about anything with code copy

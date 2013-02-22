@@ -20,6 +20,7 @@ FLAG_VPATH=0
 FLAG_NORMAL=0
 FLAG_COPY_ONLY=0
 FLAG_TAG=0
+FLAG_CONTRIB=0
 
 # Show help
 show_help()
@@ -30,6 +31,7 @@ show_help()
 	echo "Options:"
 	echo "  -d       Compile with debug flag"
 	echo "  -h       Show this help"
+	echo "  -m       Include contrib modules in installation"
 	echo "  -p PATH  Define installation folder"
 	echo "  -r       Run regressions"
 	echo " "
@@ -117,7 +119,7 @@ update_code_to_branch()
 }
 
 #Treat options
-while getopts 'b:cdhi:no:p:rt:v' OPTION
+while getopts 'b:cdhi:mno:p:rt:v' OPTION
 do
 	case $OPTION in
 	b)	# Branch to sync code with
@@ -140,6 +142,10 @@ do
 		FLAG_INPUT_FOLDER=1
 		USER_INPUT_FOLDER="$OPTARG"
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	m)	# Include contrib modules in install
+		FLAG_CONTRIB=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
 		;;
 	n)	# Normal installation flag
 		FLAG_NORMAL=1
@@ -201,7 +207,7 @@ fi
 # No installation flags can be used when copy-only is activated
 if [ "$FLAG_COPY_ONLY" == 1 ]
 then
-	if [ "$FLAG_VPATH" == 1 -o "$FLAG_NORMAL" == 1 ]
+	if [ "$FLAG_VPATH" == 1 -o "$FLAG_NORMAL" == 1 -o "$FLAG_CONTRIB" ]
 	then
 		echo "Cannot do install when copy-only is activated"
 		exit 1
@@ -391,3 +397,12 @@ fi
 
 # Install
 make install
+
+# Install contrib modules if requested
+if [ "$FLAG_CONTRIB" == 1 ]
+then
+	echo "Installing contrib modules"
+	cd contrib/
+	make
+	make install
+fi

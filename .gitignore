@@ -53,6 +53,7 @@
 /.thumbnails
 /.thunderbird
 /.VirtualBox
+/.vnc
 /VirtualBox VMs
 # Important to remove that, never put an ssh key in public!
 /.ssh

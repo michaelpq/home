@@ -207,7 +207,7 @@ fi
 # No installation flags can be used when copy-only is activated
 if [ "$FLAG_COPY_ONLY" == 1 ]
 then
-	if [ "$FLAG_VPATH" == 1 -o "$FLAG_NORMAL" == 1 -o "$FLAG_CONTRIB" ]
+	if [ "$FLAG_VPATH" == 1 -o "$FLAG_NORMAL" == 1 -o "$FLAG_CONTRIB" == 1 ]
 	then
 		echo "Cannot do install when copy-only is activated"
 		exit 1

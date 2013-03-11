@@ -1,0 +1,59 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# git_completion
+#	Print information about current GIT repository on screen.
+#	Copyright (c) 2010-2012, Michael Paquier
+#
+#	Information about current branch, as well as status can be
+#	printed. This is dedicated to PS1 and is let in a script
+#	to allow more complicated manipulations depending on environments
+#	by not adding complications to .bashrc.
+#--------------------------------------------------------------------------
+
+# Check the existence of a GIT command
+function __git_completion()
+{
+	which git &> /dev/null
+	RES=$?
+
+	# Initialize output
+	GIT_BRANCH=
+	if [ "$RES" == 0 ]
+	then
+		# Check if current repository is a GIT repository
+		git rev-parse --git-dir &> /dev/null
+		RES=$?
+		if [ "$RES" == 0 ]
+		then
+			# Fetch currently checked-out branch
+			GIT_BRANCH="$(git symbolic-ref HEAD 2>/dev/null)" ||
+			GIT_BRANCH="(unnamed branch)"
+			GIT_BRANCH=${GIT_BRANCH##refs/heads/}
+
+			# Check if repository is a bare one
+			# Such repositories have no status so no real work branch
+			CORE_BARE=`git config core.bare`
+			if [ "$CORE_BARE" == "true" ]
+			then
+				echo "(bare-repo)"
+				exit
+			fi
+
+			# Print current branch and its status
+			git status | grep "nothing to commit" > /dev/null 2>&1
+			NOTHING_TO_COMMIT=$?
+			if [ "$NOTHING_TO_COMMIT" == 0 ]
+			then
+				GIT_BRANCH="$GIT_BRANCH OK"
+			else
+				GIT_BRANCH="$GIT_BRANCH X"
+			fi
+
+			# Put parenthesis around all the information
+			GIT_BRANCH="($GIT_BRANCH)"
+		fi
+	fi
+
+	# Finally export the result
+	export GIT_PS1_COMPLETION="$GIT_BRANCH"
+}

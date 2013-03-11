@@ -72,11 +72,13 @@ fi
 unset color_prompt force_color_prompt
 
 # Add extension to show git branch of current repository
-which git_status_reference &> /dev/null
-RES=$?
-if [ "$RES" == 0 ]
+if [ -f $HOME/bin/git_completion ]
 then
-	PS1="$PS1\`git_status_reference\`"
+	. $HOME/bin/git_completion
+	# Run completion command each time command prompt is updated
+	PROMPT_COMMAND="$PROMPT_COMMAND;__git_completion"
+	# Finally add to screen the output generated
+	PS1=$PS1"\`echo -e \$GIT_PS1_COMPLETION\`"
 fi
 
 # Finish by adding extension "$" to PS1 and a single space for clarity
@@ -88,15 +90,17 @@ PS1="$PS1\$ "
 
 # Load alias definitions in external file
 # Those commands are kept separate for simplicity
-if [ -f ~/.bash_alias ]; then
-	. ~/.bash_alias
+if [ -f $HOME/.bash_alias ]
+then
+	. $HOME/.bash_alias
 fi
 
 # Load the extra alias definitions
 # This file is ignored by the GIT repository of this system
 # So store all the aliases you want to keep private there
-if [ -f ~/.bash_alias_extra ]; then
-	. ~/.bash_alias_extra
+if [ -f $HOME/.bash_alias_extra ]
+then
+	. $HOME/.bash_alias_extra
 fi
 
 #--------------------------------------------------------------------------
@@ -120,18 +124,18 @@ fi
 # Extra bash commands, bash_extra is ignored by the
 # GIT repository of this system, so store there information
 # you want to keep private.
-if [ -f ~/.bash_extra ]; then
-	. ~/.bash_extra
+if [ -f $HOME/.bash_extra ]; then
+	. $HOME/.bash_extra
 fi
 
 # Load global public parameters of Home
 # Those parameters are visible in the GIT repository of Home.
-if [ -f ~/.homeconfig ]; then
-	. ~/.homeconfig
+if [ -f $HOME/.homeconfig ]; then
+	. $HOME/.homeconfig
 fi
 
 # Load global private parameters of Home
 # Those parameters are not visible in the GIT repository of Home.
-if [ -f ~/.homeconfig_extra ]; then
-	. ~/.homeconfig_extra
+if [ -f $HOME/.homeconfig_extra ]; then
+	. $HOME/.homeconfig_extra
 fi

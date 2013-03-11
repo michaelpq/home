@@ -26,9 +26,9 @@ function __git_completion()
 		if [ "$RES" == 0 ]
 		then
 			# Fetch currently checked-out branch
-			GIT_BRANCH="$(git symbolic-ref HEAD 2>/dev/null)" ||
-			GIT_BRANCH="(unnamed branch)"
-			GIT_BRANCH=${GIT_BRANCH##refs/heads/}
+			GIT_BRANCH_NAME="$(git symbolic-ref HEAD 2>/dev/null)" ||
+			GIT_BRANCH_NAME="(unnamed branch)"
+			GIT_BRANCH_NAME=${GIT_BRANCH_NAME##refs/heads/}
 
 			# Check if repository is a bare one
 			# Such repositories have no status so no real work branch
@@ -44,13 +44,26 @@ function __git_completion()
 			NOTHING_TO_COMMIT=$?
 			if [ "$NOTHING_TO_COMMIT" == 0 ]
 			then
-				GIT_BRANCH="$GIT_BRANCH OK"
+				GIT_BRANCH_STATUS="OK"
 			else
-				GIT_BRANCH="$GIT_BRANCH X"
+				GIT_BRANCH_STATUS="X"
 			fi
 
 			# Put parenthesis around all the information
-			GIT_BRANCH="($GIT_BRANCH)"
+			GIT_BRANCH="($GIT_BRANCH_NAME $GIT_BRANCH_STATUS)"
+
+			# Finally add colors if necessary, OSX does not like system colors
+			# so simply disable them in this case.
+			if [ "$GIT_BRANCH_NAME" != "osx" ]
+			then
+				# Blue if OK, Red if not
+				if [ "$NOTHING_TO_COMMIT" == 0 ]
+				then
+					GIT_BRANCH=${HOME_COLOR_BLUE_BOLD}${GIT_BRANCH}${HOME_COLOR_OFF}
+				else
+					GIT_BRANCH=${HOME_COLOR_RED_BOLD}${GIT_BRANCH}${HOME_COLOR_OFF}
+				fi
+			fi
 		fi
 	fi
 

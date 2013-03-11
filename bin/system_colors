@@ -1,0 +1,79 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# system_colors
+#	Bunch of shortcuts for system colors
+#	Copyright (c) 2010-2012, Michael Paquier
+#--------------------------------------------------------------------------
+
+# Reset
+HOME_COLOR_OFF='\e[0m'			# Text Reset
+
+# Regular Colors
+HOME_COLOR_BLACK='\e[0;30m'		# Black
+HOME_COLOR_RED='\e[0;31m'		# Red
+HOME_COLOR_GREEN='\e[0;32m'		# Green
+HOME_COLOR_YELLOW='\e[0;33m'	# Yellow
+HOME_COLOR_BLUE='\e[0;34m'		# Blue
+HOME_COLOR_PURPLE='\e[0;35m'	# Purple
+HOME_COLOR_CYAN='\e[0;36m'		# Cyan
+HOME_COLOR_WHITE='\e[0;37m'		# White
+
+# Bold
+HOME_COLOR_BLACK_BOLD='\e[1;30m'	# Black
+HOME_COLOR_RED_BOLD='\e[1;31m'		# Red
+HOME_COLOR_GREEN_BOLD='\e[1;32m'	# Green
+HOME_COLOR_YELLOW_BOLD='\e[1;33m'	# Yellow
+HOME_COLOR_BLUE_BOLD='\e[1;34m'		# Blue
+HOME_COLOR_PURPLE_BOLD='\e[1;35m'	# Purple
+HOME_COLOR_CYAN_BOLD='\e[1;36m'		# Cyan
+HOME_COLOR_WHITE_BOLD='\e[1;37m'	# White
+
+# Underline
+HOME_COLOR_BLACK_LINE='\e[4;30m'	# Black
+HOME_COLOR_RED_LINE='\e[4;31m'		# Red
+HOME_COLOR_GREEN_LINE='\e[4;32m'	# Green
+HOME_COLOR_YELLOW_LINE='\e[4;33m'	# Yellow
+HOME_COLOR_BLUE_LINE='\e[4;34m'		# Blue
+HOME_COLOR_PURPLE_LINE='\e[4;35m'	# Purple
+HOME_COLOR_CYAN_LINE='\e[4;36m'		# Cyan
+HOME_COLOR_WHITE_LINE='\e[4;37m'	# White
+
+# Background
+HOME_COLOR_BLACK_BG='\e[40m'	# Black
+HOME_COLOR_RED_BG='\e[41m'		# Red
+HOME_COLOR_GREEN_BG='\e[42m'	# Green
+HOME_COLOR_YELLOW_BG='\e[43m'	# Yellow
+HOME_COLOR_BLUE_BG='\e[44m'		# Blue
+HOME_COLOR_PURPLE_BG='\e[45m'	# Purple
+HOME_COLOR_CYAN_BG='\e[46m'		# Cyan
+HOME_COLOR_WHITE_BG='\e[47m'	# White
+
+# High Intensity
+HOME_COLOR_BLACK_HINT='\e[0;90m'	# Black
+HOME_COLOR_RED_HINT='\e[0;91m'		# Red
+HOME_COLOR_GREEN_HINT='\e[0;92m'	# Green
+HOME_COLOR_YELLOW_HINT='\e[0;93m'	# Yellow
+HOME_COLOR_BLUE_HINT='\e[0;94m'		# Blue
+HOME_COLOR_PURPLE_HINT='\e[0;95m'	# Purple
+HOME_COLOR_CYAN_HINT='\e[0;96m'		# Cyan
+HOME_COLOR_WHITE_HINT='\e[0;97m'	# White
+
+# Bold High Intensity
+HOME_COLOR_BLACK_BHINT='\e[1;90m'	# Black
+HOME_COLOR_RED_BHINT='\e[1;91m'		# Red
+HOME_COLOR_GREEN_BHINT='\e[1;92m'	# Green
+HOME_COLOR_YELLOW_BHINT='\e[1;93m'	# Yellow
+HOME_COLOR_BLUE_BHINT='\e[1;94m'	# Blue
+HOME_COLOR_PURPLE_BHINT='\e[1;95m'	# Purple
+HOME_COLOR_CYAN_BHINT='\e[1;96m'	# Cyan
+HOME_COLOR_WHITE_BHINT='\e[1;97m'	# White
+
+# High Intensity backgrounds
+HOME_COLOR_BLACK_HINT_BACK='\e[0;100m'		# Black
+HOME_COLOR_RED_BHINT_BACK='\e[0;101m'		# Red
+HOME_COLOR_GREEN_BHINT_BACK='\e[0;102m'		# Green
+HOME_COLOR_YELLOW_BHINT_BACK='\e[0;103m'	# Yellow
+HOME_COLOR_BLUE_BHINT_BACK='\e[0;104m'		# Blue
+HOME_COLOR_PURPLE_BHINT_BACK='\e[0;105m'	# Purple
+HOME_COLOR_CYAN_BHINT_BACK='\e[0;106m'		# Cyan
+HOME_COLOR_WHITE_BHINT_BACK='\e[0;107m'		# White

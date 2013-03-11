@@ -121,6 +121,11 @@ if [ -f /etc/bash_completion ]; then
 	. /etc/bash_completion
 fi
 
+# Load environment variables for system colors
+if [ -f $HOME/bin/system_colors ]; then
+    . $HOME/bin/system_colors
+fi
+
 # Extra bash commands, bash_extra is ignored by the
 # GIT repository of this system, so store there information
 # you want to keep private.

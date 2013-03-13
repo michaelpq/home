@@ -1,0 +1,31 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# pg_binarchive
+#	Update a series of archive containing stable Postgres versions
+#	Copyright (c) 2010-2013, Michael Paquier
+#
+#	This is used for test purposes. Be sure to update LD_LIBRARY_PATH
+#	and call those archives with full path as they are not contained
+#	in PATH.
+#--------------------------------------------------------------------------
+
+# Create stable repository if it does not exist yet
+if [ ! -d $HOME_STABLE_BIN ]
+then
+	echo "Creating inexisting folder $HOME_STABLE_BIN"
+	mkdir $HOME_STABLE_BIN
+fi
+
+# Update installation with latest stable versions
+for branch in REL8_4_STABLE REL9_0_STABLE REL9_1_STABLE REL9_2_STABLE
+do
+	# Remove existing version if any
+	if [ -d $HOME_STABLE_BIN/$branch ]
+	then
+		echo "Removing old installation of $branch at $HOME_STABLE_BIN/$branch"
+		rm -r $HOME_STABLE_BIN/$branch
+	fi
+
+	# Install the latest version wanted
+	pg_compile -d -n -b $branch -p $HOME_STABLE_BIN/$branch
+done

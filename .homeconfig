@@ -7,6 +7,9 @@
 # Global make path for all binaries
 export HOME_GLOBAL_MAKE=$HOME/make
 
+# Folder where are located various stable installation versions
+export HOME_STABLE_BIN=$HOME/bin/stable
+
 # PostgreSQL development parameters
 export HOME_POSTGRES_SRC=$HOME/git/postgres
 export HOME_POSTGRES_MAKE=$HOME_GLOBAL_MAKE/postgres

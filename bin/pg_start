@@ -292,14 +292,6 @@ sleep 2
 # Take a backup for slave nodes
 if [ "$NUM_SLAVES" -gt 0 ]
 then
-	#Start backup
-	echo "launching pg_start_backup..."
-	$PSQL_BIN/psql postgres -p $MASTER_PORT -c "SELECT pg_start_backup('backup')"
-
-	#Stop Backup
-	echo "launching pg_stop_backup..."
-	$PSQL_BIN/psql postgres -p $MASTER_PORT -c "SELECT pg_stop_backup()"
-
 	#Initialize slaves by taking a base backup from master
 	echo "Initializing slave nodes..."
 	for i in $(seq 1 $NUM_SLAVES)

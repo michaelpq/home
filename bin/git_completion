@@ -54,7 +54,8 @@ function __git_completion()
 
 			# Finally add colors if necessary, OSX does not like system colors
 			# so simply disable them in this case.
-			if [ "$GIT_BRANCH_NAME" != "osx" ]
+			HOME_ENV_NAME=`spatch env-list | grep "*" | cut -f 2 -d " "`
+			if [ "$HOME_ENV_NAME" != "osx" ]
 			then
 				# Blue if OK, Red if not
 				if [ "$NOTHING_TO_COMMIT" == 0 ]

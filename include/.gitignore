@@ -1,0 +1,5 @@
+# Ignore all the private headers here
+*
+
+# But do not ignore myself!
+!/.gitignore

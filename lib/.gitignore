@@ -1,0 +1,5 @@
+# Ignore all the private libraries here
+*
+
+# But do not ignore myself!
+!/.gitignore

@@ -85,6 +85,21 @@ fi
 PS1="$PS1\$ "
 
 #--------------------------------------------------------------------------
+# Compilation and development settings
+#--------------------------------------------------------------------------
+
+# LIBRARY_PATH is used by gcc before compilation to search for directories
+# containing libraries that need to be linked to your program
+export LIBRARY_PATH=$HOME/lib
+
+# LD_LIBRARY_PATH is used to search for directories containing the libraries
+# after it has been successfully compiled and linked.
+export LD_LIBRARY_PATH=$HOME/lib
+
+# Header repository
+export C_INCLUDE_PATH=$HOME/include
+
+#--------------------------------------------------------------------------
 # Alias definitions
 #--------------------------------------------------------------------------
 

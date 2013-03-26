@@ -28,6 +28,7 @@
 /.gstreamer*
 /.gtk-bookmarks
 /.icedtea
+/.irssi
 /.java
 /.lesshst
 /.local

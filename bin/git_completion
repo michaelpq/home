@@ -35,8 +35,8 @@ function __git_completion()
 			CORE_BARE=`git config core.bare`
 			if [ "$CORE_BARE" == "true" ]
 			then
-				echo "(bare-repo)"
-				exit
+				export GIT_PS1_COMPLETION="(bare-repo)"
+				return
 			fi
 
 			# Print current branch and its status

@@ -25,21 +25,24 @@ function __git_completion()
 		RES=$?
 		if [ "$RES" == 0 ]
 		then
-			# Fetch currently checked-out branch
-			GIT_BRANCH_NAME="$(git symbolic-ref HEAD 2>/dev/null)" ||
-			GIT_BRANCH_NAME="(unnamed branch)"
-			GIT_BRANCH_NAME=${GIT_BRANCH_NAME##refs/heads/}
-
 			# Check if repository is a bare one
 			# Such repositories have no status so no real work branch
 			CORE_BARE=`git config core.bare`
 			if [ "$CORE_BARE" == "true" ]
 			then
-				export GIT_PS1_COMPLETION="(bare-repo)"
+				GIT_BRANCH="(bare-repo)"
+				GIT_BRANCH=${HOME_COLOR_BLACK_BOLD}${GIT_BRANCH}${HOME_COLOR_OFF}
+				export GIT_PS1_COMPLETION="$GIT_BRANCH"
 				return
 			fi
 
-			# Print current branch and its status
+			# Fetch currently checked-out branch
+			GIT_BRANCH_NAME="$(git symbolic-ref HEAD 2>/dev/null)" ||
+			GIT_BRANCH_NAME="(unnamed branch)"
+			GIT_BRANCH_NAME=${GIT_BRANCH_NAME##refs/heads/}
+
+			# Print current branch and its status, note that
+			# this operation cannot be run on a bare tree
 			git status | grep "nothing to commit" > /dev/null 2>&1
 			NOTHING_TO_COMMIT=$?
 			if [ "$NOTHING_TO_COMMIT" == 0 ]

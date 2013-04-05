@@ -27,6 +27,7 @@
 /.gnupg
 /.gstreamer*
 /.gtk-bookmarks
+/.Heroes*
 /.icedtea
 /.irssi
 /.java
@@ -55,6 +56,7 @@
 /.thunderbird
 /.VirtualBox
 /.vnc
+/.xonotic
 /VirtualBox VMs
 # Important to remove that, never put an ssh key in public!
 /.ssh

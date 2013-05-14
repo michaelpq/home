@@ -6,6 +6,8 @@
 [alias]
 	graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
 	menage = clean -d -x -f
+	undo = reset --hard HEAD~1
+	record = log --find-renames -p
 [color]
 	ui = auto
 [core]

@@ -1,0 +1,6 @@
+-- .psqlrc
+--	Custom settings for psql client
+--	Copyright (c) 2010-2013, Michael Paquier
+
+-- Set default error output as verbose
+\set VERBOSITY verbose

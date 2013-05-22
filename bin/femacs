@@ -3,7 +3,7 @@
 # femacs
 #	emacs is coupled with find command to launch a file with given name by
 #	looking for it from current repository
-#	Copyright (c) 2010-2012, Michael Paquier
+#	Copyright (c) 2010-2013, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Show utility help

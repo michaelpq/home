@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # pg_start
 #	Start a PostgreSQL cluster
-#	Copyright (c) 2010-2012, Michael Paquier
+#	Copyright (c) 2010-2013, Michael Paquier
 #
 #	Build a PostgreSQL cluster from scratch
 #	A method-based on pg_basebackup is used to set up the slaves

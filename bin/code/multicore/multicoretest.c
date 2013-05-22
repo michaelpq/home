@@ -1,7 +1,7 @@
 /*
  * Multi-thread tests in multi-core machine
  * possibility to run serial or parallel tests
- * Michael Paquier, 2012
+ * Michael Paquier, 2013
  * Following command to compile:
  * gcc -lpthread multicoretest.c -o multicoretest
  */

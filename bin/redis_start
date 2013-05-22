@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # redis_start
 #	Start a Redis cluster
-#	Copyright (c) 2010-2012, Michael Paquier
+#	Copyright (c) 2010-2013, Michael Paquier
 #
 #	Build a Redis cluster from scratch. Slaves can be called on demand.
 #--------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # redis_compile
 #	Copy and compile Redis code
-#	Copyright (c) 2010-2012, Michael Paquier
+#	Copyright (c) 2010-2013, Michael Paquier
 #
 #	The code used for compilation is a copy of an original code.
 #	Run regressions if necessary or enforce debug flag.

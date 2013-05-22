@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # git_completion
 #	Print information about current GIT repository on screen.
-#	Copyright (c) 2010-2012, Michael Paquier
+#	Copyright (c) 2010-2013, Michael Paquier
 #
 #	Information about current branch, as well as status can be
 #	printed. This is dedicated to PS1 and is let in a script

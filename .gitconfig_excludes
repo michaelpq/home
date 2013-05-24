@@ -1,0 +1,8 @@
+#--------------------------------------------------------------------------
+# .gitconfig_excludes
+#	git settings for global excludes for all git projects
+#	Copyright (c) 2010-2013, Michael Paquier
+#--------------------------------------------------------------------------
+
+# Ignore emacs backup files
+*~

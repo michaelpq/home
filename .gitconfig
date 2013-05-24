@@ -12,6 +12,7 @@
 	ui = auto
 [core]
 	editor = emacs -nw
+	excludesfile = ~/.gitconfig_excludes
 [push]
 	default = matching
 [include]

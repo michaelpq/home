@@ -4,5 +4,9 @@
 #	Copyright (c) 2010-2013, Michael Paquier
 #--------------------------------------------------------------------------
 
-# Ignore emacs backup files
+# Emacs backup files
 *~
+# Files created by raw patch application
+# Rejected files are not ignored because it is easier to track that with
+# commands of the type git status.
+*.orig

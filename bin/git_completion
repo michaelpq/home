@@ -20,10 +20,20 @@ function __git_completion()
 	GIT_BRANCH=
 	if [ "$RES" == 0 ]
 	then
+		RES_WORKING_TREE="false"
 		# Check if current repository is a GIT repository
 		git rev-parse --git-dir &> /dev/null
 		RES=$?
+
+		# Check working tree presence
 		if [ "$RES" == 0 ]
+		then
+			# OK, we are inside a GIT repository, now check if
+			# it is a working tree or not
+			RES_WORKING_TREE=`git rev-parse --is-inside-work-tree`
+		fi
+
+		if [ "$RES_WORKING_TREE" == "true" ]
 		then
 			# Check if repository is a bare one
 			# Such repositories have no status so no real work branch

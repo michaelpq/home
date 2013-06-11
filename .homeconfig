@@ -19,6 +19,11 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME_POSTGRES_INSTALL/lib
 # To SGML catalogs for PostgreSQL documentation
 export SGML_CATALOG_FILES=/etc/sgml/catalog:/usr/share/sgml/jade/catalog
 
+# pg_top development parameters
+export HOME_PG_TOP_SRC=$HOME/git/pg_top
+export HOME_PG_TOP_MAKE=$HOME_GLOBAL_MAKE/pg_top
+export HOME_PG_TOP_INSTALL=$HOME/bin/pgsql
+
 # Redis development parameters
 export HOME_REDIS_SRC=$HOME/git/redis
 export HOME_REDIS_MAKE=$HOME_GLOBAL_MAKE/redis

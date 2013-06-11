@@ -1,0 +1,26 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# pg_top_compile
+#	Copy and compile pg_top
+#	Copyright (c) 2010-2013, Michael Paquier
+#
+#	The code used for compilation is a copy of an original code. No fancy
+#	options are supported for simplicity and because pg_top is not that
+#	much a huge code.
+#--------------------------------------------------------------------------
+
+# Remove the old source directory
+echo "Removing old source dir at $HOME_PG_TOP_MAKE"
+rm -rf $HOME_PG_TOP_MAKE
+
+echo "Copying source $HOME_PG_TOP_SRC to $HOME_PG_TOP_MAKE"
+cp -r $HOME_PG_TOP_SRC $HOME_PG_TOP_MAKE
+
+# Begin compilation and install
+cd $HOME_PG_TOP_MAKE
+
+# perform the installation
+autoreconf -i
+./configure --prefix=$HOME_PG_TOP_INSTALL CFLAGS="-DG"
+make
+make install

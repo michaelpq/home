@@ -1,19 +1,14 @@
 #!/bin/bash
 #--------------------------------------------------------------------------
 # menage
-#	Clean up PostgreSQL/Postgres-XC folder
+#	Clean up PostgreSQL processes in an atrocious way
 #	Copyright (c) 2010-2013, Michael Paquier
 #
 #	A simple way to clean up a development environment in one single
-#	command by killing atrociously all the processes related to PG and XC.
+#	command by killing atrociously all the processes related to Postgres
 #--------------------------------------------------------------------------
 
 #Take out all processes
 echo "Killing atrociously Postgres processes"
 killall postgres gtm_proxy gtm > /dev/null 2>&1
 sleep 2
-
-#Kill GTM/Standby in the most atrocious way
-echo "Killing atrociously GTM processes"
-gtm_pid=`ps ux | grep "gtm -x 100" | grep bin | cut -d " " -f 2-4`
-kill -9 $gtm_pid > /dev/null 2>&1

@@ -17,7 +17,7 @@ then
 fi
 
 # Update installation with latest stable versions
-for branch in REL8_4_STABLE REL9_0_STABLE REL9_1_STABLE REL9_2_STABLE
+for branch in REL8_4_STABLE REL9_0_STABLE REL9_1_STABLE REL9_2_STABLE REL9_3_STABLE
 do
 	# Remove existing version if any
 	if [ -d $HOME_STABLE_BIN/$branch ]

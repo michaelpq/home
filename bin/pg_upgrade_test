@@ -1,0 +1,164 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# pg_upgrade_test
+#	Test pg_upgrade between 2 existing stable versions
+#	Copyright (c) 2010-2013, Michael Paquier
+#
+#	When dev is specified as a version, the version installed in
+#	HOME_POSTGRES_INSTALL is used as second path. For simplicity,
+#	This patch
+#--------------------------------------------------------------------------
+
+# Option-related variables
+EXPECTED_ARGS=0
+
+# Show utility help
+show_help()
+{
+	ERROR_NUM=$1
+	echo "Usage: `basename $0` [OPTION]..."
+	echo " "
+	echo "Options:"
+	echo "  -n     New version to upgrade to"
+	echo "  -o     Old version to upgrade from"
+	echo "Notes:"
+	echo "- Version number needs to be set to the branch name of the version"
+	echo "  required for test: \"REL9_3_STABLE\" for example for 9.3, version"
+	echo "  maintained by pg_binarchive. It can also be set to \"dev\" to"
+	echo "  choose the version currently compiled in dev path."
+	echo "- For simplicity, no check is done on version order"
+    exit $ERROR_NUM
+}
+
+check_version_available()
+{
+	VERSION_TO_CHECK=$1
+	# Check if a development version is used
+	if [ $VERSION_TO_CHECK == "dev" ]
+	then
+		if [ ! -d $HOME_POSTGRES_INSTALL ]
+		then
+			echo "No installation available in $HOME_POSTGRES_INSTALL"
+			exit 1
+		fi
+		if [ ! -d $HOME_POSTGRES_INSTALL/bin ]
+		then
+			echo "No binaries available in $HOME_POSTGRES_INSTALL/bin"
+			exit 1
+		fi
+		if [ ! -d $HOME_POSTGRES_INSTALL/lib ]
+		then
+			echo "No libraries available in $HOME_POSTGRES_INSTALL/lib"
+			exit 1
+		fi
+	else
+		# Check the case of a normal version
+		CHECK_INSTALL_PATH=$HOME_STABLE_BIN/$VERSION_TO_CHECK
+		if [ ! -d $CHECK_INSTALL_PATH ]
+		then
+			echo "No installation available in $CHECK_INSTALL_PATH"
+			echo "Be sure to run pg_binarchive to set up such versions"
+			exit 1
+		fi
+		if [ ! -d $CHECK_INSTALL_PATH/bin ]
+		then
+			echo "No binaries available in $CHECK_INSTALL_PATH/bin"
+			echo "Be sure to run pg_binarchive to set up such versions"
+			exit 1
+		fi
+		if [ ! -d $CHECK_INSTALL_PATH/lib ]
+		then
+			echo "No libraries available in $CHECK_INSTALL_PATH/lib"
+			echo "Be sure to run pg_binarchive to set up such versions"
+			exit 1
+		fi
+	fi
+}
+
+# Treat options
+while getopts 'hn:o:' OPTION
+do
+	case $OPTION in
+	h)	# Show help
+		show_help 0
+		;;
+	n)	# New cluster version to update to
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		NEW_VERSION="$OPTARG"
+		;;
+	o)	# Old cluster version to update from
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		OLD_VERSION="$OPTARG"
+		;;
+	?)	# Leave without an error code
+		show_help 0
+		;;
+	esac
+done
+
+if [ $# == 0 ]
+then
+	echo "No arguments specified"
+	show_help 1
+fi
+
+# Check number of arguments
+if [ $# -ne $EXPECTED_ARGS ]
+then
+	# Leave with an error code
+	show_help 1
+fi
+
+# Check if versions are available
+check_version_available $OLD_VERSION
+check_version_available $NEW_VERSION
+
+# Data folders are installed in HOME_POSTGRES_INSTALL similarly to
+# the development version
+BIN_OLD_VERSION=$HOME_STABLE_BIN/$OLD_VERSION/bin
+BIN_NEW_VERSION=$HOME_STABLE_BIN/$NEW_VERSION/bin
+DATA_OLD_VERSION=$HOME_POSTGRES_INSTALL/$OLD_VERSION
+DATA_NEW_VERSION=$HOME_POSTGRES_INSTALL/$NEW_VERSION
+
+# If the old or new versions are tagged as dev, point to the
+# default installation
+if [ $OLD_VERSION == "dev" ]
+then
+	BIN_OLD_VERSION=$HOME_POSTGRES_INSTALL/bin
+fi
+if [ $NEW_VERSION == "dev" ]
+then
+	BIN_NEW_VERSION=$HOME_POSTGRES_INSTALL/bin
+fi
+
+
+# Remove old folders if any
+rm -r $DATA_OLD_VERSION $DATA_NEW_VERSION
+
+# Create cluster for old version
+# Note: it might be better to use pg_start here but it looks better to rely
+# on default options for this test
+$BIN_OLD_VERSION/initdb -D $DATA_OLD_VERSION
+echo "port = 6665" >> $DATA_OLD_VERSION/postgresql.conf
+# Start it
+$BIN_OLD_VERSION/pg_ctl start -D $DATA_OLD_VERSION
+
+# Create cluster for new version
+$BIN_NEW_VERSION/initdb -D $DATA_NEW_VERSION
+echo "port = 6666" >> $DATA_NEW_VERSION/postgresql.conf
+# Start it
+$BIN_NEW_VERSION/pg_ctl start -D $DATA_NEW_VERSION
+
+# Sleep a bit before stopping the nodes to allow the upgrade
+sleep 2
+
+# Stop the nodes
+$BIN_OLD_VERSION/pg_ctl stop -D $DATA_OLD_VERSION
+$BIN_NEW_VERSION/pg_ctl stop -D $DATA_NEW_VERSION
+
+# Perform the upgrade by using the version of the newest version
+$BIN_NEW_VERSION/pg_upgrade -b $BIN_OLD_VERSION -B $BIN_NEW_VERSION \
+	-d $DATA_OLD_VERSION -D $DATA_NEW_VERSION
+
+# Do necessary cleanup
+menage

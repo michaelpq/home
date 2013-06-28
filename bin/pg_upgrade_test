@@ -11,6 +11,7 @@
 
 # Option-related variables
 EXPECTED_ARGS=0
+FLAG_FILE=0
 
 # Show utility help
 show_help()
@@ -19,8 +20,10 @@ show_help()
 	echo "Usage: `basename $0` [OPTION]..."
 	echo " "
 	echo "Options:"
-	echo "  -n     New version to upgrade to"
-	echo "  -o     Old version to upgrade from"
+	echo "  -f FILE      SQL file to upload objects on old cluster"
+	echo "  -h           Show help and exit"
+	echo "  -n BRANCH    New version to upgrade to"
+	echo "  -o BRANCH    Old version to upgrade from"
 	echo "Notes:"
 	echo "- Version number needs to be set to the branch name of the version"
 	echo "  required for test: \"REL9_3_STABLE\" for example for 9.3, version"
@@ -76,9 +79,14 @@ check_version_available()
 }
 
 # Treat options
-while getopts 'hn:o:' OPTION
+while getopts 'f:hn:o:' OPTION
 do
 	case $OPTION in
+	f)	# File to upload objects to old cluster
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		SQL_FILE_UPLOAD="$OPTARG"
+		FLAG_FILE=1
+		;;
 	h)	# Show help
 		show_help 0
 		;;
@@ -107,6 +115,16 @@ if [ $# -ne $EXPECTED_ARGS ]
 then
 	# Leave with an error code
 	show_help 1
+fi
+
+# Check file presence if any defined
+if [ "$FLAG_FILE" == 1 ]
+then
+	if [ ! -f $SQL_FILE_UPLOAD ]
+	then
+		echo "File not found: $SQL_FILE_UPLOAD"
+		exit 1
+	fi
 fi
 
 # Check if versions are available
@@ -151,6 +169,9 @@ $BIN_NEW_VERSION/pg_ctl start -D $DATA_NEW_VERSION
 
 # Sleep a bit before stopping the nodes to allow the upgrade
 sleep 2
+
+# Upload some objects in old cluster
+$BIN_OLD_VERSION/psql -f $SQL_FILE_UPLOAD -p 6665 postgres
 
 # Stop the nodes
 $BIN_OLD_VERSION/pg_ctl stop -D $DATA_OLD_VERSION

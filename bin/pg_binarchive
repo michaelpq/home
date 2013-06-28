@@ -6,7 +6,8 @@
 #
 #	This is used for test purposes. Be sure to update LD_LIBRARY_PATH
 #	and call those archives with full path as they are not contained
-#	in PATH.
+#	in PATH. Contrib modules are installed as well to allow using
+#	features like pg_upgrade when testing.
 #--------------------------------------------------------------------------
 
 # Create stable repository if it does not exist yet
@@ -27,5 +28,5 @@ do
 	fi
 
 	# Install the latest version wanted
-	pg_compile -d -n -b $branch -p $HOME_STABLE_BIN/$branch
+	pg_compile -d -m -n -b $branch -p $HOME_STABLE_BIN/$branch
 done

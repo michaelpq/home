@@ -27,4 +27,7 @@ export HOME_PG_TOP_INSTALL=$HOME/bin/pgsql
 # Add Postgres binaries to path
 export PATH=$HOME_POSTGRES_INSTALL/bin:$PATH
 
+# Global base repository for ccache
+export HOME_CCACHE_DIR=$HOME/bin/ccache
+
 # Add other parameters publicly visible here if necessary

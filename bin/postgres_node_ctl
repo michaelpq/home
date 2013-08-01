@@ -1,0 +1,99 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# postgres_node_ctl
+#	Perform action on a given Postgres node, either slave or master.
+#	Copyright (c) 2010-2013, Michael Paquier
+#
+#	Such a node has been initialized first with postgres_node_init. The
+#	only reason why this wrapper is used is to allow support for binary
+#	archives when using past versions of Postgres that could need to
+#	enforce automatically the binary path of pg_ctl.
+#--------------------------------------------------------------------------
+
+# Option check flags
+FLAG_ACTION=0
+FLAG_PATH=0
+FLAG_DATA_FOLDER=0
+EXPECTED_ARGS=0
+
+show_help()
+{
+	ERROR_NUM=$1
+	echo "Usage: `basename $0` [OPTION]..."
+	echo " "
+	echo "Options:"
+	echo "  -a ACTION		Use an action for pg_ctl, either"
+	echo "  -b PATH         Path to Postgres install folder"
+	echo "  -d DATA_FOLDER  Data folder of the node"
+	echo "  -h              Show this help and leave"
+	exit $ERROR_NUM
+}
+
+# Read options
+while getopts 'a:b:d:h' OPTION
+do
+	case $OPTION in
+	a)	# Action to be kicked with pg_ctl. Note that no check is made on
+		# this value, pg_ctl will simply complain if something is not
+		# supported.
+		CTL_ACTION="$OPTARG"
+		FLAG_ACTION=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	b)	# Path to point to Postgres binaries
+		PSQL_USER_PATH="$OPTARG"
+		FLAG_PATH=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	d)	# Data folder of the new node
+		FLAG_DATA_FOLDER=1
+		NODE_DATA_FOLDER="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	h)	# Show this help
+		show_help 1
+		;;
+	?)	# Leave with an error code
+		show_help 1
+		;;
+	esac
+done
+
+# Check number of arguments
+if [ $# -ne $EXPECTED_ARGS ]
+then
+	# Leave with an error code
+	show_help 1
+fi
+
+# Perform safety checks
+# Specifying a data folder is mandatory
+if [ "$FLAG_DATA_FOLDER" == 0 ]
+then
+	echo "Specifying a data folder is mandatory"
+	show_help 1
+	exit 1
+fi
+# An action is mandatory
+if [ "$FLAG_ACTION" == 0 ]
+then
+	echo "Specifying an action for pg_ctl is mandatory"
+	show_help 1
+	exit 1
+fi
+
+#Set default PSQL install folder to the one wanted by user
+if [ "$FLAG_PATH" == 1 ]
+then
+	PSQL_FOLDER=$PSQL_USER_PATH
+else
+	# Set up default
+	PSQL_FOLDER=$HOME_POSTGRES_INSTALL
+	echo "Installation folder set to default $PSQL_FOLDER"
+fi
+
+# The node is supposed to be ready, so simply start it
+$PSQL_FOLDER/bin/pg_ctl -D $NODE_DATA_FOLDER $CTL_ACTION
+
+# Node started safely
+exit 0

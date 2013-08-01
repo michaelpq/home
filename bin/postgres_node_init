@@ -1,29 +1,29 @@
 #!/bin/bash
 #--------------------------------------------------------------------------
 # postgres_node_init
-#	Initialize a new Postgres node, either slave or master.
+#	Initialize a new Postgres node, either standby or master.
 #	Copyright (c) 2010-2013, Michael Paquier
 #
-#	Either a master or a slave can be created using this script. As this
+#	Either a master or a standby can be created using this script. As this
 #	script is planned to be used with Home only, there is no possibility
 #	to set up a foreign host name, all the nodes are running on the local
-#	server. If a slave is created, its related master needs to be alive
+#	server. If a standby is created, its related master needs to be alive
 #	such as a base backup is taken. Port, data folder and branch name
 #	need to be given by the	caller. The return result of this script is
-#	the creation status of the node. A slave is connected to master using
+#	the creation status of the node. A standby is connected to master using
 #	asynchronous streaming replication, and this script just adds the
 #	necessary configuration to do that.
 #
 #	Note that this script can be used also for cascading replication
-#	as a root node could be as well another slave.
+#	as a root node could be as well another standby.
 #
 #	Here only the initialization is done. The node will need to be
 #	launched afterwards by the caller. This is important because in some
-#	test you might want to start a slave with a certain delay.
+#	test you might want to start a standby with a certain delay.
 #
-#	When a slave node is created, the application name of the node is
+#	When a standby node is created, the application name of the node is
 #	harcoded the port it listens to:
-#	- slave_$PORT
+#	- node_$PORT
 #	This makes things clear regarding what connects to what.
 #
 #	In the settings, WAL archiving is enabled.
@@ -33,7 +33,7 @@
 FLAG_PATH=0
 FLAG_DATA_FOLDER=0
 FLAG_PORT=0
-FLAG_SLAVE=0
+FLAG_STANDBY=0
 FLAG_ROOT_PORT=0
 EXPECTED_ARGS=0
 
@@ -47,8 +47,8 @@ show_help()
 	echo "  -d DATA_FOLDER  Data folder of the node"
 	echo "  -h              Show this help and leave"
 	echo "  -p PORT			Port of the node"
-	echo "  -q MASTER_PORT  Port of root node this slave needs to use"
-	echo "  -s              Create a slave"
+	echo "  -q MASTER_PORT  Port of root node this standby needs to use"
+	echo "  -s              Create a standby"
 	exit $ERROR_NUM
 }
 
@@ -74,13 +74,13 @@ do
 		NODE_PORT="$OPTARG"
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
 		;;
-	q)	# Port of the root node if slave is created
+	q)	# Port of the root node if standby is created
 		FLAG_ROOT_PORT=1
 		ROOT_PORT="$OPTARG"
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
 		;;
-	s)	# Flag for slave creation
-		FLAG_SLAVE=1
+	s)	# Flag for standby creation
+		FLAG_STANDBY=1
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
 		;;
 	?)	# Leave with an error code
@@ -111,15 +111,15 @@ then
 	show_help 1
 	exit 1
 fi
-# If a slave is wanted, specifying a root node port is mandatory
-if [ "$FLAG_SLAVE" == 1 -a "$FLAG_ROOT_PORT" == 0 ]
+# If a standby is wanted, specifying a root node port is mandatory
+if [ "$FLAG_STANDBY" == 1 -a "$FLAG_ROOT_PORT" == 0 ]
 then
-	echo "Specifying a root node port is mandatory when creating a slave"
+	echo "Specifying a root node port is mandatory when creating a standby"
 	show_help 1
 	exit 1
 fi
-# Cannot specify a root node port if no slave is wanted
-if [ "$FLAG_SLAVE" == 0 -a "$FLAG_ROOT_PORT" == 1 ]
+# Cannot specify a root node port if no standby is wanted
+if [ "$FLAG_STANDBY" == 0 -a "$FLAG_ROOT_PORT" == 1 ]
 then
 	echo "No root port can be specified if a master is created"
 	show_help 1
@@ -151,14 +151,14 @@ then
 fi
 mkdir $NODE_ARCHIVE
 
-# If new node is a slave, fetch archives from root node
-if [ $FLAG_SLAVE == 1 ]
+# If new node is a standby, fetch archives from root node
+if [ $FLAG_STANDBY == 1 ]
 then
 	ROOT_ARCHIVE=$ARCHIVE_DATA/node_$ROOT_PORT
 fi
 
 # Generic options for postgresql.conf, replication parameters are set by
-# default for consistency among nodes and simplification of slave creation
+# default for consistency among nodes and simplification of standby creation
 OPTIONS_POSTGRESQL="logging_collector = on\n"\
 "log_statement = 'all'\n"\
 "log_min_messages = debug1\n"\
@@ -177,14 +177,21 @@ OPTIONS_PGHBA="host replication $USER 127.0.0.1/32 trust\n"\
 "host replication $USER ::1/128 trust\n"\
 "local replication $USER trust\n"
 
-# Parameters for recovery.conf, used only if node is a slave
-OPTIONS_SLAVE_RECOVERY="restore_command = 'cp -i $ROOT_ARCHIVE/%f %p'\n"\
+# Parameters for recovery.conf, used only if node is a standby
+OPTIONS_STANDBY_RECOVERY="restore_command = 'cp -i $ROOT_ARCHIVE/%f %p'\n"\
 "standby_mode = on\n"\
 "recovery_target_timeline = 'latest'\n"\
-"primary_conninfo = 'host=localhost port=$ROOT_PORT application_name=slave_$NODE_PORT'\n"
+"primary_conninfo = 'host=localhost port=$ROOT_PORT application_name=node_$NODE_PORT'\n"
+
+# Enforce deletion of data folder if it exists
+if [ -d $NODE_DATA_FOLDER ]
+then
+	echo "Data folder $NODE_DATA_FOLDER exists, enforcing its removal"
+	rm -rf $NODE_DATA_FOLDER
+fi
 
 # Create a master node
-if [ "$FLAG_SLAVE" == 0 ]
+if [ "$FLAG_STANDBY" == 0 ]
 then
 	# Initialize the data folder of this node
 	$INITDB -D $NODE_DATA_FOLDER
@@ -192,18 +199,18 @@ then
 	# Set postgresql.conf
 	echo -e $OPTIONS_POSTGRESQL >> $NODE_DATA_FOLDER/postgresql.conf
 
-	# Set up pg_hba.conf with replication settings. For a slave this
+	# Set up pg_hba.conf with replication settings. For a standby this
 	# is taken with pg_basebackup. No archives are used
 	echo -e $OPTIONS_PGHBA >> $NODE_DATA_FOLDER/pg_hba.conf
 else
-	# Initialize a slave with a fresh base backup
+	# Initialize a standby with a fresh base backup
 	pg_basebackup -p $ROOT_PORT -D $NODE_DATA_FOLDER
 
 	# Set recovery.conf
-	echo -e $OPTIONS_SLAVE_RECOVERY >> $NODE_DATA_FOLDER/recovery.conf
+	echo -e $OPTIONS_STANDBY_RECOVERY >> $NODE_DATA_FOLDER/recovery.conf
 fi
 
-# Enforce the port number of the slave, this setting is added at the bottom
+# Enforce the port number of the standby, this setting is added at the bottom
 # of postgresql.conf, this way it will be enforced to this new value.
 echo "port = $NODE_PORT" >> $NODE_DATA_FOLDER/postgresql.conf
 

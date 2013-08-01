@@ -43,7 +43,7 @@ show_help()
 	echo "Usage: `basename $0` [OPTION]..."
 	echo " "
 	echo "Options:"
-	echo "  -b PATH         Path to Postgres binaries"
+	echo "  -b PATH         Path to Postgres install folder"
 	echo "  -d DATA_FOLDER  Data folder of the node"
 	echo "  -h              Show this help and leave"
 	echo "  -p PORT			Port of the node"

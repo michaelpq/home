@@ -1,0 +1,85 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# postgres_get_port
+#	Get a valid port number for a new Postgres node.
+#	Copyright (c) 2010-2013, Michael Paquier
+#
+#	This is used to manage a cluster of nodes running on a single server
+#	for Home. The port is found by using psql (binary path can be enforced
+#	at will). The result returned by this script is the port taken. Scan
+#	begins from 5432. A valid port is returned only if this script has
+#	as exit code 0.
+#--------------------------------------------------------------------------
+
+# Option check flags
+FLAG_PATH=0
+EXPECTED_ARGS=0
+
+show_help()
+{
+	ERROR_NUM=$1
+	echo "Usage: `basename $0` [OPTION]..."
+	echo " "
+	echo "Options:"
+	echo "  -b PATH   Path to Postgres install folder"
+	echo "  -h        Show this help and leave"
+	exit $ERROR_NUM
+}
+
+# Read options
+while getopts 'b:' OPTION
+do
+	case $OPTION in
+	b)   # Branch to use Postgres binaries from.
+	     PSQL_USER_PATH="$OPTARG"
+	     FLAG_PATH=1
+	     EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+	     ;;
+	h)   # Show this help
+	     show_help 1
+	     ;;
+	?)   # Leave with an error code
+	     show_help 1
+	     ;;
+	esac
+done
+
+# Check number of arguments
+if [ $# -ne $EXPECTED_ARGS ]
+then
+	# Leave with an error code
+	show_help 1
+fi
+
+#Set default PSQL install folder to the one wanted by user
+if [ "$FLAG_PATH" == 1 ]
+then
+	PSQL_FOLDER=$PSQL_USER_PATH
+else
+	# Set up default
+	PSQL_FOLDER=$HOME_POSTGRES_INSTALL
+fi
+
+# Get a port for the new node
+PORT_SCAN=5432
+PORT_FOUND=0
+
+# Scan and find an available port
+while [ "$PORT_FOUND" == 0 ]
+do
+	# Check if this port is in use
+	$PSQL_FOLDER/bin/psql -p $PORT_SCAN -c 'SELECT 1' template1 > /dev/null 2>&1
+	ERR_NUM=$?
+	if [ $ERR_NUM != 0 ]
+	then
+		# Found a port
+		PORT_FOUND=1
+	else
+		# Increment port number by a unit
+		PORT_SCAN=$(($PORT_SCAN + 1))
+	fi
+done
+
+# Print out the port found, it will be used by the new node
+echo $PORT_SCAN
+exit 0

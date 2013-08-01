@@ -24,14 +24,7 @@ export HOME_PG_TOP_SRC=$HOME/git/pg_top
 export HOME_PG_TOP_MAKE=$HOME_GLOBAL_MAKE/pg_top
 export HOME_PG_TOP_INSTALL=$HOME/bin/pgsql
 
-# Redis development parameters
-export HOME_REDIS_SRC=$HOME/git/redis
-export HOME_REDIS_MAKE=$HOME_GLOBAL_MAKE/redis
-export HOME_REDIS_INSTALL=$HOME/bin/redis
-
 # Add Postgres binaries to path
 export PATH=$HOME_POSTGRES_INSTALL/bin:$PATH
-# Add Redis binaries to path
-export PATH=$HOME_REDIS_INSTALL/bin:$PATH
 
 # Add other parameters publicly visible here if necessary

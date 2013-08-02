@@ -30,17 +30,17 @@ show_help()
 while getopts 'b:' OPTION
 do
 	case $OPTION in
-	b)   # Branch to use Postgres binaries from.
-	     PSQL_USER_PATH="$OPTARG"
-	     FLAG_PATH=1
-	     EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
-	     ;;
-	h)   # Show this help
-	     show_help 1
-	     ;;
-	?)   # Leave with an error code
-	     show_help 1
-	     ;;
+	b)	# Branch to use Postgres binaries from.
+		PSQL_USER_PATH="$OPTARG"
+		FLAG_PATH=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	h)	# Show this help
+		show_help 1
+		;;
+	?)	# Leave with an error code
+		show_help 1
+		;;
 	esac
 done
 

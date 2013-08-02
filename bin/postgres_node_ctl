@@ -72,14 +72,12 @@ if [ "$FLAG_DATA_FOLDER" == 0 ]
 then
 	echo "Specifying a data folder is mandatory"
 	show_help 1
-	exit 1
 fi
 # An action is mandatory
 if [ "$FLAG_ACTION" == 0 ]
 then
 	echo "Specifying an action for pg_ctl is mandatory"
 	show_help 1
-	exit 1
 fi
 
 #Set default PSQL install folder to the one wanted by user

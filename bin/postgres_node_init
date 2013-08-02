@@ -102,28 +102,24 @@ if [ "$FLAG_PORT" == 0 ]
 then
 	echo "Specifying a port is mandatory"
 	show_help 1
-	exit 1
 fi
 # Specifying a data folder is mandatory
 if [ "$FLAG_DATA_FOLDER" == 0 ]
 then
 	echo "Specifying a data folder is mandatory"
 	show_help 1
-	exit 1
 fi
 # If a standby is wanted, specifying a root node port is mandatory
 if [ "$FLAG_STANDBY" == 1 -a "$FLAG_ROOT_PORT" == 0 ]
 then
 	echo "Specifying a root node port is mandatory when creating a standby"
 	show_help 1
-	exit 1
 fi
 # Cannot specify a root node port if no standby is wanted
 if [ "$FLAG_STANDBY" == 0 -a "$FLAG_ROOT_PORT" == 1 ]
 then
 	echo "No root port can be specified if a master is created"
 	show_help 1
-	exit 1
 fi
 
 #Set default PSQL install folder to the one wanted by user

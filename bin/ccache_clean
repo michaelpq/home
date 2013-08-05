@@ -1,0 +1,78 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# ccache_clean
+#	Clean up ccache for a given branch.
+#	Copyright (c) 2010-2013, Michael Paquier
+#--------------------------------------------------------------------------
+
+# Option check flags
+FLAG_BRANCH=0
+EXPECTED_ARGS=0
+
+show_help()
+{
+	ERROR_NUM=$1
+	echo "Usage: `basename $0` [OPTION]..."
+	echo " "
+	echo "Options:"
+	echo "  -b BRANCH  Branch to clean up"
+	echo "  -h         Show this help and leave"
+	exit $ERROR_NUM
+}
+
+# Read options
+while getopts 'b:h' OPTION
+do
+	case $OPTION in
+	b)	# Branch to clean up to point to Postgres binaries
+		CCACHE_BRANCH="$OPTARG"
+		FLAG_BRANCH=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	h)	# Show this help
+		show_help 1
+		;;
+	?)	# Leave with an error code
+		show_help 1
+		;;
+	esac
+done
+
+# Check number of arguments
+if [ $# -ne $EXPECTED_ARGS ]
+then
+	# Leave with an error code
+	show_help 1
+fi
+
+# Perform safety checks
+# Check that ccache is installed
+which ccache > /dev/null 2>&1
+ERR_NUM=$?
+if [ $ERR_NUM != 0 ]
+then
+	echo "ccache is not installed in this environment."
+	echo "You should add it in PATH."
+	exit 1
+fi
+# Specifying a branch is mandatory
+if [ $FLAG_BRANCH == 0 ]
+then
+	echo "Specifying a branch is mandatory"
+	show_help 1
+fi
+
+# Remove the cache associated to a branch
+CCACHE_FOLDER=$HOME_CCACHE_DIR/$CCACHE_BRANCH
+
+# If cache exists, remove it
+if [ -d $CCACHE_FOLDER ]
+then
+	echo "Removing cache for branch $CCACHE_BRANCH"
+	rm -rf $CCACHE_FOLDER
+fi
+
+# Create fresh cache folder
+echo "Creating empty folder cache for branch $CCACHE_BRANCH"
+mkdir $CCACHE_FOLDER
+exit 0

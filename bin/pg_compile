@@ -11,6 +11,7 @@
 # Take and check options
 EXPECTED_ARGS=0
 FLAG_DEBUG=0
+FLAG_CCACHE=0
 FLAG_REGRESS=0
 FLAG_PATH=0
 # VPATH and code copy flags
@@ -30,6 +31,7 @@ show_help()
 	echo " "
 	echo "Options:"
 	echo "  -d       Compile with debug flag"
+	echo "  -e NAME  ccache code in given subpath"
 	echo "  -h       Show this help"
 	echo "  -m       Include contrib modules in installation"
 	echo "  -p PATH  Define installation folder"
@@ -119,7 +121,7 @@ update_code_to_branch()
 }
 
 #Treat options
-while getopts 'b:cdhi:mno:p:rt:v' OPTION
+while getopts 'b:cde:hi:mno:p:rt:v' OPTION
 do
 	case $OPTION in
 	b)	# Branch to sync code with
@@ -134,6 +136,11 @@ do
 	d)	# Enforce debug flag
 		FLAG_DEBUG=1
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		;;
+	e)	# Enable ccache
+		FLAG_CCACHE=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		CCACHE_NAME="$OPTARG"
 		;;
 	h)	# Help
 		show_help 0
@@ -330,18 +337,18 @@ then
 			update_code_to_branch $USER_GIT_BRANCH
 		fi
 
-		CONFIGURE_CALL_FOLDER="."
-	fi
-
-	# Check the presence of configure in given folder
-	if [ ! -x $CONFIGURE_CALL_FOLDER/configure ]
-	then
-		echo "No configure in folder $CONFIGURE_CALL_FOLDER"
-		exit 1
+		# Use the base folder of the git tree where we are
+		CONFIGURE_CALL_FOLDER=`git rev-parse --show-toplevel`
 	fi
 
 	# Configure Postgres install folder
-	$CONFIGURE_CALL_FOLDER/configure $CONFIGURE_OPTIONS
+	if [ "$FLAG_CCACHE" == 1 ]
+	then
+		$CONFIGURE_CALL_FOLDER/configure CC='ccache gcc' \
+			 CCACHE_DIR=$HOME_CCACHE_DIR/$CCACHE_NAME $CONFIGURE_OPTIONS
+	else
+		$CONFIGURE_CALL_FOLDER/configure $CONFIGURE_OPTIONS
+	fi
 elif [ "$FLAG_COPY_ONLY" == 1 ]
 then
 	# Perform a copy-only
@@ -360,15 +367,8 @@ then
 	# exit, no installation is necessary
 	exit 0
 else
-	# Configure folder is the current folder here
-	CONFIGURE_CALL_FOLDER="."
-
-	# Check the presence of configure in given folder
-	if [ ! -x $CONFIGURE_CALL_FOLDER/configure ]
-	then
-		echo "No configure in folder $CONFIGURE_CALL_FOLDER"
-		exit 1
-	fi
+	# Configure folder is the base folder of git tree
+	CONFIGURE_CALL_FOLDER=`git rev-parse --show-toplevel`
 
 	# Update code to given tag
 	if [ "$FLAG_TAG" == 1 ]
@@ -381,8 +381,17 @@ else
 		update_code_to_branch $USER_GIT_BRANCH
 	fi
 
+	# Move to base folder of git tree to not trigger VPATH install
+	cd $CONFIGURE_CALL_FOLDER
+
 	# We do here a normal install, so do not worry about anything with code copy
-	./configure $CONFIGURE_OPTIONS
+	if [ "$FLAG_CCACHE" == 1 ]
+	then
+		./configure CC="ccache gcc" CCACHE_DIR=$HOME_CCACHE_DIR/$CCACHE_NAME \
+			$CONFIGURE_OPTIONS
+	else
+		./configure $CONFIGURE_OPTIONS
+	fi
 fi
 
 # Compile, by being here we certify that we are already in the compilation

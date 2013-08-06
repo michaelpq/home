@@ -159,8 +159,8 @@ if [ "$NUM_SLAVES" -gt 0 ]
 then
 	for i in $(seq 1 $NUM_SLAVES)
 	do
-		SLAVE_DATA=$PSQL_FOLDER/node_$SLAVE_PORT
 		SLAVE_PORT=`postgres_get_port`
+		SLAVE_DATA=$PSQL_FOLDER/node_$SLAVE_PORT
 		postgres_node_init -d $SLAVE_DATA -p $SLAVE_PORT -q $MASTER_PORT -s \
 			-b $PSQL_FOLDER
 		postgres_node_ctl -d $SLAVE_DATA -b $PSQL_FOLDER -a start

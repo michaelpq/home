@@ -10,7 +10,6 @@
 # Take and check options
 EXPECTED_ARGS=0
 NUM_SLAVES=0
-FLAG_CASCADING=0
 FLAG_PATH=0
 FLAG_VERSION=0
 
@@ -21,7 +20,6 @@ show_help()
 	echo "Usage: `basename $0` [OPTION]..."
 	echo " "
 	echo "Options:"
-	echo "  -c                  Cascading replication"
 	echo "  -h                  Show this help"
 	echo "  -p PATH             Path to Postgres install folder"
 	echo "                      The same folder is used to store data folders"
@@ -80,13 +78,9 @@ show_version()
 }
 
 # Treat options
-while getopts 'chp:s:v' OPTION
+while getopts 'hp:s:v' OPTION
 do
 	case $OPTION in
-	c)	# Cascading - single layer
-		FLAG_CASCADING=1
-		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
-		;;
 	h)  # Show this help
 		show_help 0
 		;;
@@ -114,13 +108,6 @@ if [ $# -ne $EXPECTED_ARGS ]
 then
 	# Leave with an error code
 	show_help 1
-fi
-
-# Stop cascading for the time being
-if [ "$FLAG_CASCADING" == 1 ]
-then
-	echo "Cascading is not yet supported"
-	exit 1
 fi
 
 #Set default PSQL install folder to the one wanted by user

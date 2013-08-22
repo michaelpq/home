@@ -11,6 +11,8 @@
 EXPECTED_ARGS=0
 NUM_SLAVES=0
 FLAG_PATH=0
+FLAG_CONFIG_SUFFIX=0
+FLAG_RECOVERY_SUFFIX=0
 FLAG_VERSION=0
 
 # Show utility help
@@ -20,9 +22,15 @@ show_help()
 	echo "Usage: `basename $0` [OPTION]..."
 	echo " "
 	echo "Options:"
+	echo "  -c CONFIG_SUFFIX    Define suffix for configuration settings of"
+	echo "                      postgresql.conf. See postgres_node_init for"
+	echo "                      more details. Default is \"dev\"."
 	echo "  -h                  Show this help"
 	echo "  -p PATH             Path to Postgres install folder"
 	echo "                      The same folder is used to store data folders"
+	echo "  -r CONFIG_SUFFIX    Define suffix for configuration settings of"
+	echo "                      recovery.conf. See postgres_node_init for"
+	echo "                      more details. Default is \"dev\"."
 	echo "  -s number_slaves    Choose number of slaves behind a node"
 	echo "  -v                  Output installation version and leave"
 	exit $ERROR_NUM
@@ -59,6 +67,16 @@ check_install()
 	fi
 }
 
+# Check an non-zero code, exit if found
+check_error()
+{
+	ERRNUM=$1
+	if [ $ERRNUM != 0 ]
+	then
+		exit $ERRNUM
+	fi
+}
+
 # Show installation version and leave
 show_version()
 {
@@ -78,15 +96,27 @@ show_version()
 }
 
 # Treat options
-while getopts 'hp:s:v' OPTION
+while getopts 'c:hp:r:s:v' OPTION
 do
 	case $OPTION in
+	c)	# Suffix for configuration settings of postgresql.conf
+		# Option value used directly with postgres_node_init.
+		FLAG_CONFIG_SUFFIX=1
+		CONFIG_SUFFIX="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
 	h)  # Show this help
 		show_help 0
 		;;
 	p)	# Path to postgres install folder
 		FLAG_PATH=1
 		PSQL_USER_PATH="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	r)	# Suffix for configuration settings of recovery.conf
+		# Option value used directly with postgres_node_init.
+		FLAG_RECOVERY_SUFFIX=1
+		RECOVERY_SUFFIX="$OPTARG"
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
 		;;
 	s)	# Number of slaves attached to the main node
@@ -110,7 +140,19 @@ then
 	show_help 1
 fi
 
-#Set default PSQL install folder to the one wanted by user
+# Set default suffix value of configuration settings
+if [ "$FLAG_CONFIG_SUFFIX" == 0 ]
+then
+    CONFIG_SUFFIX="dev"
+fi
+
+# Set default suffix value of recovery settings
+if [ "$FLAG_RECOVERY_SUFFIX" == 0 ]
+then
+    RECOVERY_SUFFIX="dev"
+fi
+
+# Set default PSQL install folder to the one wanted by user
 if [ "$FLAG_PATH" == 1 ]
 then
 	PSQL_FOLDER=$PSQL_USER_PATH
@@ -133,7 +175,9 @@ fi
 MASTER_PORT=`postgres_get_port`
 echo "Master node will listen at port $MASTER_PORT"
 MASTER_DATA=$PSQL_FOLDER/node_$MASTER_PORT
-postgres_node_init -p $MASTER_PORT -d $MASTER_DATA -b $PSQL_FOLDER
+postgres_node_init -c $CONFIG_SUFFIX -p $MASTER_PORT -d $MASTER_DATA \
+	-b $PSQL_FOLDER
+check_error $?
 
 # Slaves need the base backup of master first, so start it
 postgres_node_ctl -d $MASTER_DATA -b $PSQL_FOLDER -a start
@@ -149,7 +193,9 @@ then
 		SLAVE_PORT=`postgres_get_port`
 		SLAVE_DATA=$PSQL_FOLDER/node_$SLAVE_PORT
 		postgres_node_init -d $SLAVE_DATA -p $SLAVE_PORT -q $MASTER_PORT -s \
-			-b $PSQL_FOLDER
+			-b $PSQL_FOLDER -r $RECOVERY_SUFFIX
+		check_error $?
+
 		postgres_node_ctl -d $SLAVE_DATA -b $PSQL_FOLDER -a start
 
 		# Wait a bit for startup, due to automatic port detection

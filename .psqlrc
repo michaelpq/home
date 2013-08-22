@@ -13,5 +13,9 @@
 \set slaves 'SELECT application_name, pg_xlog_location_diff(sent_location, flush_location) AS replay_delta, sync_priority, sync_state FROM pg_stat_replication ORDER BY replay_delta ASC, application_name;'
 \set clear '\\! clear;'
 
+-- Set prompt to not print the name of database connected. The only thing
+-- taken into account is if the user is superuser or not.
+\set PROMPT1 '=%# '
+
 -- Set default error output as verbose
 \set VERBOSITY verbose

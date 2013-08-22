@@ -1,0 +1,4 @@
+# All the contents of this folder are made private, except some generic
+# configuration files used by postgres.
+!/postgresql.dev.conf
+!/recovery.dev.conf

@@ -35,6 +35,8 @@ FLAG_DATA_FOLDER=0
 FLAG_PORT=0
 FLAG_STANDBY=0
 FLAG_ROOT_PORT=0
+FLAG_CONFIG_SUFFIX=0
+FLAG_RECOVERY_SUFFIX=0
 EXPECTED_ARGS=0
 
 show_help()
@@ -43,22 +45,47 @@ show_help()
 	echo "Usage: `basename $0` [OPTION]..."
 	echo " "
 	echo "Options:"
-	echo "  -b PATH         Path to Postgres install folder"
-	echo "  -d DATA_FOLDER  Data folder of the node"
-	echo "  -h              Show this help and leave"
-	echo "  -p PORT			Port of the node"
-	echo "  -q MASTER_PORT  Port of root node this standby needs to use"
-	echo "  -s              Create a standby"
+	echo "  -b PATH             Path to Postgres install folder"
+	echo "  -c CONFIG_SUFFIX    Specify configuration file suffix for"
+	echo "                      custom settings of postgresql.conf."
+	echo "                      Works only for a master node."
+	echo "  -d DATA_FOLDER      Data folder of the node"
+	echo "  -h                  Show this help and leave"
+	echo "  -p PORT             Port of the node"
+	echo "  -q MASTER_PORT      Port of root node this standby needs to use"
+	echo "  -r RECOVERY_SUFFIX  Specify recovery.conf file suffix for"
+	echo "                      custom settings. Works only for standby node."
+	echo "  -s                  Create a standby"
+	echo " "
+	echo "Notes:"
+	echo "- CONFIG_SUFFIX helps in specifying a configuration file located"
+	echo "  in $HOME_POSTGRES_ETC containing parameter values for"
+	echo "  postgresql.conf that are non-environment specific or generated"
+	echo "  automatically by Home scripts like port or archive_command."
+	echo "  This is useful for debugging purposes or to plug in modules."
+	echo "  The suffix designates a file name of postgresql.$CONFIG_SUFFIX.conf."
+	echo "  This option has no effect for a standby node."
+	echo "- Similarly to CONFIG_SUFFIX, RECOVERY_SUFFIX works for recovery.conf"
+	echo "  and recovery.$RECOVERY_SUFFIX.conf. This option has no effect for"
+	echo "  a master node."
+	echo "- A standby node inherits its postgresql.conf parameters directly"
+	echo "  from the master node it is connected to."
+	echo "- Default value is \"dev\" for CONFIG_SUFFIX and RECOVERY_SUFFIX."
 	exit $ERROR_NUM
 }
 
 # Read options
-while getopts 'b:d:hp:q:s' OPTION
+while getopts 'b:c:d:hp:q:r:s' OPTION
 do
 	case $OPTION in
 	b)	# Path to point to Postgres binaries
 		PSQL_USER_PATH="$OPTARG"
 		FLAG_PATH=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	c)	# Specify configuration file suffix
+		CONFIG_SUFFIX="$OPTARG"
+		FLAG_CONFIG_SUFFIX=1
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
 		;;
 	d)	# Data folder of the new node
@@ -77,6 +104,11 @@ do
 	q)	# Port of the root node if standby is created
 		FLAG_ROOT_PORT=1
 		ROOT_PORT="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	r)	# Specify recovery.conf file settings
+		FLAG_RECOVERY_SUFFIX=1
+		RECOVERY_SUFFIX="$OPTARG"
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
 		;;
 	s)	# Flag for standby creation
@@ -132,6 +164,35 @@ else
 	echo "Installation folder set to default $PSQL_FOLDER"
 fi
 
+# Set configuration suffix if specified by user. Take also care of the
+# default value "dev".
+if [ "$FLAG_CONFIG_SUFFIX" == 0 ]
+then
+	CONFIG_SUFFIX="dev"
+fi
+# Check existence of configuration file
+USER_CONFIG_FILE=$HOME_POSTGRES_ETC/postgresql.$CONFIG_SUFFIX.conf
+if [ ! -f $USER_CONFIG_FILE ]
+then
+	echo "No custom configuration file with suffix $USER_CONFIG_FILE found"
+	echo "File path is $USER_CONFIG_FILE"
+	exit 1
+fi
+
+# Set recovery suffix if specified by user.
+if [ "$FLAG_RECOVERY_SUFFIX" == 0 ]
+then
+	RECOVERY_SUFFIX="dev"
+fi
+# Check existence of configuration file
+USER_RECOVERY_FILE=$HOME_POSTGRES_ETC/recovery.$CONFIG_SUFFIX.conf
+if [ ! -f $USER_CONFIG_FILE ]
+then
+	echo "No custom configuration file with suffix $USER_RECOVERY_FILE found"
+	echo "File path is $USER_RECOVERY_FILE"
+	exit 1
+fi
+
 # Some environment variables
 PSQL_BIN=$PSQL_FOLDER/bin
 INITDB=$PSQL_BIN/initdb
@@ -153,30 +214,19 @@ then
 	ROOT_ARCHIVE=$ARCHIVE_DATA/node_$ROOT_PORT
 fi
 
-# Generic options for postgresql.conf, replication parameters are set by
-# default for consistency among nodes and simplification of standby creation
-OPTIONS_POSTGRESQL="logging_collector = on\n"\
-"log_statement = 'all'\n"\
-"log_min_messages = debug1\n"\
-"log_min_error_statement = debug1\n"\
-"log_autovacuum_min_duration = -1\n"\
-"max_prepared_transactions = 20\n"\
-"max_wal_senders = 10\n"\
-"hot_standby = on\n"\
-"wal_level = hot_standby\n"\
-"archive_mode = on\n"\
-"archive_command = 'cp -i %p $NODE_ARCHIVE/%f'\n"\
-"work_mem = 1MB\n"
+# Node-related parameters for postgresql.conf. Those values need to be generated
+# by the script itself to ensure correct settings for the new node. You can still
+# enforce values for certain parameters to set them directly in the custom
+# configuration file as this custom file is applied after those settings.
+OPTIONS_POSTGRESQL="archive_command = 'cp -i %p $NODE_ARCHIVE/%f'\n"
 
 # Options of pg_hba.conf to allow replication
 OPTIONS_PGHBA="host replication $USER 127.0.0.1/32 trust\n"\
 "host replication $USER ::1/128 trust\n"\
 "local replication $USER trust\n"
 
-# Parameters for recovery.conf, used only if node is a standby
+# Node-related Parameters for recovery.conf, used only if node is a standby
 OPTIONS_STANDBY_RECOVERY="restore_command = 'cp -i $ROOT_ARCHIVE/%f %p'\n"\
-"standby_mode = on\n"\
-"recovery_target_timeline = 'latest'\n"\
 "primary_conninfo = 'host=localhost port=$ROOT_PORT application_name=node_$NODE_PORT'\n"
 
 # Enforce deletion of data folder if it exists
@@ -195,6 +245,9 @@ then
 	# Set postgresql.conf
 	echo -e $OPTIONS_POSTGRESQL >> $NODE_DATA_FOLDER/postgresql.conf
 
+	# Apply custom parameters for postgresql.conf
+	cat $USER_CONFIG_FILE >> $NODE_DATA_FOLDER/postgresql.conf
+
 	# Set up pg_hba.conf with replication settings. For a standby this
 	# is taken with pg_basebackup. No archives are used
 	echo -e $OPTIONS_PGHBA >> $NODE_DATA_FOLDER/pg_hba.conf
@@ -204,6 +257,9 @@ else
 
 	# Set recovery.conf
 	echo -e $OPTIONS_STANDBY_RECOVERY >> $NODE_DATA_FOLDER/recovery.conf
+
+	# Set custom parameters
+	cat $USER_RECOVERY_FILE >> $NODE_DATA_FOLDER/recovery.conf
 fi
 
 # Enforce the port number of the standby, this setting is added at the bottom

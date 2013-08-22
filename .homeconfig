@@ -7,6 +7,10 @@
 # Global make path for all binaries
 export HOME_GLOBAL_MAKE=$HOME/make
 
+# Global etc folder for all programs containing usually generic
+# configuration files that can be fetched by development environments.
+export HOME_GLOBAL_ETC=$HOME/etc
+
 # Folder where are located various stable installation versions
 export HOME_STABLE_BIN=$HOME/bin/stable
 
@@ -14,6 +18,7 @@ export HOME_STABLE_BIN=$HOME/bin/stable
 export HOME_POSTGRES_SRC=$HOME/git/postgres
 export HOME_POSTGRES_MAKE=$HOME_GLOBAL_MAKE/postgres
 export HOME_POSTGRES_INSTALL=$HOME/bin/pgsql
+export HOME_POSTGRES_ETC=$HOME_GLOBAL_ETC/postgres.d
 # PostgreSQL library path
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME_POSTGRES_INSTALL/lib
 # To SGML catalogs for PostgreSQL documentation

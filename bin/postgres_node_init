@@ -185,7 +185,7 @@ then
 	RECOVERY_SUFFIX="dev"
 fi
 # Check existence of configuration file
-USER_RECOVERY_FILE=$HOME_POSTGRES_ETC/recovery.$CONFIG_SUFFIX.conf
+USER_RECOVERY_FILE=$HOME_POSTGRES_ETC/recovery.$RECOVERY_SUFFIX.conf
 if [ ! -f $USER_CONFIG_FILE ]
 then
 	echo "No custom configuration file with suffix $USER_RECOVERY_FILE found"

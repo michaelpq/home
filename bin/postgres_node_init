@@ -255,7 +255,7 @@ else
 	pg_basebackup -p $ROOT_PORT -D $NODE_DATA_FOLDER
 
 	# Set recovery.conf
-	echo -e $OPTIONS_STANDBY_RECOVERY >> $NODE_DATA_FOLDER/recovery.conf
+	echo -e $OPTIONS_STANDBY_RECOVERY > $NODE_DATA_FOLDER/recovery.conf
 
 	# Set custom parameters
 	cat $USER_RECOVERY_FILE >> $NODE_DATA_FOLDER/recovery.conf

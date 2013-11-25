@@ -19,3 +19,6 @@
 
 -- Set default error output as verbose
 \set VERBOSITY verbose
+
+-- Print null values as "null" and not empty things
+\pset null 'null'

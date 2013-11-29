@@ -148,6 +148,11 @@ if [ -f $HOME/.bash_extra ]; then
 	. $HOME/.bash_extra
 fi
 
+# Enable git completion script
+if [ -f $HOME/.git_completion ]; then
+	. $HOME/.git_completion
+fi
+
 # Load global public parameters of Home
 # Those parameters are visible in the GIT repository of Home.
 if [ -f $HOME/.homeconfig ]; then

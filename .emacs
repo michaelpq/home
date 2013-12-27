@@ -174,6 +174,9 @@
 (add-hook 'sgml-mode-hook '(lambda ()
   (add-hook 'find-file-hook '80-col-limit)))
 
+;; Display current function name in code
+(which-function-mode 1)
+
 ;;--------------------------------------------------------------------------
 ;; Navigation
 ;;--------------------------------------------------------------------------

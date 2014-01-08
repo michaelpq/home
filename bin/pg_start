@@ -7,6 +7,9 @@
 #	The cluster is built using postgres_* infrastructure of Home.
 #--------------------------------------------------------------------------
 
+# Immediately leave in case of failure
+set -e
+
 # Take and check options
 EXPECTED_ARGS=0
 NUM_SLAVES=0

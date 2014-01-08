@@ -5,6 +5,9 @@
 #	Copyright (c) 2010-2013, Michael Paquier
 #--------------------------------------------------------------------------
 
+# Immediately leave in case of failure
+set -e
+
 `which openssl` > /dev/null 2>&1
 ERRNUM=$?
 if [ $? != 0 ]

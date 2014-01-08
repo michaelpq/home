@@ -9,6 +9,9 @@
 #	much a huge code.
 #--------------------------------------------------------------------------
 
+# Immediately leave in case of failure
+set -e
+
 # Remove the old source directory
 echo "Removing old source dir at $HOME_PG_TOP_MAKE"
 rm -rf $HOME_PG_TOP_MAKE

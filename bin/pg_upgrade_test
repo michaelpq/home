@@ -9,6 +9,9 @@
 #	This patch
 #--------------------------------------------------------------------------
 
+# Immediately leave in case of failure
+set -e
+
 # Option-related variables
 EXPECTED_ARGS=0
 FLAG_FILE=0

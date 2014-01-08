@@ -10,6 +10,9 @@
 #	features like pg_upgrade when testing.
 #--------------------------------------------------------------------------
 
+# Immediately leave in case of failure
+set -e
+
 # Create stable repository if it does not exist yet
 if [ ! -d $HOME_STABLE_BIN ]
 then

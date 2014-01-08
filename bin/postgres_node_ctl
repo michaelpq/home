@@ -10,6 +10,9 @@
 #	enforce automatically the binary path of pg_ctl.
 #--------------------------------------------------------------------------
 
+# Immediately leave in case of failure
+set -e
+
 # Option check flags
 FLAG_ACTION=0
 FLAG_PATH=0

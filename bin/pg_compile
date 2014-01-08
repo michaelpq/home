@@ -8,6 +8,9 @@
 #	Run regressions if necessary or enforce debug flag.
 #--------------------------------------------------------------------------
 
+# Immediately leave in case of failure
+set -e
+
 # Take and check options
 EXPECTED_ARGS=0
 FLAG_DEBUG=0

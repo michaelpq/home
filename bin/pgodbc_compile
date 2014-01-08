@@ -10,6 +10,9 @@
 #	development.
 #--------------------------------------------------------------------------
 
+# Immediately leave in case of failure
+set -e
+
 # Remove the old source directory
 echo "Removing old source dir at $HOME_PGODBC_MAKE"
 rm -rf $HOME_PGODBC_MAKE

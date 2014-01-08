@@ -11,6 +11,9 @@
 #	as exit code 0.
 #--------------------------------------------------------------------------
 
+# Immediately leave in case of failure
+set -e
+
 # Option check flags
 FLAG_PATH=0
 EXPECTED_ARGS=0
@@ -62,22 +65,12 @@ fi
 
 # Get a port for the new node
 PORT_SCAN=5432
-PORT_FOUND=0
 
 # Scan and find an available port
-while [ "$PORT_FOUND" == 0 ]
+while $PSQL_FOLDER/bin/psql -X -p $PORT_SCAN </dev/null 2>/dev/null
 do
-	# Check if this port is in use
-	$PSQL_FOLDER/bin/psql -p $PORT_SCAN -c 'SELECT 1' template1 > /dev/null 2>&1
-	ERR_NUM=$?
-	if [ $ERR_NUM != 0 ]
-	then
-		# Found a port
-		PORT_FOUND=1
-	else
-		# Increment port number by a unit
-		PORT_SCAN=$(($PORT_SCAN + 1))
-	fi
+	# Increment port number by a unit
+	PORT_SCAN=`expr $PORT_SCAN + 1`
 done
 
 # Print out the port found, it will be used by the new node

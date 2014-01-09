@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # postgres_get_port
 #	Get a valid port number for a new Postgres node.
-#	Copyright (c) 2010-2013, Michael Paquier
+#	Copyright (c) 2010-2014, Michael Paquier
 #
 #	This is used to manage a cluster of nodes running on a single server
 #	for Home. The port is found by using psql (binary path can be enforced

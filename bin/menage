@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # menage
 #	Clean up PostgreSQL processes in an atrocious way
-#	Copyright (c) 2010-2013, Michael Paquier
+#	Copyright (c) 2010-2014, Michael Paquier
 #
 #	A simple way to clean up a development environment in one single
 #	command by killing atrociously all the processes related to Postgres

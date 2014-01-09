@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # postgres_node_ctl
 #	Perform action on a given Postgres node, either slave or master.
-#	Copyright (c) 2010-2013, Michael Paquier
+#	Copyright (c) 2010-2014, Michael Paquier
 #
 #	Such a node has been initialized first with postgres_node_init. The
 #	only reason why this wrapper is used is to allow support for binary

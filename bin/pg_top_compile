@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # pg_top_compile
 #	Copy and compile pg_top
-#	Copyright (c) 2010-2013, Michael Paquier
+#	Copyright (c) 2010-2014, Michael Paquier
 #
 #	The code used for compilation is a copy of an original code. No fancy
 #	options are supported for simplicity and because pg_top is not that

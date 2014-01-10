@@ -1,0 +1,63 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# git-filter
+#	Small utility to change commit data in a GIT repository by replacing
+#	the author and commiter name and emails by some custom data. Both
+#	author and committer fields are updated to the same values and a email
+#	is used to determine what to replace.
+#	Copyright (c) 2010-2014, Michael Paquier
+#
+#	This can be called as well as "git filter $ARGS"
+#--------------------------------------------------------------------------
+
+# Number of expected arguments
+EXPECTED_ARGS=3
+
+# Show help messages
+show_help()
+{
+	ERROR_NUM=$1
+	echo "Usage: `basename $0` [EMAIL_TO_REPLACE] [NEW_NAME] [NEW_EMAIL]"
+	exit $ERROR_NUM
+}
+
+# Check number of arguments
+if [ $# -ne $EXPECTED_ARGS ]
+then
+	# Leave with an error code
+	show_help 1
+fi
+
+# Fill in arguments
+EMAIL_TO_REPLACE=$1
+NEW_NAME=$2
+NEW_EMAIL=$3
+
+# Now begin process, this part will do all the work to rename
+# the
+echo git filter-branch --env-filter "
+an=\"\$GIT_AUTHOR_NAME\"
+am=\"\$GIT_AUTHOR_EMAIL\"
+cn=\"\$GIT_COMMITTER_NAME\"
+cm=\"\$GIT_COMMITTER_EMAIL\"
+
+if [ \"\$GIT_COMMITTER_EMAIL\" = \"$EMAIL_TO_REPLACE\" ]
+then
+    an=\"$NEW_NAME\"
+    am=\"$NEW_EMAIL\"
+    cn=\"$NEW_NAME\"
+    cm=\"$NEW_EMAIL\"
+fi
+if [ \"\$GIT_AUTHOR_EMAIL\" = \"$EMAIL_TO_REPLACE\" ]
+then
+    an=\"$NEW_NAME\"
+    am=\"$NEW_EMAIL\"
+    cn=\"$NEW_NAME\"
+    cm=\"$NEW_EMAIL\"
+fi
+
+export GIT_AUTHOR_NAME=\"\$an\"
+export GIT_AUTHOR_EMAIL=\"\$am\"
+export GIT_COMMITTER_NAME=\"\$cn\"
+export GIT_COMMITTER_EMAIL=\"\$cm\"
+"

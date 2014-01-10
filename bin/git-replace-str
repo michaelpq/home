@@ -1,0 +1,36 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# git-replace-str
+#	Replace a string by another in a set of files in a git repository.
+#	Copyright (c) 2010-2014, Michael Paquier
+#
+#	This is always useful for things like copyright updates or modification
+#	of variable names. This can be called as a subcommand of git called
+#	"replace".
+#--------------------------------------------------------------------------
+
+# Number of expected arguments
+EXPECTED_ARGS=2
+
+# Help message
+show_help()
+{
+	ERROR_NUM=$1
+	echo "Usage: `basename $0` [OLD_STRING] [NEW_STRING]"
+	exit $ERROR_NUM
+}
+
+# Check number of arguments
+if [ $# -ne $EXPECTED_ARGS ]
+then
+	# Leave with an error code
+	show_help 1
+fi
+
+OLDSTR=$1
+NEWSTR=$2
+
+for file in `git grep -l $OLDSTR`
+do
+	sed -i "s/$OLDSTR/$NEWSTR/g" $file
+done

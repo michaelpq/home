@@ -24,11 +24,6 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME_POSTGRES_INSTALL/lib
 # To SGML catalogs for PostgreSQL documentation
 export SGML_CATALOG_FILES=/etc/sgml/catalog:/usr/share/sgml/jade/catalog
 
-# pgodbc development parameters
-export HOME_PGODBC_SRC=$HOME/git/pgodbc
-export HOME_PGODBC_MAKE=$HOME_GLOBAL_MAKE/pgodbc
-export HOME_PGODBC_INSTALL=$HOME/bin/pgsql
-
 # Add Postgres binaries to path
 export PATH=$HOME_POSTGRES_INSTALL/bin:$PATH
 

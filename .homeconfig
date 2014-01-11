@@ -40,4 +40,8 @@ export PATH=$HOME_POSTGRES_INSTALL/bin:$PATH
 # Global base repository for ccache
 export HOME_CCACHE_DIR=$HOME/bin/ccache
 
+# Global variables for asciidoc
+export ASCIIDOC=asciidoc
+export XMLTO=xmlto
+
 # Add other parameters publicly visible here if necessary

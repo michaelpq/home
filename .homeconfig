@@ -27,6 +27,9 @@ export SGML_CATALOG_FILES=/etc/sgml/catalog:/usr/share/sgml/jade/catalog
 # Add Postgres binaries to path
 export PATH=$HOME_POSTGRES_INSTALL/bin:$PATH
 
+# Add Postgres man pages to MANPATH
+export MANPATH=$HOME_POSTGRES_INSTALL/share/man:$MANPATH
+
 # Global base repository for ccache
 export HOME_CCACHE_DIR=$HOME/bin/ccache
 

@@ -66,8 +66,8 @@ fi
 # Get a port for the new node
 PORT_SCAN=5432
 
-# Scan and find an available port
-while $PSQL_FOLDER/bin/psql -X -p $PORT_SCAN </dev/null 2>/dev/null
+# Scan and find an available port by connecting to database postgres
+while $PSQL_FOLDER/bin/psql -X -p $PORT_SCAN postgres </dev/null 2>/dev/null
 do
 	# Increment port number by a unit
 	PORT_SCAN=`expr $PORT_SCAN + 1`

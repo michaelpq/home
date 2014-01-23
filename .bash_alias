@@ -33,5 +33,12 @@ alias emasc='emacs'
 alias diff='diff -uNrp'
 alias python="python2.7"
 
+# Settings related to mpd/mpc
+alias mpdstart='mpd ~/.mpdconf'
+alias mpdkill='mpd --kill'
+alias mpcnext='mpc next'
+alias mpcprev='mpc prev'
+alias mpcvol='mpc volume'
+
 # Shortcut when compiling Postgres extensions with PGXS
 alias makepg="make USE_PGXS=1"

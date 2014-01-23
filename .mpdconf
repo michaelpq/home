@@ -1,0 +1,26 @@
+#--------------------------------------------------------------------------
+# .mpdconf
+#	Simple example of mpd configuration file
+#	Copyright (c) 2010-2014, Michael Paquier
+#--------------------------------------------------------------------------
+
+# Directory where music is located
+music_directory "~/media"
+
+# Different state files
+playlist_directory "~/.mpd/playlists"
+db_file "~/.mpd/database"
+log_file "~/.mpd/log"
+pid_file "~/.mpd/pid"
+state_file "~/.mpd/state"
+
+# Control of the input
+input {
+        plugin "curl"
+}
+
+# An audio device controlled by alsa should be set
+audio_output {
+       type "alsa"
+       name "ALSA Device"
+}

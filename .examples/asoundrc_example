@@ -1,0 +1,20 @@
+#--------------------------------------------------------------------------
+# .examples/asoundrc_example
+#	example of global extra settings for alsa. This file should be
+#	copied as $HOME/.asoundrc
+#	Copyright (c) 2010-2014, Michael Paquier
+#--------------------------------------------------------------------------
+
+# Those settings should be determined depending on the output of
+# "aplay -l", part of alsa-utils. 
+
+# Default settings
+defaults.pcm.card 0
+defaults.pcm.device 1
+defaults.ctl.card 0
+
+# Intel NUC
+# defaults.pcm.card 0
+# defaults.pcm.device 3 # device 1
+# defaults.pcm.device 7 # device 2
+# defaults.ctl.card 0

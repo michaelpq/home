@@ -32,3 +32,6 @@ alias emacs='emacs -nw'
 alias emasc='emacs'
 alias diff='diff -uNrp'
 alias python="python2.7"
+
+# Shortcut when compiling Postgres extensions with PGXS
+alias makepg="make USE_PGXS=1"

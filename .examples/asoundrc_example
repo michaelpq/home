@@ -6,7 +6,7 @@
 #--------------------------------------------------------------------------
 
 # Those settings should be determined depending on the output of
-# "aplay -l", part of alsa-utils. 
+# "aplay -l", part of alsa-utils.
 
 # Default settings
 defaults.pcm.card 0

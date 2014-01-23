@@ -1,6 +1,7 @@
 #--------------------------------------------------------------------------
-# .homeconfig_extra_example
-#	Extra private settings for Home
+# .examples/homeconfig_extra_example
+#	Extra private settings for Home. This file should be copied as
+#	$HOME/.homeconfig_extra.
 #	Copyright (c) 2010-2014, Michael Paquier
 #--------------------------------------------------------------------------
 

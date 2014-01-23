@@ -1,6 +1,7 @@
 #--------------------------------------------------------------------------
-# .bash_alias_extra_example
-#	Example of extra settings for aliases
+# .examples/bash_alias_extra_example
+#	Example template of extra settings for aliases. This file should
+#	be copied as $HOME/.bash_alias_extra.
 #	Copyright (c) 2010-2014, Michael Paquier
 #--------------------------------------------------------------------------
 

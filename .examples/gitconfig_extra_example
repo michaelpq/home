@@ -1,6 +1,7 @@
 #--------------------------------------------------------------------------
-# .gitconfig_extra_example
-#	example of global extra settings for GIT
+# .examples/gitconfig_extra_example
+#	example of global extra settings for GIT. This file should be
+#	copied as $HOME/.gitconfig_extra.
 #	Copyright (c) 2010-2014, Michael Paquier
 #--------------------------------------------------------------------------
 [user]

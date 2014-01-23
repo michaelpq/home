@@ -1,6 +1,7 @@
 #--------------------------------------------------------------------------
-# .bash_extra_example
-#	Extra private settings for bash
+# .examples/bash_extra_example
+#	Extra private settings for bash. This file should be copied as
+#	$HOME/.bash_extra.
 #	Copyright (c) 2010-2014, Michael Paquier
 #--------------------------------------------------------------------------
 

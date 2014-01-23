@@ -25,11 +25,18 @@ then
 	show_help 1
 fi
 
-FILE_PATH=`find . -name "$1"`
-if [ ! -z $FILE_PATH ]
+NUM_FILES=`find . -name "$FILE_NAME" | wc -l | tr -d ' '`
+if [ $NUM_FILES == 0 ]
 then
-	# Launch the command as the file has been found
-	emacs -nw $FILE_PATH
-else
-	echo "\"$FILE_NAME\" does not exist from current repository"
+	echo "No files $FILE_NAME found in current path"
+	exit 1
+elif [ $NUM_FILES -gt 1 ]
+then
+	echo "Multiple finds $FILE_NAME found in current path, files are:"
+	find . -name "$FILE_NAME"
+	exit 1
 fi
+
+# Launch the command as one file has been found
+FILE_PATH=`find . -name "$FILE_NAME"`
+emacs -nw $FILE_PATH

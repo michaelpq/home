@@ -13,6 +13,7 @@ db_file "~/.mpd/database"
 log_file "~/.mpd/log"
 pid_file "~/.mpd/pid"
 state_file "~/.mpd/state"
+bind_to_address "localhost"
 
 # Control of the input
 input {

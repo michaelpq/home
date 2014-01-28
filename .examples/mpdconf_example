@@ -1,11 +1,15 @@
 #--------------------------------------------------------------------------
-# .mpdconf
-#	Simple example of mpd configuration file
+# .mpdconf_example
+#	Simple example of mpd configuration file. This should be copied
+#	as $HOME/.mpdconf.
 #	Copyright (c) 2010-2014, Michael Paquier
 #--------------------------------------------------------------------------
 
-# Directory where music is located
+# Music directory, note that this paraemeter is mandatory
+# Setting for Linux platforms
 music_directory "~/media"
+# Setting for OSX platforms
+# music_directory "~/Music"
 
 # Different state files
 playlist_directory "~/.mpd/playlists"
@@ -20,8 +24,16 @@ input {
 	plugin "curl"
 }
 
-# An audio device controlled by alsa should be set
+# Example of settings for Linux platforms with an audio device used by
+# alsa.
 audio_output {
 	type "alsa"
 	name "ALSA Device"
 }
+
+# Example of settings for audio device on OSX
+#audio_output {
+#	type "osx"
+#	name "CoreAudio"
+#	mixer_type "software"
+#}

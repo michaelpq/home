@@ -97,10 +97,6 @@
 (setq auto-mode-alist
   (cons '("\\(postgres\\|pgsql\\).*\\.sgml\\'" . pgsql-sgml-mode)
         auto-mode-alist))
-;; Add files with extension .sgmlin to sgml mode (Postgres-XC exclusive)
-(setq auto-mode-alist
-  (cons '("\\(postgres\\|pgsql\\).*\\.sgmlin\\'" . pgsql-sgml-mode)
-        auto-mode-alist))
 ;; Perl settings
 (defun pgsql-perl-mode ()
   "Perl style adjusted for PostgreSQL project"

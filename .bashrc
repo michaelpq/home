@@ -26,7 +26,7 @@ shopt -s histappend
 
 # Path settings
 # Give priority in scanning to /usr/local/bin for user things like homebrew
-# Give also priority to $HOME/pgsql/bin for Postgres and Postgres-XC development
+# Give also priority to $HOME/pgsql/bin for Postgres development.
 export PATH=/usr/local/bin:$PATH
 export PATH=$PATH:$HOME/bin:$HOME/bin/extra
 

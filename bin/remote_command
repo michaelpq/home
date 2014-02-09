@@ -66,9 +66,6 @@ fi
 #Build the command the command
 COMMAND_LAUNCHED="$MODE'$COMMAND'"
 echo $COMMAND_LAUNCHED
-#Optional, to be combined with pgxc_install.conf
-#Get the list of servers where to launch the command
-#Don't do anything for the moment...
 
 if [ "$KFLAG" = "0" ]
 then

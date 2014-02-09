@@ -98,5 +98,10 @@ function __git_terminal_status()
 if [ $OFFLINE_OUTPUT == 0 ]
 then
 	__git_terminal_status
-	echo $GIT_PS1_STATUS
+
+	# Do not print "\n" if output is empty
+	if [ ! -z "$GIT_PS1_STATUS" ]
+	then
+		echo $GIT_PS1_STATUS
+	fi
 fi

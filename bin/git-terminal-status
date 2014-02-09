@@ -1,6 +1,6 @@
 #!/bin/bash
 #--------------------------------------------------------------------------
-# git_completion
+# git-terminal-status
 #	Print information about current GIT repository on screen.
 #	Copyright (c) 2010-2014, Michael Paquier
 #
@@ -11,7 +11,7 @@
 #--------------------------------------------------------------------------
 
 # Check the existence of a GIT command
-function __git_completion()
+function __git_terminal_status()
 {
 	which git &> /dev/null
 	RES=$?
@@ -42,7 +42,7 @@ function __git_completion()
 			then
 				GIT_BRANCH="(bare-repo)"
 				GIT_BRANCH=${HOME_COLOR_BLACK_BOLD}${GIT_BRANCH}${HOME_COLOR_OFF}
-				export GIT_PS1_COMPLETION="$GIT_BRANCH"
+				export GIT_PS1_STATUS="$GIT_BRANCH"
 				return
 			fi
 
@@ -82,5 +82,5 @@ function __git_completion()
 	fi
 
 	# Finally export the result
-	export GIT_PS1_COMPLETION="$GIT_BRANCH"
+	export GIT_PS1_STATUS="$GIT_BRANCH"
 }

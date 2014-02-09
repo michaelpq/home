@@ -72,13 +72,13 @@ fi
 unset color_prompt force_color_prompt
 
 # Add extension to show git branch of current repository
-if [ -f $HOME/bin/git_completion ]
+if [ -f $HOME/bin/git-terminal-status ]
 then
-	. $HOME/bin/git_completion
+	. $HOME/bin/git-terminal-status
 	# Run completion command each time command prompt is updated
-	PROMPT_COMMAND="$PROMPT_COMMAND;__git_completion"
+	PROMPT_COMMAND="$PROMPT_COMMAND;__git_terminal_status"
 	# Finally add to screen the output generated
-	PS1=$PS1"\`echo -e \$GIT_PS1_COMPLETION\`"
+	PS1=$PS1"\`echo -e \$GIT_PS1_STATUS\`"
 fi
 
 # Finish by adding extension "$" to PS1 and a single space for clarity

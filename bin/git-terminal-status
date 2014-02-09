@@ -10,6 +10,14 @@
 #	by not adding complications to .bashrc.
 #--------------------------------------------------------------------------
 
+# Check if output should be printed when loading this script
+if [ "$1" == "--offline" ]
+then
+	OFFLINE_OUTPUT=1
+else
+	OFFLINE_OUTPUT=0
+fi
+
 # Check the existence of a GIT command
 function __git_terminal_status()
 {
@@ -84,3 +92,11 @@ function __git_terminal_status()
 	# Finally export the result
 	export GIT_PS1_STATUS="$GIT_BRANCH"
 }
+
+# Print output only if requested. The offline mode is used when loading this
+# script, generally at session loading.
+if [ $OFFLINE_OUTPUT == 0 ]
+then
+	__git_terminal_status
+	echo $GIT_PS1_STATUS
+fi

@@ -74,7 +74,9 @@ unset color_prompt force_color_prompt
 # Add extension to show git branch of current repository
 if [ -f $HOME/bin/git-terminal-status ]
 then
-	. $HOME/bin/git-terminal-status
+	# Load terminal status script, be sure to avoid priting anything
+	# when loading it here.
+	. $HOME/bin/git-terminal-status --offline
 	# Run completion command each time command prompt is updated
 	PROMPT_COMMAND="$PROMPT_COMMAND;__git_terminal_status"
 	# Finally add to screen the output generated

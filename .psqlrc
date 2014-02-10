@@ -20,6 +20,9 @@
 -- Set default error output as verbose
 \set VERBOSITY verbose
 
+-- Output processing time for each query run
+\timing on
+
 -- Ignore errors in transaction block. This setting is not effective
 -- for scripts but just for interactive sessions.
 \set ON_ERROR_ROLLBACK interactive

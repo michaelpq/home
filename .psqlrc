@@ -20,5 +20,9 @@
 -- Set default error output as verbose
 \set VERBOSITY verbose
 
+-- Ignore errors in transaction block. This setting is not effective
+-- for scripts but just for interactive sessions.
+\set ON_ERROR_ROLLBACK interactive
+
 -- Print null values as "null" and not empty things
 \pset null 'null'

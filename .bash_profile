@@ -4,4 +4,8 @@
 #	Copyright (c) 2010-2014, Michael Paquier
 #--------------------------------------------------------------------------
 
-[[ -f ~/.bashrc ]] && . ~/.bashrc
+# Load .bashrc
+if [ -f $HOME/.bashrc ]
+then
+	. $HOME/.bashrc
+fi

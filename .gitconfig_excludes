@@ -6,6 +6,10 @@
 
 # Emacs backup files
 *~
+
+# Files created by emacs for unsaved changes
+.#*
+
 # Files created by raw patch application
 # Rejected files are not ignored because it is easier to track that with
 # commands of the type git status.

@@ -16,6 +16,7 @@
 /.bitcoin
 /.cache
 /.ccache
+/.cgminer
 /.cups
 /.dbus
 /.dropbox

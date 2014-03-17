@@ -102,6 +102,31 @@ export LD_LIBRARY_PATH=$HOME/lib
 export C_INCLUDE_PATH=$HOME/include
 
 #--------------------------------------------------------------------------
+# Environment variables
+#--------------------------------------------------------------------------
+
+# Those variables should be loaded before aliases or extra commands as
+# they could use what is loaded here.
+
+# Load environment variables for system colors.
+# Those variables are loaded first as they depend on nothing else.
+if [ -f $HOME/bin/system_colors ]; then
+    . $HOME/bin/system_colors
+fi
+
+# Load global public parameters of Home.
+# Those parameters are visible in the GIT repository of Home.
+if [ -f $HOME/.homeconfig ]; then
+	. $HOME/.homeconfig
+fi
+
+# Load global private parameters of Home.
+# Those parameters are not visible in the GIT repository of Home.
+if [ -f $HOME/.homeconfig_extra ]; then
+	. $HOME/.homeconfig_extra
+fi
+
+#--------------------------------------------------------------------------
 # Alias definitions
 #--------------------------------------------------------------------------
 
@@ -138,11 +163,6 @@ if [ -f /etc/bash_completion ]; then
 	. /etc/bash_completion
 fi
 
-# Load environment variables for system colors
-if [ -f $HOME/bin/system_colors ]; then
-    . $HOME/bin/system_colors
-fi
-
 # Extra bash commands, bash_extra is ignored by the
 # GIT repository of this system, so store there information
 # you want to keep private.
@@ -153,16 +173,4 @@ fi
 # Enable git completion script
 if [ -f $HOME/.git_completion ]; then
 	. $HOME/.git_completion
-fi
-
-# Load global public parameters of Home
-# Those parameters are visible in the GIT repository of Home.
-if [ -f $HOME/.homeconfig ]; then
-	. $HOME/.homeconfig
-fi
-
-# Load global private parameters of Home
-# Those parameters are not visible in the GIT repository of Home.
-if [ -f $HOME/.homeconfig_extra ]; then
-	. $HOME/.homeconfig_extra
 fi

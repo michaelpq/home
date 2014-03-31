@@ -35,3 +35,6 @@ alias python="python2.7"
 
 # Shortcut when compiling Postgres extensions with PGXS
 alias makepg="make USE_PGXS=1"
+
+# Redirect to root location of a git folder
+alias githome="cd `git root`"

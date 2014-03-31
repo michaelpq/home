@@ -37,4 +37,4 @@ alias python="python2.7"
 alias makepg="make USE_PGXS=1"
 
 # Redirect to root location of a git folder
-alias githome="cd `git root`"
+alias githome="cd \`git root\`"

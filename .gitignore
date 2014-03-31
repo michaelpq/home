@@ -17,6 +17,7 @@
 /.cache
 /.ccache
 /.cgminer
+/.csp_ovftool*
 /.cups
 /.dbus
 /.dropbox

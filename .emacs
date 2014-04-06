@@ -72,9 +72,9 @@
    (indent-tabs-mode . t)
    (c-basic-offset   . 4)
    (tab-width . 4)
-   (c-offsets-alist .
-   ((case-label . +))))
-  nil) ; t = set this mode, nil = don't
+   (c-offsets-alist . ((case-label . +)
+                       (label . -)
+                       (statement-case-open . +)))))
 (defun pgsql-c-mode ()
   (c-mode)
   (c-set-style "pgsql")

@@ -100,14 +100,13 @@
 ;; Perl settings
 (defun pgsql-perl-mode ()
   "Perl style adjusted for PostgreSQL project"
-  (interactive)
-  (setq tab-width 4)
-  (setq perl-indent-level 4)
-  (setq indent-tabs-mode nil)
-  (setq perl-continued-statement-offset 4)
-  (setq perl-brace-offset 0)
-  (setq perl-brace-imaginary-offset 0)
-  (setq perl-label-offset -2)
+  (tab-width . 4)
+  (perl-indent-level . 4)
+  (perl-continued-statement-offset . 4)
+  (perl-continued-brace-offset . 4)
+  (perl-brace-offset . 0)
+  (perl-brace-imaginary-offset . 0)
+  (perl-label-offset . -2)
 )
 (add-hook 'perl-mode-hook
            (lambda ()

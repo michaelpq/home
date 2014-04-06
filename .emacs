@@ -67,8 +67,8 @@
 ;; PostgreSQL settings
 ;; Use of a named style makes it easy to use the style elsewhere
 (c-add-style "pgsql"
-  '("bsd"
-   (fill-column . 79)
+  '((c-file-style . "bsd")
+   (fill-column . 78)
    (indent-tabs-mode . t)
    (c-basic-offset   . 4)
    (tab-width . 4)

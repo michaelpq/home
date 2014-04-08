@@ -4,9 +4,6 @@
 #	Copyright (c) 2010-2014, Michael Paquier
 #--------------------------------------------------------------------------
 
-# Global make path for all binaries
-export HOME_GLOBAL_MAKE=$HOME/make
-
 # Global etc folder for all programs containing usually generic
 # configuration files that can be fetched by development environments.
 export HOME_GLOBAL_ETC=$HOME/etc
@@ -16,7 +13,6 @@ export HOME_STABLE_BIN=$HOME/bin/stable
 
 # PostgreSQL development parameters
 export HOME_POSTGRES_SRC=$HOME/git/postgres
-export HOME_POSTGRES_MAKE=$HOME_GLOBAL_MAKE/postgres
 export HOME_POSTGRES_INSTALL=$HOME/bin/pgsql
 export HOME_POSTGRES_ETC=$HOME_GLOBAL_ETC/postgres.d
 # PostgreSQL library path

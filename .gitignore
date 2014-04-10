@@ -81,7 +81,6 @@
 # Some virtual box modules
 /.vboxclient*
 # Ignore default development repositories
-/make
 /postgres
 /workspace
 # Ignore all the MacOSX-related files and folders

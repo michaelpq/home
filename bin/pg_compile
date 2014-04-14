@@ -5,7 +5,7 @@
 #	Copyright (c) 2010-2014, Michael Paquier
 #
 #	The code used for compilation is a copy of an original code.
-#	Run regressions if necessary or enforce debug flag.
+#	Run regressions if necessary or compile contrib modules.
 #--------------------------------------------------------------------------
 
 # Immediately leave in case of failure
@@ -13,7 +13,6 @@ set -e
 
 # Take and check options
 EXPECTED_ARGS=0
-FLAG_DEBUG=0
 FLAG_CCACHE=0
 FLAG_REGRESS=0
 FLAG_PATH=0
@@ -29,7 +28,6 @@ show_help()
 	echo "Usage: `basename $0` [OPTION]..."
 	echo " "
 	echo "Options:"
-	echo "  -d       Compile with debug flag"
 	echo "  -e NAME  ccache code in given subpath"
 	echo "  -h       Show this help"
 	echo "  -m       Include contrib modules in installation"
@@ -122,10 +120,6 @@ do
 		USER_GIT_BRANCH="$OPTARG"
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
 		;;
-	d)	# Enforce debug flag
-		FLAG_DEBUG=1
-		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
-		;;
 	e)	# Enable ccache
 		FLAG_CCACHE=1
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
@@ -195,11 +189,7 @@ fi
 CONFIGURE_OPTIONS="--enable-depend --enable-debug --disable-rpath"
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --enable-cassert --with-libxml"
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --prefix=$PSQL_INSTALL_FOLDER"
-# Enable debug options
-if [ "$FLAG_DEBUG" == 1 ]
-then
-	CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS CFLAGS=-DG"
-fi
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS CFLAGS=-DG"
 
 # Perform configure, build and installation, here calling configure from
 # the local folder is enough.

@@ -189,7 +189,9 @@ fi
 CONFIGURE_OPTIONS="--enable-depend --enable-debug --disable-rpath"
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --enable-cassert --with-libxml"
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --prefix=$PSQL_INSTALL_FOLDER"
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS CFLAGS=-DG"
+
+# CFLAGS for compiler options
+CFLAGS_DATA="-DG -fno-omit-frame-pointer"
 
 # Perform configure, build and installation, here calling configure from
 # the local folder is enough.
@@ -216,9 +218,9 @@ cd $CONFIGURE_CALL_FOLDER
 if [ "$FLAG_CCACHE" == 1 ]
 then
 	./configure CC="ccache gcc" CCACHE_DIR=$HOME_CCACHE_DIR/$CCACHE_NAME \
-		$CONFIGURE_OPTIONS
+		$CONFIGURE_OPTIONS CFLAGS="$CFLAGS_DATA"
 else
-	./configure $CONFIGURE_OPTIONS
+	./configure $CONFIGURE_OPTIONS CFLAGS="$CFLAGS_DATA"
 fi
 
 # Compile...

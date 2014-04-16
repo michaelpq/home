@@ -31,5 +31,5 @@ do
 	fi
 
 	# Install the latest version wanted
-	pg_compile -d -m -b $branch -p $HOME_STABLE_BIN/$branch
+	pg_compile -m -b $branch -p $HOME_STABLE_BIN/$branch
 done

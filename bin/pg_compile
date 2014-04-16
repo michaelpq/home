@@ -84,6 +84,10 @@ update_code_to_commit()
 	git stash -q
 	git stash clear &> /dev/null
 
+	# Clean up as well any useless files for have a clean tree
+	git clean -d -x -f
+
+	# Now create a temporary branch that will be used for compilation
 	git branch tmp_$UPDATE_TO_COMMIT $CHECKED_COMMIT_ID &> /dev/null
 	git checkout tmp_$UPDATE_TO_COMMIT &> /dev/null
 }
@@ -111,6 +115,9 @@ update_code_to_branch()
 	# Store existing code if any
 	git stash -q
 	git stash clear &> /dev/null
+
+	# Clean up as well any useless files for have a clean tree
+	git clean -d -x -f
 
 	# Then checkout the stuff
 	git checkout $UPDATE_TO_BRANCH &> /dev/null

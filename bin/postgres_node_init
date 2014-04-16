@@ -200,8 +200,13 @@ fi
 PSQL_BIN=$PSQL_FOLDER/bin
 INITDB=$PSQL_BIN/initdb
 
-# Folder for archives
+# Folder for archives, enforce its creation if it does not exist
 ARCHIVE_DATA=$PSQL_FOLDER/archive
+if [ ! -d $ARCHIVE_DATA ]
+then
+	mkdir -p $ARCHIVE_DATA
+fi
+
 # Current node archive folder
 NODE_ARCHIVE=$ARCHIVE_DATA/node_$NODE_PORT
 # Enforce creation of new archive folder for node

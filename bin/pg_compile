@@ -16,6 +16,7 @@ EXPECTED_ARGS=0
 FLAG_CCACHE=0
 FLAG_REGRESS=0
 FLAG_PATH=0
+FLAG_BRANCH=0
 # VPATH and code copy flags
 FLAG_SRC_FOLDER=0
 FLAG_TAG=0
@@ -40,6 +41,9 @@ show_help()
 	echo "Code synchronization options"
 	echo "  -b BRANCH"
 	echo "           Sync source code with latest point of given branch"
+	echo "  -o REMOTE"
+	echo "           Name of the remote to sync branches with. Value is"
+	echo "           ignored if no branches are specified."
 	echo "  -t SHA1 or TAG"
 	echo "           Sync output code up to given Git tag or commit"
 	echo "           If nothing is specified current code of"
@@ -91,6 +95,7 @@ update_code_to_commit()
 update_code_to_branch()
 {
 	UPDATE_TO_BRANCH=$1
+	UPDATE_TO_REMOTE=$2
 
 	git show-ref --quiet $UPDATE_TO_BRANCH
 	RES=$?
@@ -109,10 +114,16 @@ update_code_to_branch()
 
 	# Then checkout the stuff
 	git checkout $UPDATE_TO_BRANCH &> /dev/null
+
+	# Update to latest point defined by remote
+	git merge $UPDATE_TO_REMOTE/$UPDATE_TO_BRANCH
 }
 
+# Default values
+USER_GIT_REMOTE="origin"
+
 #Treat options
-while getopts 'b:de:h:mp:rt:' OPTION
+while getopts 'b:de:h:mo:p:rt:' OPTION
 do
 	case $OPTION in
 	b)	# Branch to sync code with
@@ -131,6 +142,10 @@ do
 	m)	# Include contrib modules in install
 		FLAG_CONTRIB=1
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		;;
+	o)	# Remote to sync branches with
+		USER_GIT_REMOTE="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
 		;;
 	p)	# Installation folder
 		FLAG_PATH=1
@@ -208,7 +223,7 @@ fi
 # Update code to given branch
 if [ "$FLAG_BRANCH" == 1 ]
 then
-	update_code_to_branch $USER_GIT_BRANCH
+	update_code_to_branch $USER_GIT_BRANCH $USER_GIT_REMOTE
 fi
 
 # Move to base folder of git tree to not trigger VPATH install

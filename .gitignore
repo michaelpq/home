@@ -103,3 +103,14 @@
 /media
 /.xinitrc
 /.config
+# Ignore all the Windows-related files and folder
+/AppData
+/Contacts
+/Favorites
+/Links
+/NTUSER.DAT*
+/Saved Games/
+/Searches
+/Videos
+/_viminfo
+/ntuser.*

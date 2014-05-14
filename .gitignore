@@ -21,6 +21,7 @@
 /.cups
 /.dbus
 /.debug
+/.DownloadManager
 /.dropbox
 /.eclipse
 /.emacs.d

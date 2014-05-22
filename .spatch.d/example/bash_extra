@@ -5,7 +5,7 @@
 #--------------------------------------------------------------------------
 
 # Default editor to use
-EDITOR="emacs -nw"
+export EDITOR="emacs -nw"
 
 # Settings related to proxy
 no_proxy=localhost,127.0.0.1

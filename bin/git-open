@@ -1,10 +1,18 @@
 #!/bin/bash
 #--------------------------------------------------------------------------
-# femacs
-#	emacs is coupled with find command to launch a file with given name by
-#	looking for it from current repository
+# git-open
+#	Environment editor is coupled with `git ls-files` to launch a file
+#	with given name by looking for it from current repository.
 #	Copyright (c) 2010-2014, Michael Paquier
 #--------------------------------------------------------------------------
+
+# Sanity checks
+if [ -z $EDITOR ]
+then
+	echo "EDITOR is not set, this is needed when opening a file with this"
+	echo "This is needed when opening a file with" `basename $0`
+	exit 1
+fi
 
 # Show utility help
 show_help()
@@ -25,7 +33,7 @@ then
 	show_help 1
 fi
 
-NUM_FILES=`find . -name "$FILE_NAME" | wc -l | tr -d ' '`
+NUM_FILES=`git ls-files -- **/$FILE_NAME -- $FILE_NAME | wc -l | tr -d ' '`
 if [ $NUM_FILES == 0 ]
 then
 	echo "No files $FILE_NAME found in current path"
@@ -33,10 +41,10 @@ then
 elif [ $NUM_FILES -gt 1 ]
 then
 	echo "Multiple finds $FILE_NAME found in current path, files are:"
-	find . -name "$FILE_NAME"
+	git ls-files -- **/$FILE_NAME -- $FILE_NAME
 	exit 1
 fi
 
 # Launch the command as one file has been found
-FILE_PATH=`find . -name "$FILE_NAME"`
-emacs -nw $FILE_PATH
+FILE_PATH=`git ls-files -- **/$FILE_NAME -- $FILE_NAME`
+$EDITOR $FILE_PATH

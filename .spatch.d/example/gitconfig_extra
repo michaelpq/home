@@ -6,6 +6,8 @@
 [user]
 	name = John Doe
 	email = john@example.com
+[core]
+	editor = emacs -nw
 [credential]
 	helper = store
 [http]

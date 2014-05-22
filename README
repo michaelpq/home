@@ -23,6 +23,7 @@ following order priority:
 - master, for core features
 - linux, for Linux related features
 - osx, for OS X features
+- windows, for Windows features
 This allows to keep the commit tree readable.
 
 Copyright information can be found in the file COPYRIGHT and license terms

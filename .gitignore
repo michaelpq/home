@@ -8,6 +8,8 @@
 /.viminfo
 /.ICEauthority
 /.Xauthority
+/archive
+/data
 # Remove some system repositories that need to be kept private
 /.adobe
 /.account

@@ -174,10 +174,15 @@ then
 	show_version $PSQL_FOLDER
 fi
 
+# Check if data folder exists and create it if necessary
+if [ ! -d $HOME_POSTGRES_DATA ]
+then
+	mkdir $HOME_POSTGRES_DATA
+fi
+
 # Initialize the master node
 MASTER_PORT=`postgres_get_port`
-echo "Master node will listen at port $MASTER_PORT"
-MASTER_DATA=$PSQL_FOLDER/node_$MASTER_PORT
+MASTER_DATA=$HOME_POSTGRES_DATA/$MASTER_PORT
 postgres_node_init -c $CONFIG_SUFFIX -p $MASTER_PORT -d $MASTER_DATA \
 	-b $PSQL_FOLDER
 check_error $?
@@ -194,7 +199,7 @@ then
 	for i in $(seq 1 $NUM_SLAVES)
 	do
 		SLAVE_PORT=`postgres_get_port`
-		SLAVE_DATA=$PSQL_FOLDER/node_$SLAVE_PORT
+		SLAVE_DATA=$HOME_POSTGRES_DATA/$SLAVE_PORT
 		postgres_node_init -d $SLAVE_DATA -p $SLAVE_PORT -q $MASTER_PORT -s \
 			-b $PSQL_FOLDER -r $RECOVERY_SUFFIX
 		check_error $?

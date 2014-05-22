@@ -15,6 +15,9 @@ export HOME_STABLE_BIN=$HOME/bin/stable
 export HOME_POSTGRES_SRC=$HOME/git/postgres
 export HOME_POSTGRES_INSTALL=$HOME/bin/pgsql
 export HOME_POSTGRES_ETC=$HOME_GLOBAL_ETC/postgres.d
+export HOME_POSTGRES_DATA=$HOME/data
+export HOME_POSTGRES_ARCHIVE=$HOME/archive
+
 # PostgreSQL library path
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME_POSTGRES_INSTALL/lib
 # To SGML catalogs for PostgreSQL documentation

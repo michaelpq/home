@@ -201,21 +201,19 @@ PSQL_BIN=$PSQL_FOLDER/bin
 INITDB=$PSQL_BIN/initdb
 
 # Folder for archives, enforce its creation if it does not exist
-ARCHIVE_DATA=$PSQL_FOLDER/archive
-if [ ! -d $ARCHIVE_DATA ]
+if [ ! -d $HOME_POSTGRES_ARCHIVE ]
 then
-	mkdir -p $ARCHIVE_DATA
+	mkdir -p $HOME_POSTGRES_ARCHIVE
 fi
 
 # Current node archive folder
-NODE_ARCHIVE=$ARCHIVE_DATA/node_$NODE_PORT
+NODE_ARCHIVE=$HOME_POSTGRES_ARCHIVE/$NODE_PORT
 # Enforce creation of new archive folder for node
 if [ -d $NODE_ARCHIVE ]
 then
 	rm -r $NODE_ARCHIVE
 fi
 mkdir $NODE_ARCHIVE
-
 
 # Options of pg_hba.conf to allow replication
 OPTIONS_PGHBA="host replication $USER 127.0.0.1/32 trust\n"\
@@ -239,6 +237,12 @@ then
 	# custom file is applied after those settings.
 	OPTIONS_POSTGRESQL="archive_command = 'cp -i %p $NODE_ARCHIVE/%f'\n"
 
+	# Some logging information
+	echo "Master node information..."
+	echo "- Port: $NODE_PORT"
+	echo "- Data folder: $NODE_DATA_FOLDER"
+	echo "- Archive folder: $NODE_ARCHIVE"
+
 	# Initialize the data folder of this node
 	$INITDB -D $NODE_DATA_FOLDER
 
@@ -253,7 +257,14 @@ then
 	echo -e $OPTIONS_PGHBA >> $NODE_DATA_FOLDER/pg_hba.conf
 else
 	# If new node is a standby, fetch archives from root node
-	ROOT_ARCHIVE=$ARCHIVE_DATA/node_$ROOT_PORT
+	ROOT_ARCHIVE=$HOME_POSTGRES_ARCHIVE/$ROOT_PORT
+
+	# Some logging information
+	echo "Standby node information..."
+	echo "- Port: $NODE_PORT"
+	echo "- Data folder: $NODE_DATA_FOLDER"
+	echo "- Archive folder: $NODE_ARCHIVE"
+	echo "- Root port: $ROOT_PORT"
 
 	# Node-related parameters for recovery.conf
 	OPTIONS_STANDBY_RECOVERY="restore_command = 'cp -i $ROOT_ARCHIVE/%f %p'\n"\

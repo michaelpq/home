@@ -9,6 +9,9 @@
 # Development paths
 /archive
 /data
+/git
+/include
+/lib
 /postgres
 /workspace
 

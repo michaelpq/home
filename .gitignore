@@ -1,16 +1,18 @@
-# Ignore private settings
+# Private settings of Home
 /.bash_extra
 /.bash_alias_extra
 /.bash_history
 /.gitconfig_extra
 /.git-credentials
 /.homeconfig_extra
-/.viminfo
-/.ICEauthority
-/.Xauthority
+
+# Development paths
 /archive
 /data
-# Remove some system repositories that need to be kept private
+/postgres
+/workspace
+
+# System-related paths
 /.adobe
 /.account
 /.anthy
@@ -38,6 +40,7 @@
 /.gstreamer*
 /.gtk-bookmarks
 /.Heroes*
+/.ICEauthority
 /.icedtea
 /.irssi
 /.java
@@ -68,26 +71,24 @@
 /.rnd
 /.rtorrent.rc
 /.smb*
+/.ssh
 /.subversion
 /.swt
 /.thumbnails
 /.thunderbird
 /.ttytterkey
+/.uim.d
+/.vboxclient*
 /.vim
+/.viminfo
 /.VirtualBox
 /.vnc
+/.Xauthority
 /.xonotic
 /perf.data
 /VirtualBox VMs
-# Important to remove that, never put an ssh key in public!
-/.ssh
-/.uim.d
-# Some virtual box modules
-/.vboxclient*
-# Ignore default development repositories
-/postgres
-/workspace
-# Ignore all the MacOSX-related files and folders
+
+# MacOSX paths
 /.CFUserTextEncoding
 /.DS_Store
 /.Trash
@@ -99,21 +100,23 @@
 /Music
 /Pictures
 /Public
-# Ignore all the Linux-related files and folders
+
+# Linux paths
 /desktop
 /doc
 /download
 /media
 /.xinitrc
 /.config
-# Ignore all the Windows-related files and folder
+
+# Windows paths
 /AppData
 /Contacts
 /Favorites
 /Links
+/ntuser.*
 /NTUSER.DAT*
 /Saved Games/
 /Searches
 /Videos
 /_viminfo
-/ntuser.*

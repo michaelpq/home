@@ -39,14 +39,14 @@ Private paths
 
 Home provides paths to store private libraries, binaries, headers and
 settings to very adaptable to the user's needs. Default environment
-variables define those paths:
+variables define those paths (which still need to be created btw):
 
 - $HOME_LIB_EXTRA, to store private libraries. LD_LIBRARY_PATH and
  LIBRARY_PATH use that.
 - $HOME_BIN_EXTRA, for private binaries. Included in PATH by default.
 - $HOME_INCLUDE_EXTRA, for private headers. Included in C_INCLUDE_PATH.
 
-There is as well a set files that can be used for private settings:
+There is as well a set of files that can be used for private settings:
 
 - $HOME/.bash_alias_extra, for private alias values
 - $HOME/.bash_extra, for bash private values

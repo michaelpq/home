@@ -18,26 +18,63 @@ OS/desktop/environment dependent files of all the other environments so
 you can check out freely each branch without impacting the environment
 you are using.
 
+OS supported
+------------
+
 When a commit impacts several branches, commit is done respecting the
 following order priority:
-- master, for core features
-- linux, for Linux related features
-- osx, for OS X features
-- windows, for Windows features
+
+  * master, for core features
+  * linux, for Linux related features
+  * osx, for OS X features
+  * windows, for Windows features
+
 This allows to keep the commit tree readable.
 
 Copyright information can be found in the file COPYRIGHT and license terms
 can be found in the file LICENSE.
 
-=====================
-Follow-ups:
-=====================
-- Development blog: http://michael.otacoo.com/
-- Twitter: http://twitter.com/michaelpq
+Private paths
+-------------
 
-=====================
+Home provides paths to store private libraries, binaries, headers and
+settings to very adaptable to the user's needs. Default environment
+variables define those paths:
+
+  * $HOME_LIB_EXTRA, to store private libraries. LD_LIBRARY_PATH and
+ LIBRARY_PATH use that.
+  * $HOME_BIN_EXTRA, for private binaries. Included in PATH by default.
+  * $HOME_INCLUDE_EXTRA, for private headers. Included in C_INCLUDE_PATH.
+
+There is as well a set files that can be used for private settings:
+
+  * $HOME/.bash_alias_extra, for private alias values
+  * $HOME/.bash_extra, for bash private values
+  * $HOME/.gitconfig_extra, for git private settings
+
+All those files are linked automatically with spatch, a utility
+written in bash to manage multiple setting profiles in a single
+environment.
+
+All the options available with spatch can be listed as follows:
+
+    spatch -h
+
+All those paths are ignored by Home. Those folders need to be created
+by user if needed as well.
+
+It is as well possible to hardcode them in the extra bash settings as
+private settings are loaded after the settings of Home.
+
+Follow-ups
+----------
+
+  * Development blog: http://michael.otacoo.com/
+  * Twitter: http://twitter.com/michaelpq
+
 Donations
-=====================
+---------
+
 Home is maintained during the free time of his developer, here are a
 couple of ways to donate and show your love to this project:
 - Bitcoin wallet address: 1HFRvuQdwVuJZkjE3go9CWhCpgstMe8JXT

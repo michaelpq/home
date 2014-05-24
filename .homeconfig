@@ -1,6 +1,9 @@
 #--------------------------------------------------------------------------
 # .homeconfig
-#	Public environment variables of Home
+#	Public environment variables of Home. This file should only
+#	contain parameters related directly to Home. System variables
+#	should be set firectly in ~/.bashrc is they impact all the
+#	enrivonments.
 #	Copyright (c) 2010-2014, Michael Paquier
 #--------------------------------------------------------------------------
 
@@ -11,6 +14,18 @@ export HOME_GLOBAL_ETC=$HOME/etc
 # Folder where are located various stable installation versions
 export HOME_STABLE_BIN=$HOME/bin/stable
 
+# Binary paths
+# Public binary path.
+export HOME_BIN=$HOME/bin
+# Private path ignored by HOME
+export HOME_BIN_EXTRA=$HOME/bin/extra
+
+# Private library path, ignored by Home and included in LD_LIBRARY_PATH.
+export HOME_LIB_EXTRA=$HOME/lib
+
+# Private include path, ignored by Home and included in C_INCLUDE_PATH.
+export HOME_INCLUDE_EXTRA=$HOME/include
+
 # PostgreSQL development parameters
 export HOME_POSTGRES_SRC=$HOME/git/postgres
 export HOME_POSTGRES_INSTALL=$HOME/bin/pgsql
@@ -18,22 +33,10 @@ export HOME_POSTGRES_ETC=$HOME_GLOBAL_ETC/postgres.d
 export HOME_POSTGRES_DATA=$HOME/data
 export HOME_POSTGRES_ARCHIVE=$HOME/archive
 
-# PostgreSQL library path
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME_POSTGRES_INSTALL/lib
-# To SGML catalogs for PostgreSQL documentation
-export SGML_CATALOG_FILES=/etc/sgml/catalog:/usr/share/sgml/jade/catalog
-
-# Add Postgres binaries to path
-export PATH=$HOME_POSTGRES_INSTALL/bin:$PATH
-
-# Add Postgres man pages to MANPATH
-export MANPATH=$HOME_POSTGRES_INSTALL/share/man:$MANPATH
-
 # Global base repository for ccache
 export HOME_CCACHE_DIR=$HOME/bin/ccache
 
-# Global variables for asciidoc
-export ASCIIDOC=asciidoc
-export XMLTO=xmlto
+# To SGML catalogs for PostgreSQL documentation
+export SGML_CATALOG_FILES=/etc/sgml/catalog:/usr/share/sgml/jade/catalog
 
 # Add other parameters publicly visible here if necessary

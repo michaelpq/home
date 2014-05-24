@@ -25,10 +25,11 @@ shopt -s histappend
 #--------------------------------------------------------------------------
 
 # Path settings
-# Give priority in scanning to /usr/local/bin for user things like homebrew
-# Give also priority to $HOME/pgsql/bin for Postgres development.
+# Give priority in scanning to /usr/local/bin for brew on OSX. This is
+# set up here for the next settings that may involve binary calls in
+# PATH.
 export PATH=/usr/local/bin:$PATH
-export PATH=$PATH:$HOME/bin:$HOME/bin/extra
+export PATH=$PATH:$HOME/bin
 
 # Check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -117,14 +118,22 @@ fi
 
 # LIBRARY_PATH is used by gcc before compilation to search for directories
 # containing libraries that need to be linked to your program
-export LIBRARY_PATH=$HOME/lib
+export LIBRARY_PATH=$HOME_POSTGRES_INSTALL/lib:$HOME_LIB_EXTRA
 
+# Library paths
 # LD_LIBRARY_PATH is used to search for directories containing the libraries
 # after it has been successfully compiled and linked.
-export LD_LIBRARY_PATH=$HOME/lib
+export LD_LIBRARY_PATH=$HOME_POSTGRES_INSTALL/lib:$HOME_LIB_EXTRA
 
-# Header repository
-export C_INCLUDE_PATH=$HOME/include:$HOME_POSTGRES_INSTALL/include
+# Header paths
+export C_INCLUDE_PATH=$HOME_POSTGRES_INSTALL/include:$HOME_INCLUDE_EXTRA
+
+# Include Postgres binaries in PATH. Priority is given to them, so add
+# then in first position.
+export PATH=$HOME_POSTGRES_INSTALL/bin:$HOME_BIN_EXTRA:$PATH
+
+# Include Postgres man folder in MANPATH
+export MANPATH=$HOME_POSTGRES_INSTALL/share/man:$MANPATH
 
 #--------------------------------------------------------------------------
 # Alias definitions

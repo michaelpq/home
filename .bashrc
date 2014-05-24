@@ -87,21 +87,6 @@ fi
 PS1="$PS1\$ "
 
 #--------------------------------------------------------------------------
-# Compilation and development settings
-#--------------------------------------------------------------------------
-
-# LIBRARY_PATH is used by gcc before compilation to search for directories
-# containing libraries that need to be linked to your program
-export LIBRARY_PATH=$HOME/lib
-
-# LD_LIBRARY_PATH is used to search for directories containing the libraries
-# after it has been successfully compiled and linked.
-export LD_LIBRARY_PATH=$HOME/lib
-
-# Header repository
-export C_INCLUDE_PATH=$HOME/include
-
-#--------------------------------------------------------------------------
 # Environment variables
 #--------------------------------------------------------------------------
 
@@ -125,6 +110,21 @@ fi
 if [ -f $HOME/.homeconfig_extra ]; then
 	. $HOME/.homeconfig_extra
 fi
+
+#--------------------------------------------------------------------------
+# Compilation and development settings
+#--------------------------------------------------------------------------
+
+# LIBRARY_PATH is used by gcc before compilation to search for directories
+# containing libraries that need to be linked to your program
+export LIBRARY_PATH=$HOME/lib
+
+# LD_LIBRARY_PATH is used to search for directories containing the libraries
+# after it has been successfully compiled and linked.
+export LD_LIBRARY_PATH=$HOME/lib
+
+# Header repository
+export C_INCLUDE_PATH=$HOME/include:$HOME_POSTGRES_INSTALL/include
 
 #--------------------------------------------------------------------------
 # Alias definitions

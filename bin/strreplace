@@ -26,7 +26,14 @@ NEWSTR=$3
 #Simply replace string with sed and erase old file
 for file in `find . -name "*.$EXTENSION"`
 do
-	sed -i "s/$OLDSTR/$NEWSTR/g" $file
+	ENV_NAME=`uname`
+	if [ $ENV_NAME == 'Darwin' ]
+	then
+		# In OSX, sed has a mandatory value with option -i
+		sed -i "" "s/$OLDSTR/$NEWSTR/g" $file
+	else
+		sed -i "s/$OLDSTR/$NEWSTR/g" $file
+	fi
 done
 
 exit $?

@@ -46,6 +46,9 @@ variables define those paths (which still need to be created btw):
 - $HOME_BIN_EXTRA, for private binaries. Included in PATH by default.
 - $HOME_INCLUDE_EXTRA, for private headers. Included in C_INCLUDE_PATH.
 
+It is not recommended to change those default values, as the same values
+are hardcoded as well in .gitignore in the decicated paths.
+
 There is as well a set of files that can be used for private settings:
 
 - $HOME/.bash_alias_extra, for private alias values

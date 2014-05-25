@@ -78,8 +78,11 @@ then
 	# Load terminal status script, be sure to avoid priting anything
 	# when loading it here.
 	. $HOME/bin/git-terminal-status --offline
-	# Run completion command each time command prompt is updated
-	PROMPT_COMMAND="$PROMPT_COMMAND;__git_terminal_status"
+	# PROMPT_COMMAND defines the start message at beginning of command
+	# line. It is completely defined here to be OS-proof.
+	PROMPT_COMMAND="printf \"\033]0;%s@%s:%s\007\" \"${USER}\" "
+	PROMPT_COMMAND+="\"${HOSTNAME%%.*}\" \"${PWD/#$HOME/\~}\";"
+	PROMPT_COMMAND+="__git_terminal_status"
 	# Finally add to screen the output generated
 	PS1=$PS1"\`echo -e \$GIT_PS1_STATUS\`"
 fi

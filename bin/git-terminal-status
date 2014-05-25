@@ -75,8 +75,8 @@ function __git_terminal_status()
 
 			# Finally add colors if necessary, OSX does not like system colors
 			# so simply disable them in this case.
-			HOME_ENV_NAME=`spatch env-list | grep "*" | cut -f 2 -d " "`
-			if [ "$HOME_ENV_NAME" != "osx" ]
+			ENV_NAME=`uname`
+			if [ "$ENV_NAME" != "Darwin" ]
 			then
 				# Blue if OK, Red if not
 				if [ "$NOTHING_TO_COMMIT" == 0 ]

@@ -7,7 +7,7 @@
 #--------------------------------------------------------------------------
 
 # Sanity checks
-if [ -z $EDITOR ]
+if [ -z "$EDITOR" ]
 then
 	echo "EDITOR is not set, this is needed when opening a file with this"
 	echo "This is needed when opening a file with" `basename $0`

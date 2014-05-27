@@ -80,7 +80,7 @@ then
 	. $HOME/bin/git-terminal-status --offline
 	# PROMPT_COMMAND defines the start message at beginning of command
 	# line. It is completely defined here to be OS-proof.
-	PROMPT_COMMAND="printf \"\033]0;%s@%s:%s\007\" \"${USER}\" "
+	PROMPT_COMMAND+="printf \"\033]0;%s@%s:%s\007\" \"${USER}\" "
 	PROMPT_COMMAND+="\"${HOSTNAME%%.*}\" \"${PWD/#$HOME/\~}\";"
 	PROMPT_COMMAND+="__git_terminal_status"
 	# Finally add to screen the output generated

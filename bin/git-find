@@ -1,0 +1,28 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# git-find
+#	Look for file(s) with given name in git code tree.
+#	Copyright (c) 2010-2014, Michael Paquier
+#--------------------------------------------------------------------------
+
+# Show utility help
+show_help()
+{
+	ERROR_NUM=$1
+	echo "Usage: `basename $0` [FILENAME]"
+	echo "Example: `basename $0` *file*.h"
+	exit $ERROR_NUM
+}
+
+EXPECTED_ARGS=1
+
+# Grab the arguments
+FILE_NAME=$1
+
+if [ $# -ne $EXPECTED_ARGS ]
+then
+	# Leave with an error code
+	show_help 1
+fi
+
+git ls-files -- **/$FILE_NAME -- $FILE_NAME

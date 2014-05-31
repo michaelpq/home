@@ -33,7 +33,7 @@ then
 	show_help 1
 fi
 
-NUM_FILES=`git ls-files -- **/$FILE_NAME -- $FILE_NAME | wc -l | tr -d ' '`
+NUM_FILES=`git find $FILE_NAME | wc -l | tr -d ' '`
 if [ $NUM_FILES == 0 ]
 then
 	echo "No files $FILE_NAME found in current path"

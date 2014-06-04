@@ -63,7 +63,15 @@ shopt -s checkwinsize
 # details about them. The 3rd argument represents the output format of
 # printf using the first two arguments. Here we do not print out any
 # spaces to save some space.
-PROMPT_COMMAND='__git_ps1 "\u@\h:\w" "\\\$ " "(%s%s)"'
+# On Mac OSX, appending the new prompt command is useful as it allows
+# a new tab to use the same working directory as current tab.
+ENV_NAME=`uname`
+if [ $ENV_NAME == 'Darwin' ]
+then
+	PROMPT_COMMAND="$PROMPT_COMMAND __git_ps1 \"\u@\h:\w\" \"\\\$ \" \"(%s%s)\""
+else
+	PROMPT_COMMAND='__git_ps1 "\u@\h:\w" "\\\$ " "(%s%s)"'
+fi
 
 #--------------------------------------------------------------------------
 # Environment variables

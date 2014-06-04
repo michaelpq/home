@@ -29,6 +29,9 @@ export GIT_PS1_SHOWUPSTREAM="auto"
 # Should be set to a non-empty value to enable.
 export GIT_PS1_SHOWCOLORHINTS="true"
 
+# Separator between branch name and the different statuses
+export GIT_PS1_STATESEPARATOR=""
+
 # Default editor to use
 export EDITOR="emacs -nw"
 

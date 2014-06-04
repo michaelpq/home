@@ -4,6 +4,31 @@
 #	Copyright (c) 2010-2014, Michael Paquier
 #--------------------------------------------------------------------------
 
+# Settings for git prompt on terminal
+# Show unstaged (*) and staged (+) changes on current repository.
+# Should be set to a non-empty value to enable.
+GIT_PS1_SHOWDIRTYSTATE="true"
+
+# Show if there are stashed things, marked with '$'
+# Should be set to a non-empty value to enable.
+GIT_PS1_SHOWSTASHSTATE="true"
+
+# Show untracked files, marked with '%'
+# Should be set to a non-empty value to enable.
+GIT_PS1_SHOWUNTRACKEDFILES="asd"
+
+# Show differences with upstream:
+# - "<" if behind
+# - ">" if ahead
+# - "<>" if diverged
+# - "=" if no diffs
+# This can be set to several values...
+GIT_PS1_SHOWUPSTREAM="auto"
+
+# Print colored hints.
+# Should be set to a non-empty value to enable.
+GIT_PS1_SHOWCOLORHINTS="asd"
+
 # Default editor to use
 export EDITOR="emacs -nw"
 

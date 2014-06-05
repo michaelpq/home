@@ -167,6 +167,16 @@ else
 	echo "Installation folder set to default $PSQL_FOLDER"
 fi
 
+# Newline format, this changes depending on the platform where this
+# script is run (Looking at you, windows...)
+ENV_NAME=`uname`
+if [[ $ENV_NAME == MINGW* ]]
+then
+	CONF_NEWLINE="\r\n"
+else
+	CONF_NEWLINE="\n"
+fi
+
 # Set configuration suffix if specified by user. Take also care of the
 # default value "dev".
 if [ "$FLAG_CONFIG_SUFFIX" == 0 ]
@@ -215,10 +225,18 @@ then
 fi
 mkdir $NODE_ARCHIVE
 
-# Options of pg_hba.conf to allow replication
-OPTIONS_PGHBA="host replication $USER 127.0.0.1/32 trust\n"\
-"host replication $USER ::1/128 trust\n"\
-"local replication $USER trust\n"
+# Options of pg_hba.conf to allow replication. On Windows, we have special
+# needs caused by first the system user name tracked as USERNAME and not
+# USER, and the lack of support for local connections.
+if [[ $ENV_NAME == MINGW* ]]
+then
+	OPTIONS_PGHBA="host replication $USERNAME 127.0.0.1/32 trust$CONF_NEWLINE"\
+"host replication $USERNAME ::1/128 trust$CONF_NEWLINE"
+else
+	OPTIONS_PGHBA="host replication $USER 127.0.0.1/32 trust$CONF_NEWLINE"\
+"host replication $USER ::1/128 trust$CONF_NEWLINE"\
+"local replication $USER trust$CONF_NEWLINE"
+fi
 
 # Enforce deletion of data folder if it exists
 if [ -d $NODE_DATA_FOLDER ]
@@ -235,7 +253,7 @@ then
 	# the new node. You can still enforce values for certain parameters
 	# to set them directly in the custom configuration file as this
 	# custom file is applied after those settings.
-	OPTIONS_POSTGRESQL="archive_command = 'cp -i %p $NODE_ARCHIVE/%f'\n"
+	OPTIONS_POSTGRESQL="archive_command = 'cp -i %p $NODE_ARCHIVE/%f'$CONF_NEWLINE"
 
 	# Some logging information
 	echo "Master node information..."
@@ -267,8 +285,8 @@ else
 	echo "- Root port: $ROOT_PORT"
 
 	# Node-related parameters for recovery.conf
-	OPTIONS_STANDBY_RECOVERY="restore_command = 'cp -i $ROOT_ARCHIVE/%f %p'\n"\
-"primary_conninfo = 'host=localhost port=$ROOT_PORT application_name=node_$NODE_PORT'\n"
+	OPTIONS_STANDBY_RECOVERY="restore_command = 'cp -i $ROOT_ARCHIVE/%f %p'$CONF_NEWLINE"\
+"primary_conninfo = 'host=localhost port=$ROOT_PORT application_name=node_$NODE_PORT'$CONF_NEWLINE"
 
 	# Initialize a standby with a fresh base backup
 	pg_basebackup -p $ROOT_PORT -D $NODE_DATA_FOLDER

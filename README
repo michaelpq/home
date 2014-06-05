@@ -10,13 +10,8 @@ master. This branch ignores all the settings done in all the other
 environments so it can be fetched freely whatever the environment used.
 It also maintains consistent all the features and folder structures that
 are shared among all the environments.
-Each other branch (XFCE, Windows, etc.) is based on the core features in
-master. Each branch is maintained respecting the specificities of each
-environment. In this case, each branch orientated to a given OS or desktop
-environment is set up so as to ignore all the settings and all the
-OS/desktop/environment dependent files of all the other environments so
-you can check out freely each branch without impacting the environment
-you are using.
+Additional branches can be created depending on very specific needs of
+a configuration or OS, even if things are made to be a maximum OS-proof.
 
 OS supported
 ------------
@@ -26,7 +21,6 @@ following order priority:
 
 - master, for core features
 - linux, for Linux related features
-- windows, for Windows features
 
 This allows to keep the commit tree readable. If the OS is not maintained
 in a separate branch explicitely, using master is recommended.

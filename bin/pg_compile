@@ -211,19 +211,18 @@ else
 fi
 
 # General options for configure
-CONFIGURE_OPTIONS="--enable-depend --enable-debug --disable-rpath"
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --enable-cassert"
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --prefix=$PSQL_INSTALL_FOLDER"
+CONFIGURE_OPTIONS="--enable-depend --enable-debug --disable-rpath "
+CONFIGURE_OPTIONS+="--enable-cassert --prefix=$PSQL_INSTALL_FOLDER "
 
 # Add platform specific settings
 if [[ $ENV_NAME == MINGW* ]]
 then
 	# MinGW
-	CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --host=x86_64-w64-mingw32"
-	CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --without-zlib"
+	CONFIGURE_OPTIONS+="--host=x86_64-w64-mingw32 "
+	CONFIGURE_OPTIONS+="--without-zlib "
 else
 	# Linux/Unix
-	CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-libxml"
+	CONFIGURE_OPTIONS+="--with-libxml "
 fi
 
 # CFLAGS for compiler options

@@ -32,6 +32,7 @@
 /.dropbox
 /.eclipse
 /.emacs.d
+/.esd_auth
 /.filezilla
 /.fontconfig
 /.gconf

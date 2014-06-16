@@ -7,5 +7,9 @@
 # Shortcut to machine "server"
 alias server="ssh server"
 
+# Extensions for clamav with local configuration
+alias freshclam="freshclam --config-file=$HOME/.clamav/freshclam.conf"
+alias clamscan="clamscan -r -i $HOME --move=$HOME/.clamav/quarantine --database=$HOME/.clamav/db"
+
 # Add your other private settings here and then copy of link this file as
 # $HOME/.bash_alias_extra to make it effective.

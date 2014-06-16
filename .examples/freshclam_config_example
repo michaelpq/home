@@ -1,0 +1,16 @@
+#--------------------------------------------------------------------------
+# .examples/freshclam_config_example
+#	Example of configuration file for freshclam, database updater of
+#	clamav. This file should be copied as $HOME/.clamav/freshclam.conf.
+#	USERNAME should be replaced with your own user name.
+#	Copyright (c) 2010-2014, Michael Paquier
+#--------------------------------------------------------------------------
+
+# Location of configuration file of freshclam
+UpdateLogFile /home/USERNAME/.clamav/freshclam.log
+
+# Mirror to which freshclam connects for the updates
+DatabaseMirror database.clamav.net
+
+# Database directory
+DatabaseDirectory /home/USERNAME/.clamav/db

@@ -3,9 +3,9 @@
 --	Copyright (c) 2010-2014, Michael Paquier
 
 \echo 'Option menu:'
-\echo '\t:clear\t-- Clear screen'
-\echo '\t:slaves\t-- Display slave activity'
-\echo '\t:uptime\t-- Session uptime'
+\echo '\t:clear\t\t-- Clear screen'
+\echo '\t:slaves\t\t-- Display slave activity'
+\echo '\t:uptime\t\t-- Session uptime'
 \echo '\t:version\t-- Show server version'
 \echo ''
 

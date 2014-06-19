@@ -218,7 +218,6 @@ CONFIGURE_OPTIONS+="--enable-cassert --prefix=$PSQL_INSTALL_FOLDER "
 if [[ $ENV_NAME == MINGW* ]]
 then
 	# MinGW
-	CONFIGURE_OPTIONS+="--host=x86_64-w64-mingw32 "
 	CONFIGURE_OPTIONS+="--without-zlib "
 else
 	# Linux/Unix

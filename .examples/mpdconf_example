@@ -17,7 +17,12 @@ db_file "~/.mpd/database"
 log_file "~/.mpd/log"
 pid_file "~/.mpd/pid"
 state_file "~/.mpd/state"
-bind_to_address "localhost"
+
+# Host address to listen to
+# Listen only to localhost
+# bind_to_address "localhost"
+# Listen to all the addresses available
+# bind_to_address "[::]:6600"
 
 # Control of the input
 input {

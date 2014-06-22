@@ -57,6 +57,8 @@
 /.mozilla
 /.mpd
 /.mpdconf
+/.mutt
+/.muttrc
 /.m2
 /.netrc
 /.nexuiz

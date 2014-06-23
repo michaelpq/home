@@ -10,6 +10,9 @@
 # Files created by emacs for unsaved changes
 .#*
 
+# Temporary files created during compilation
+*.o-*
+
 # Files created by raw patch application
 # Rejected files are not ignored because it is easier to track that with
 # commands of the type git status.

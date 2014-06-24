@@ -13,12 +13,24 @@ set imap_user = "john@example.com"
 set imap_pass = "My_password"
 # Uncomment and edit this trick if you do not want to store this
 # password as static data on your computer.
-# set imap_pass=`getpassword email_id`
+# set imap_pass = `getpassword email_id`
 
-# Remote Folders
-set spoolfile = "+INBOX"
-set postponed ="+[Example]/Drafts"
-set folder = "imaps://imap.example.com:993"
+# Mail box settings
+# Uncomment the following section for a local box
+#set mbox_type = maildir
+#set mbox = "~/mail/inbox/"
+#set spoolfile = "~/mail/inbox/"
+#set folder = "~/mail/"
+#set record = "~/mail/sent/"
+#set postponed = "~/mail/postponed/"
+
+# Uncomment the following section for a remote box
+# set folder = "imaps://imap.example.com:993"
+# Note that those parameters need to be set *after* "folder"
+#set spoolfile = "+INBOX"
+#set mbox = "+INBOX"
+#set postponed = "+[Example]/Drafts"
+#set record = "+[Example]/Sent Mail"
 
 # SMTP Setup
 set smtp_url = "smtp://johnr@smtp.example.com:587/"

@@ -2,14 +2,6 @@
 # General
 #--------------------------------------------------------------------------
 
-# Mail box settings
-set mbox_type=maildir
-set mbox="~/mail/inbox/"
-set spoolfile="~/mail/inbox/"
-set folder="~/mail/"
-set record="~/mail/sent/"
-set postponed="~/mail/postponed/"
-
 # Local Folders
 set message_cachedir =~/.mutt/cache/bodies
 set certificate_file =~/.mutt/certificates

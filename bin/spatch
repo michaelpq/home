@@ -20,6 +20,7 @@ FILES[0]=gitconfig_extra
 FILES[1]=bash_extra
 FILES[2]=bash_alias_extra
 FILES[3]=mutt_extra
+FILES[4]=mutt_aliases
 
 show_help ()
 {

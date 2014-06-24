@@ -18,6 +18,11 @@ set move = no
 set sort = 'threads'
 set sort_aux = 'reverse-last-date-received'
 
+# Aliases
+set alias_file = ~/.mutt_aliases
+set sort_alias = alias
+set reverse_alias = yes
+
 #--------------------------------------------------------------------------
 # Colors
 #--------------------------------------------------------------------------
@@ -66,8 +71,18 @@ color body  brightred black [\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+
 color body brightblue black (https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+
 
 #--------------------------------------------------------------------------
+# Key bindings
+#--------------------------------------------------------------------------
+
+# Create an alias when selecting an email
+macro index,pager a "<create-alias>"
+
+#--------------------------------------------------------------------------
 # Inclusions
 #--------------------------------------------------------------------------
+
+# Alias source file
+source $alias_file
 
 # Private parameters
 # They are included at the end to enforce existing values if wanted

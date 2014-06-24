@@ -1,0 +1,12 @@
+#--------------------------------------------------------------------------
+# mutt_aliases
+#	Private list of aliases for mutt
+#	Copyright (c) 2010-2014, Michael Paquier
+#--------------------------------------------------------------------------
+
+# Example of entry for mutt alias file
+alias john.doe John Doe <john.doe@example.com>
+
+# Add your other settings here, then copy or link this file
+# as $HOME/.mutt_aliases, or use `spatch conf` to make it
+# effective.

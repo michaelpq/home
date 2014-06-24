@@ -87,4 +87,4 @@ source $alias_file
 # Private parameters
 # They are included at the end to enforce existing values if wanted
 # by user and ignored in source tree.
-source ~/.muttrc_extra
+source ~/.mutt_extra

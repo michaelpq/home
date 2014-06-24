@@ -66,12 +66,12 @@ color index yellow default '~N'
 # Flagged Messages mark
 color index brightred default '~F'
 # Deleted message mark
-color index   blue default  '~D'
+color index blue default  '~D'
 
 # Identify email addresses
-color body  brightred black [\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+
+color body brightred white [\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+
 # Identify URLs
-color body brightblue black (https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+
+color body brightblue white (https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+
 
 #--------------------------------------------------------------------------
 # Key bindings

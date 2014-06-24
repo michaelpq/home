@@ -26,6 +26,9 @@ set reverse_alias = yes
 # Signature
 set signature="~/.mutt_signature"
 
+# How often to check for new mail (time in seconds).
+set mail_check = 120
+
 #--------------------------------------------------------------------------
 # Colors
 #--------------------------------------------------------------------------

@@ -125,6 +125,10 @@ mono indicator reverse
 # Create an alias when selecting an email
 macro index,pager a "<create-alias>"
 
+# Thread collapsing
+bind index - collapse-thread
+bind index _ collapse-all
+
 #--------------------------------------------------------------------------
 # Inclusions
 #--------------------------------------------------------------------------

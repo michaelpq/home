@@ -33,48 +33,90 @@ set mail_check = 120
 # Colors
 #--------------------------------------------------------------------------
 
-color hdrdefault cyan default
-color attachment yellow default
-color header brightyellow default "From: "
-color header brightyellow default "Subject: "
-color header brightyellow default "Date: "
-color quoted green default
-color quoted1 cyan default
-color quoted2 green default
-color quoted3 cyan default
+# Colors for items in the index
+color index brightcyan black ~N
+color index brightred black ~O
+color index brightyellow black ~F
+color index black green ~T
+color index brightred black ~D
+mono index bold ~N
+mono index bold ~F
+mono index bold ~T
+mono index bold ~D
 
-# Error messages
-color error red default
+# Highlights inside the body of a message.
 
-# Message informational messages
-color message white default
+# URLs
+color body brightgreen black "(http|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
+color body brightgreen black "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
+mono body bold "(http|ftp|news|telnet|finger)://[^ \"\t\r\n]*"
+mono body bold "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
 
-# Indicator for the current message
-color indicator white red
+# Email addresses.
+color body brightgreen black "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
 
-# Status lines in the folder index sed for the mini-help line
-color status white blue
+# Header
+color header green black "^from:"
+color header green black "^to:"
+color header green black "^cc:"
+color header green black "^date:"
+color header yellow black "^newsgroups:"
+color header yellow black "^reply-to:"
+color header brightcyan black "^subject:"
+color header red black "^x-spam-rule:"
+color header green black "^x-mailer:"
+color header yellow black "^message-id:"
+color header yellow black "^Organization:"
+color header yellow black "^Organisation:"
+color header yellow black "^User-Agent:"
+color header yellow black "^message-id: .*pine"
+color header yellow black "^X-Fnord:"
+color header yellow black "^X-WebTV-Stationery:"
 
-# Tree display of threads within the folder index
-color tree red default
+color header red black "^x-spam-rule:"
+color header green black "^x-mailer:"
+color header yellow black "^message-id:"
+color header yellow black "^Organization:"
+color header yellow black "^Organisation:"
+color header yellow black "^User-Agent:"
+color header yellow black "^message-id: .*pine"
+color header yellow black "^X-Fnord:"
+color header yellow black "^X-WebTV-Stationery:"
+color header yellow black "^X-Message-Flag:"
+color header yellow black "^X-Spam-Status:"
+color header yellow black "^X-SpamProbe:"
+color header red black "^X-SpamProbe: SPAM"
 
-# Search matches found with search within the internal pager
-color search white blue
+# Coloring quoted text - coloring the first 7 levels:
+color quoted cyan black
+color quoted1 yellow black
+color quoted2 red black
+color quoted3 green black
+color quoted4 cyan black
+color quoted5 yellow black
+color quoted6 red black
+color quoted7 green black
 
-# Markers indicating a wrapped line
-color markers red default
-color index yellow default '~O'
-color index yellow default '~N'
+# Default color definitions
+color hdrdefault white green
+color signature brightmagenta black
+color indicator black cyan
+color attachment black green
+color error red black
+color message white black
+color search brightwhite magenta
+color status brightyellow blue
+color tree brightblue black
+color normal white black
+color tilde green black
+color bold brightyellow black
+color underline magenta black
+color markers brightcyan black
 
-# Flagged Messages mark
-color index brightred default '~F'
-# Deleted message mark
-color index blue default '~D'
-
-# Identify email addresses
-color body brightred white [\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+
-# Identify URLs
-color body brightblue white (https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+
+# Color definitions when on a mono screen
+mono bold bold
+mono underline underline
+mono indicator reverse
 
 #--------------------------------------------------------------------------
 # Key bindings

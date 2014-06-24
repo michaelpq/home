@@ -14,6 +14,7 @@ set -e
 # Take and check options
 EXPECTED_ARGS=0
 FLAG_CCACHE=0
+FLAG_CONFIGURE=0
 FLAG_REGRESS=0
 FLAG_PATH=0
 FLAG_BRANCH=0
@@ -29,6 +30,7 @@ show_help()
 	echo "Usage: `basename $0` [OPTION]..."
 	echo " "
 	echo "Options:"
+	echo "  -c       Leave after configure"
 	echo "  -e NAME  ccache code in given subpath"
 	echo "  -h       Show this help"
 	echo "  -m       Include contrib modules in installation"
@@ -130,13 +132,17 @@ update_code_to_branch()
 USER_GIT_REMOTE="origin"
 
 #Treat options
-while getopts 'b:de:h:mo:p:rt:' OPTION
+while getopts 'b:cde:h:mo:p:rt:' OPTION
 do
 	case $OPTION in
 	b)	# Branch to sync code with
 		FLAG_BRANCH=1
 		USER_GIT_BRANCH="$OPTARG"
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	c)	# Only configure
+		FLAG_CONFIGURE=1
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
 		;;
 	e)	# Enable ccache
 		FLAG_CCACHE=1
@@ -271,6 +277,13 @@ else
 	else
 		./configure $CONFIGURE_OPTIONS CFLAGS="$CFLAGS_DATA"
 	fi
+fi
+
+# If only configure has been requested, leave now
+if [ "$FLAG_CONFIGURE" == 1 ]
+then
+	echo "Only configure has been requested, leaving..."
+	exit 0
 fi
 
 # Compile...

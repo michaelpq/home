@@ -5,8 +5,9 @@
 /.gitconfig_extra
 /.git-credentials
 /.homeconfig_extra
-/.mutt_extra
 /.mutt_aliases
+/.mutt_extra
+/.mutt_signature
 
 # Development paths
 /archive

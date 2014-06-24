@@ -23,6 +23,9 @@ set alias_file = ~/.mutt_aliases
 set sort_alias = alias
 set reverse_alias = yes
 
+# Signature
+set signature="~/.mutt_signature"
+
 #--------------------------------------------------------------------------
 # Colors
 #--------------------------------------------------------------------------

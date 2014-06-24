@@ -52,7 +52,7 @@
       initial-scratch-message nil)
 
 ;;--------------------------------------------------------------------------
-;; Code formatting
+;; Formatting
 ;;--------------------------------------------------------------------------
 
 ;; Shell scripting
@@ -85,6 +85,7 @@
 (setq auto-mode-alist
   (cons '("\\(postgres\\|pgsql\\).*\\.cc\\'" . pgsql-c-mode)
         auto-mode-alist))
+
 ;; SGML documentation
 (defun pgsql-sgml-mode ()
   "SGML mode adjusted for PostgreSQL project"
@@ -97,6 +98,7 @@
 (setq auto-mode-alist
   (cons '("\\(postgres\\|pgsql\\).*\\.sgml\\'" . pgsql-sgml-mode)
         auto-mode-alist))
+
 ;; Perl settings
 (defun pgsql-perl-mode ()
   "Perl style adjusted for PostgreSQL project"
@@ -171,6 +173,9 @@
 
 ;; Display current function name in code
 (which-function-mode 1)
+
+;; Mutt settings
+(setq auto-mode-alist (append '(("/tmp/mutt.*" . mail-mode)) auto-mode-alist))
 
 ;;--------------------------------------------------------------------------
 ;; Navigation

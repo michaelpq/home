@@ -3,10 +3,10 @@
 #--------------------------------------------------------------------------
 
 # Local Folders
-set message_cachedir =~/.mutt/cache/bodies
-set certificate_file =~/.mutt/certificates
+set message_cachedir = ~/.mutt/cache/bodies
+set certificate_file = ~/.mutt/certificates
 # If created as a repository, this will contain one file per account.
-set header_cache =~/.mutt/cache/headers
+set header_cache = ~/.mutt/cache/headers
 
 # Keepalive settings
 set imap_keepalive = 900
@@ -24,7 +24,7 @@ set sort_alias = alias
 set reverse_alias = yes
 
 # Signature
-set signature="~/.mutt_signature"
+set signature = "~/.mutt_signature"
 
 # How often to check for new mail (time in seconds).
 set mail_check = 120
@@ -69,7 +69,7 @@ color index yellow default '~N'
 # Flagged Messages mark
 color index brightred default '~F'
 # Deleted message mark
-color index blue default  '~D'
+color index blue default '~D'
 
 # Identify email addresses
 color body brightred white [\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+

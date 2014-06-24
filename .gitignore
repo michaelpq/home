@@ -5,7 +5,7 @@
 /.gitconfig_extra
 /.git-credentials
 /.homeconfig_extra
-/.muttrc_extra
+/.mutt_extra
 
 # Development paths
 /archive

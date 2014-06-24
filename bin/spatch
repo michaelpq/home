@@ -19,7 +19,7 @@ VERSION="spatch version 1.0"
 FILES[0]=gitconfig_extra
 FILES[1]=bash_extra
 FILES[2]=bash_alias_extra
-FILES[3]=muttrc_extra
+FILES[3]=mutt_extra
 
 show_help ()
 {

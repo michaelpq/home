@@ -48,6 +48,7 @@ There is as well a set of files that can be used for private settings:
 - $HOME/.bash_alias_extra, for private alias values
 - $HOME/.bash_extra, for bash private values
 - $HOME/.gitconfig_extra, for git private settings
+- $HOME/.mutt_extra, for mutt private settings
 
 All those files are linked automatically with spatch, a utility
 written in bash to manage multiple setting profiles in a single

@@ -1,0 +1,83 @@
+#--------------------------------------------------------------------------
+# General
+#--------------------------------------------------------------------------
+
+# Mail box settings
+set mbox_type=maildir
+set mbox="~/mail/inbox/"
+set spoolfile="~/mail/inbox/"
+set folder="~/mail/"
+set record="~/mail/sent/"
+set postponed="~/mail/postponed/"
+
+# Local Folders
+set message_cachedir =~/.mutt/cache/bodies
+set certificate_file =~/.mutt/certificates
+# If created as a repository, this will contain one file per account.
+set header_cache =~/.mutt/cache/headers
+
+# Keepalive settings
+set imap_keepalive = 900
+
+# Stop asking to "move read messages to mbox"
+set move = no
+
+# Sort of messages
+set sort = 'threads'
+set sort_aux = 'reverse-last-date-received'
+
+#--------------------------------------------------------------------------
+# Colors
+#--------------------------------------------------------------------------
+
+color hdrdefault cyan default
+color attachment yellow default
+color header brightyellow default "From: "
+color header brightyellow default "Subject: "
+color header brightyellow default "Date: "
+color quoted green default
+color quoted1 cyan default
+color quoted2 green default
+color quoted3 cyan default
+
+# Error messages
+color error red default
+
+# Message informational messages
+color message white default
+
+# Indicator for the current message
+color indicator white red
+
+# Status lines in the folder index sed for the mini-help line
+color status white blue
+
+# Tree display of threads within the folder index
+color tree red default
+
+# Search matches found with search within the internal pager
+color search white blue
+
+# Markers indicating a wrapped line
+color markers red default
+color index yellow default '~O'
+color index yellow default '~N'
+
+# Flagged Messages mark
+color index brightred default '~F'
+# Deleted message mark
+color index   blue default  '~D'
+
+# Identify email addresses
+color body  brightred black [\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+
+# Identify URLs
+color body brightblue black (https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+
+
+#--------------------------------------------------------------------------
+# Inclusions
+#--------------------------------------------------------------------------
+
+# Private parameters
+# They are included at the end to enforce existing values if wanted
+# by user and ignored in source tree.
+source ~/.muttrc_extra

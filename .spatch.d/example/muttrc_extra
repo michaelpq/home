@@ -1,0 +1,41 @@
+#--------------------------------------------------------------------------
+# muttrc_extra
+#	Private global extra settings for mutt
+#	Copyright (c) 2010-2014, Michael Paquier
+#--------------------------------------------------------------------------
+
+# Account information
+set from = "john@doe.com"
+set realname = "John Doe"
+set imap_user = "john@example.com"
+
+# Password information
+set imap_pass = "My_password"
+# Uncomment and edit this trick if you do not want to store this
+# password as static data on your computer.
+# set imap_pass=`getpassword email_id`
+
+# Remote Folders
+set spoolfile = "+INBOX"
+set postponed ="+[Example]/Drafts"
+set folder = "imaps://imap.example.com:993"
+
+# SMTP Setup
+set smtp_url = "smtp://johnr@smtp.example.com:587/"
+set smtp_pass = "My_password"
+# Uncomment and edit this trick if you do not want to store this
+# password as static data on your computer.
+# set smtp_pass=`getpassword email_id`
+
+# Shortcuts
+macro index,pager am "<enter-command>unset trash\n <delete-message>" "Archive message"
+macro index,pager d "<enter-command>set trash=\"imaps://imap.example.com/[Example]/Bin\"\n <delete-message>" "Delete message"
+macro index,pager gi "<change-folder>=INBOX<enter>" "Go to inbox"
+macro index,pager ga "<change-folder>=[Example]/All Mail<enter>" "Go to all mail"
+macro index,pager gs "<change-folder>=[Example]/Starred<enter>" "Go to starred messages"
+macro index,pager gd "<change-folder>=[Example]/Drafts<enter>" "Go to drafts"
+macro index,pager gl "<change-folder>?" "Go to 'Label'"
+
+# My Editor
+# Not really needed as this defaults to EDITOR, but uncomment in case
+# set editor='emacs -nw

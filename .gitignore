@@ -5,6 +5,7 @@
 /.gitconfig_extra
 /.git-credentials
 /.homeconfig_extra
+/.muttrc_extra
 
 # Development paths
 /archive
@@ -58,7 +59,6 @@
 /.mpd
 /.mpdconf
 /.mutt
-/.muttrc
 /.m2
 /.netrc
 /.nexuiz

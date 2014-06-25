@@ -45,13 +45,20 @@ set smtp_pass = "My_password"
 #set smtp_pass=`getpassword email_id`
 
 # Shortcuts
-macro index,pager am "<enter-command>unset trash\n <delete-message>" "Archive message"
-macro index,pager d "<enter-command>set trash=\"imaps://imap.example.com/[Example]/Bin\"\n <delete-message>" "Delete message"
-macro index,pager gi "<change-folder>=INBOX<enter>" "Go to inbox"
-macro index,pager ga "<change-folder>=[Example]/All Mail<enter>" "Go to all mail"
-macro index,pager gs "<change-folder>=[Example]/Starred<enter>" "Go to starred messages"
-macro index,pager gd "<change-folder>=[Example]/Drafts<enter>" "Go to drafts"
+# Uncomment where necessary
+# Generic ones
 macro index,pager gl "<change-folder>?" "Go to 'Label'"
+macro index,pager gi "<change-folder>=INBOX<enter>" "Go to inbox"
+# Common version
+#macro index,pager ga "<change-folder>=All Mail<enter>" "Go to all mail"
+#macro index,pager gs "<change-folder>=Starred<enter>" "Go to starred messages"
+#macro index,pager gd "<change-folder>=Drafts<enter>" "Go to drafts"
+#macro index,pager d "<save-message>=Trash<enter><enter><refresh>" "Trash Message"
+# Gmail version
+#macro index,pager ga "<change-folder>=[Gmail]/All Mail<enter>" "Go to all mail"
+#macro index,pager gs "<change-folder>=[Gmail]/Starred<enter>" "Go to starred messages"
+#macro index,pager gd "<change-folder>=[Gmail]/Drafts<enter>" "Go to drafts"
+#macro index,pager d "<save-message>=[Gmail]/Trash<enter><enter><refresh>" "Trash Message"
 
 # My Editor
 # Not really needed as this defaults to EDITOR, but uncomment in case

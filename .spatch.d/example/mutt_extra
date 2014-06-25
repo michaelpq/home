@@ -10,10 +10,10 @@ set realname = "John Doe"
 set imap_user = "john@example.com"
 
 # Password information
-set imap_pass = "My_password"
+#set imap_pass = "My_password"
 # Uncomment and edit this trick if you do not want to store this
 # password as static data on your computer.
-# set imap_pass = `getpassword email_id`
+#set imap_pass = `getpassword email_id`
 
 # Mail box settings
 # Uncomment the following section for a local box
@@ -24,20 +24,25 @@ set imap_pass = "My_password"
 #set record = "~/mail/sent/"
 #set postponed = "~/mail/postponed/"
 
-# Uncomment the following section for a remote box
-# set folder = "imaps://imap.example.com:993"
-# Note that those parameters need to be set *after* "folder"
+# Uncomment this section for a remote box
+#set folder = "imaps://imap.example.com:993"
 #set spoolfile = "+INBOX"
 #set mbox = "+INBOX"
-#set postponed = "+[Example]/Drafts"
-#set record = "+[Example]/Sent Mail"
+#set postponed = "+Drafts"
+#set record = "+Sent"
+
+# Uncomment this section for a gmail account
+#set folder = "imaps://imap.gmail.com:993"
+#set spoolfile = "+INBOX"
+#set postponed = "+[Gmail]/Drafts"
+#set record = "+[Gmail]/Sent Mail"
 
 # SMTP Setup
 set smtp_url = "smtp://johnr@smtp.example.com:587/"
 set smtp_pass = "My_password"
 # Uncomment and edit this trick if you do not want to store this
 # password as static data on your computer.
-# set smtp_pass=`getpassword email_id`
+#set smtp_pass=`getpassword email_id`
 
 # Shortcuts
 macro index,pager am "<enter-command>unset trash\n <delete-message>" "Archive message"
@@ -50,4 +55,4 @@ macro index,pager gl "<change-folder>?" "Go to 'Label'"
 
 # My Editor
 # Not really needed as this defaults to EDITOR, but uncomment in case
-# set editor='emacs -nw
+#set editor='emacs -nw

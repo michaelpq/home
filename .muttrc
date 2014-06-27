@@ -29,6 +29,10 @@ set signature = "~/.mutt_signature"
 # How often to check for new mail (time in seconds).
 set mail_check = 120
 
+# SSL settings
+set ssl_starttls = yes
+set ssl_force_tls = yes
+
 #--------------------------------------------------------------------------
 # Colors
 #--------------------------------------------------------------------------

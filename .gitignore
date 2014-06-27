@@ -7,7 +7,6 @@
 /.homeconfig_extra
 /.mutt_aliases
 /.mutt_extra
-/.mutt_signature
 
 # Development paths
 /archive

@@ -9,6 +9,9 @@ set from = "john@doe.com"
 set realname = "John Doe"
 set imap_user = "john@example.com"
 
+# Signature
+set signature = "echo $realname |"
+
 # Password information
 #set imap_pass = "My_password"
 # Uncomment and edit this trick if you do not want to store this

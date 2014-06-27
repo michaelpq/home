@@ -12,7 +12,6 @@
 !/example/gitconfig_extra
 !/example/mutt_aliases
 !/example/mutt_extra
-!/example/mutt_signature
 
 # Files of default/
 !/default/DESCRIPTION
@@ -21,4 +20,3 @@
 !/default/gitconfig_extra
 !/default/mutt_aliases
 !/default/mutt_extra
-!/default/mutt_signature

@@ -4,8 +4,11 @@
 #	Copyright (c) 2010-2014, Michael Paquier
 #--------------------------------------------------------------------------
 
-# Example of entry for mutt alias file
-alias john.doe John Doe <john.doe@example.com>
+# Single alias entry
+alias john.doe john.doe@example.com (John Doe)
+
+# Group alias
+alias john.group john.doe@example.com (John Doe), jenny.doe@example.com (Jenny Doe)
 
 # Add your other settings here, then copy or link this file
 # as $HOME/.mutt_aliases, or use `spatch conf` to make it

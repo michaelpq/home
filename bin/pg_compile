@@ -18,7 +18,8 @@ FLAG_CONFIGURE=0
 FLAG_REGRESS=0
 FLAG_PATH=0
 FLAG_BRANCH=0
-# VPATH and code copy flags
+FLAG_MAKEFILE=0
+# Code copy flags
 FLAG_SRC_FOLDER=0
 FLAG_TAG=0
 FLAG_CONTRIB=0
@@ -36,6 +37,9 @@ show_help()
 	echo "  -m       Include contrib modules in installation"
 	echo "  -p PATH  Define installation folder"
 	echo "  -r       Run regressions"
+	echo "  -s FLAG  Choose custom Makefile.custom. This file is located"
+	echo "           in $HOME_POSTGRES_ETC and named as Makefile.$FLAG.custom."
+	echo "           Default is \"dev\"."
 	echo " "
 	echo "Code copy for installation:"
 	echo "  -i PATH  Original code folder (source)"
@@ -132,7 +136,7 @@ update_code_to_branch()
 USER_GIT_REMOTE="origin"
 
 #Treat options
-while getopts 'b:cde:h:mo:p:rt:' OPTION
+while getopts 'b:cde:h:mo:p:rs:t:' OPTION
 do
 	case $OPTION in
 	b)	# Branch to sync code with
@@ -168,6 +172,11 @@ do
 	r)	# Run regressions
 		FLAG_REGRESS=1
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		;;
+	s)	# Custom Makefile
+		FLAG_MAKEFILE=1
+		USER_MAKEFILE="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
 		;;
 	t)	# Get code up to tag or commit ID
 		FLAG_TAG=1
@@ -216,6 +225,26 @@ else
 	echo "Using default installation folder $PSQL_INSTALL_FOLDER"
 fi
 
+# Copy custom Makefile
+if [ "$FLAG_MAKEFILE" == 1 ]
+then
+	CUSTOM_MAKEFILE=$HOME_POSTGRES_ETC/Makefile.$USER_MAKEFILE.custom
+	# Check its existence
+	if [ ! -f $CUSTOM_MAKEFILE ]
+	then
+		echo "Custom Makefile $CUSTOM_MAKEFILE does not exist"
+		exit 1
+	fi
+	echo "Using custom Makefile $CUSTOM_MAKEFILE"
+else
+	# Use default instead
+	CUSTOM_MAKEFILE=$HOME_POSTGRES_ETC/Makefile.dev.custom
+	echo "Using default custom Makefile $CUSTOM_MAKEFILE"
+fi
+
+# Copy file in source tree before running coonfigure
+cp $CUSTOM_MAKEFILE $HOME_POSTGRES_SRC/src/Makefile.custom
+
 # General options for configure
 CONFIGURE_OPTIONS="--enable-depend --enable-debug --disable-rpath "
 CONFIGURE_OPTIONS+="--enable-cassert --prefix=$PSQL_INSTALL_FOLDER "
@@ -229,9 +258,6 @@ else
 	# Linux/Unix
 	CONFIGURE_OPTIONS+="--with-libxml "
 fi
-
-# CFLAGS for compiler options
-CFLAGS_DATA="-DG -fno-omit-frame-pointer"
 
 # Perform configure, build and installation, here calling configure from
 # the local folder is enough.

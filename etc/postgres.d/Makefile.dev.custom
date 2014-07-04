@@ -1,0 +1,9 @@
+#------------------------------------------------------------------------------
+# Generic settings for Makefile.custom in a development environment.
+#------------------------------------------------------------------------------
+
+# Debugger flag
+CFLAGS += -DG
+
+# Profiling with perf
+CFLAGS += -fno-omit-frame-pointer

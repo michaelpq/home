@@ -3,3 +3,4 @@
 *
 !/postgresql.dev.conf
 !/recovery.dev.conf
+!/Makefile.dev.custom

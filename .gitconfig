@@ -4,17 +4,28 @@
 #	Copyright (c) 2010-2014, Michael Paquier
 #--------------------------------------------------------------------------
 [alias]
+	# Execution of raw command
 	exec = "!exec "
+	# Print graph of git commit history
 	graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
+	# Remove all files not tracked in tree
 	menage = clean -d -x -f
+	# Filter file rename, deletion and copy
 	record = log --find-renames --irreversible-delete --break-rewrites --find-copies -p
+	# Show top level repository
 	root = rev-parse --show-toplevel
+	# Remove last commit
 	undo = reset --hard HEAD~1
 [color]
+	# Print output in color if possible
 	ui = auto
 [core]
+	# Exclusion of several file types
 	excludesfile = ~/.gitconfig_excludes
 [push]
+	# Push branches having same name remotely and locally
 	default = matching
 [include]
+	# Private parameters, done at the end to override other values
+	# if necessary
 	path = .gitconfig_extra

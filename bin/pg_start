@@ -188,10 +188,7 @@ postgres_node_init -c $CONFIG_SUFFIX -p $MASTER_PORT -d $MASTER_DATA \
 check_error $?
 
 # Slaves need the base backup of master first, so start it
-postgres_node_ctl -d $MASTER_DATA -b $PSQL_FOLDER -a start
-
-# Wait for start up a bit, for automatic port detection
-sleep 1
+$PSQL_FOLDER/bin/pg_ctl start -w -D $MASTER_DATA
 
 # Now initialize and start the slaves if any
 if [ "$NUM_SLAVES" -gt 0 ]
@@ -204,10 +201,7 @@ then
 			-b $PSQL_FOLDER -r $RECOVERY_SUFFIX
 		check_error $?
 
-		postgres_node_ctl -d $SLAVE_DATA -b $PSQL_FOLDER -a start
-
-		# Wait a bit for startup, due to automatic port detection
-		sleep 1
+		$PSQL_FOLDER/bin/pg_ctl start -D $SLAVE_DATA -w
 	done
 fi
 

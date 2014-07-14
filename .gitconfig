@@ -8,6 +8,8 @@
 	exec = "!exec "
 	# Print graph of git commit history
 	graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
+	# Log output easier to read than vanilla
+	lol = log --pretty=format:\"%C(blue)commit: %H%C(reset)%n%C(green)author: %aN <%aE>%C(reset)%n%C(yellow)date: %aD%C(reset)%n%n%B\"
 	# Remove all files not tracked in tree
 	menage = clean -d -x -f
 	# Filter file rename, deletion and copy

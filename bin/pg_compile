@@ -248,6 +248,7 @@ cp $CUSTOM_MAKEFILE $HOME_POSTGRES_SRC/src/Makefile.custom
 # General options for configure
 CONFIGURE_OPTIONS="--enable-depend --enable-debug --disable-rpath "
 CONFIGURE_OPTIONS+="--enable-cassert --prefix=$PSQL_INSTALL_FOLDER "
+CONFIGURE_OPTIONS+="--with-openssl "
 
 # Add platform specific settings
 if [[ $ENV_NAME == MINGW* ]]

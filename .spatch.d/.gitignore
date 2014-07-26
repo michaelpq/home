@@ -9,6 +9,7 @@
 !/example/DESCRIPTION
 !/example/bash_alias_extra
 !/example/bash_extra
+!/example/emacs_extra
 !/example/gitconfig_extra
 !/example/mutt_aliases
 !/example/mutt_extra
@@ -17,6 +18,7 @@
 !/default/DESCRIPTION
 !/default/bash_alias_extra
 !/default/bash_extra
+!/default/emacs_extra
 !/default/gitconfig_extra
 !/default/mutt_aliases
 !/default/mutt_extra

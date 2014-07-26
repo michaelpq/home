@@ -1,0 +1,10 @@
+;;--------------------------------------------------------------------------
+;; emacs_extra
+;;	Extra private settings for emacs
+;;	Copyright (c) 2010-2014, Michael Paquier
+;;--------------------------------------------------------------------------
+
+;; This is a default configuration file, so empty by default...
+
+;; Add your extra settings here and then copy or link this file
+;; as $HOME/.emacs_extra to make it effective.

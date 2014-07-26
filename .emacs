@@ -12,9 +12,6 @@
         (default-directory my-lisp-dir))
     (setq load-path (cons my-lisp-dir load-path))
     (normal-top-level-add-subdirs-to-load-path))))
-(when (file-exists-p "~/.emacs.d/elpa/package.el")
-  (when (load (expand-file-name "~/.emacs.d/elpa/package.el"))
-    (package-initialize)))
 
 ;;--------------------------------------------------------------------------
 ;; System configuration
@@ -210,3 +207,12 @@
 
 ;; Rectangular selection area, activate a mark to begin selection
 (global-set-key "\C-@" 'set-mark-command)
+
+;;--------------------------------------------------------------------------
+;; Others
+;;--------------------------------------------------------------------------
+
+;; Private settings for emacs
+;; Bypass if it does not exist.
+(when (file-exists-p "~/.emacs_extra")
+ (load-file "~/.emacs_extra"))

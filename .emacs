@@ -123,11 +123,11 @@
       (set (make-local-variable 'tab-stop-list) (nreverse ls))))
 ;; This is essential to change the behaviour of backspace for a tab...
 (defun c-tab-mode-common-hook ()
-  (setq tab-width 4) ;; change this to taste, this is what K&R uses :)
+  (setq tab-width 4)
   (private-build-tab-stop-list tab-width)
   (setq c-basic-offset tab-width))
 (defun sh-tab-mode-common-hook ()
-  (setq tab-width 4) ;; change this to taste, this is what K&R uses :)
+  (setq tab-width 4)
   (private-build-tab-stop-list tab-width)
   (setq c-basic-offset tab-width))
 ;; Finally add this hook for necessary languages
@@ -215,4 +215,4 @@
 ;; Private settings for emacs
 ;; Bypass if it does not exist.
 (when (file-exists-p "~/.emacs_extra")
- (load-file "~/.emacs_extra"))
+  (load-file "~/.emacs_extra"))

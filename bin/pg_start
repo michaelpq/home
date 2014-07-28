@@ -71,6 +71,10 @@ check_install()
 }
 
 # Start node depending on environment
+# On Linux/Unix only a pg_ctl start is enough while with Windows systems
+# it is better to register the service and then start it using the service
+# manager to make the instance global and not sticked only to the session
+# where this script was kicked.
 start_node()
 {
 	PORT=$1
@@ -206,11 +210,7 @@ postgres_node_init -c $CONFIG_SUFFIX -p $MASTER_PORT -d $MASTER_DATA \
 	-b $PSQL_FOLDER
 check_error $?
 
-# Start up master node. On Linux/Unix only a pg_ctl start is
-# enough while with Windows systems it is better to resgister
-# the service and then start it using the service manager to
-# make the server management and not stick only to the session
-# where this script is started.
+# Start up master node.
 start_node $MASTER_PORT $MASTER_DATA
 
 # Now initialize and start the slaves if any

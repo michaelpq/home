@@ -234,6 +234,7 @@ then
 	OPTIONS_PGHBA="host replication $CLUSTER_USER 127.0.0.1/32 trust$CONF_NEWLINE"\
 "host replication $CLUSTER_USER ::1/128 trust$CONF_NEWLINE"
 else
+	CLUSTER_USER=$USER
 	OPTIONS_PGHBA="host replication $CLUSTER_USER 127.0.0.1/32 trust$CONF_NEWLINE"\
 "host replication $CLUSTER_USER ::1/128 trust$CONF_NEWLINE"\
 "local replication $CLUSTER_USER trust$CONF_NEWLINE"

@@ -60,5 +60,17 @@ do
 	# Get port number from 4th line of given postmaster.pid
 	NODE_PORT=`sed "4q;d" $file`
 	echo "Stopping server listening to port $NODE_PORT"
-	$PSQL_FOLDER/bin/pg_ctl stop -D `dirname $file` -m immediate
+
+	# On Unix/Linux, server can be easily stopped with a stop command.
+	# On Windows the service manager is used for this purpose, and service
+	# is unregistered as well.
+	ENV_NAME=`uname`
+	if [[ $ENV_NAME == MINGW* ]]
+	then
+		SERVICE_NAME=postgres_$NODE_PORT
+		sc stop $SERVICE_NAME
+		pg_ctl unregister -N $SERVICE_NAME
+	else
+		$PSQL_FOLDER/bin/pg_ctl stop -D `dirname $file` -m immediate
+	fi
 done

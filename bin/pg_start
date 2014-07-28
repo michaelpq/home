@@ -70,6 +70,25 @@ check_install()
 	fi
 }
 
+# Start node depending on environment
+start_node()
+{
+	PORT=$1
+	DATA_FOLDER=$2
+	ENV_NAME=`uname`
+	if [[ $ENV_NAME == MINGW* ]]
+	then
+		SERVICE_NAME=postgres_$PORT
+		$PSQL_FOLDER/bin/pg_ctl register -w -D $DATA_FOLDER \
+			-N $SERVICE_NAME
+		sc start $SERVICE_NAME
+		sleep 1
+	else
+		# Slaves need the base backup of master first, so start it
+		$PSQL_FOLDER/bin/pg_ctl start -w -D $DATA_FOLDER
+	fi
+}
+
 # Check an non-zero code, exit if found
 check_error()
 {
@@ -187,8 +206,12 @@ postgres_node_init -c $CONFIG_SUFFIX -p $MASTER_PORT -d $MASTER_DATA \
 	-b $PSQL_FOLDER
 check_error $?
 
-# Slaves need the base backup of master first, so start it
-$PSQL_FOLDER/bin/pg_ctl start -w -D $MASTER_DATA
+# Start up master node. On Linux/Unix only a pg_ctl start is
+# enough while with Windows systems it is better to resgister
+# the service and then start it using the service manager to
+# make the server management and not stick only to the session
+# where this script is started.
+start_node $MASTER_PORT $MASTER_DATA
 
 # Now initialize and start the slaves if any
 if [ "$NUM_SLAVES" -gt 0 ]
@@ -200,8 +223,7 @@ then
 		postgres_node_init -d $SLAVE_DATA -p $SLAVE_PORT -q $MASTER_PORT -s \
 			-b $PSQL_FOLDER -r $RECOVERY_SUFFIX
 		check_error $?
-
-		$PSQL_FOLDER/bin/pg_ctl start -D $SLAVE_DATA -w
+		start_node $SLAVE_PORT $SLAVE_DATA
 	done
 fi
 

@@ -216,7 +216,8 @@ start_node $MASTER_PORT $MASTER_DATA
 # Now initialize and start the slaves if any
 if [ "$NUM_SLAVES" -gt 0 ]
 then
-	for i in $(seq 1 $NUM_SLAVES)
+	i=1
+	while [ $i -le $NUM_SLAVES ]
 	do
 		SLAVE_PORT=`postgres_get_port`
 		SLAVE_DATA=$HOME_POSTGRES_DATA/$SLAVE_PORT
@@ -224,6 +225,7 @@ then
 			-b $PSQL_FOLDER -r $RECOVERY_SUFFIX
 		check_error $?
 		start_node $SLAVE_PORT $SLAVE_DATA
+		i=`expr $i + 1`
 	done
 fi
 

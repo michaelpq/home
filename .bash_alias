@@ -33,6 +33,9 @@ alias emasc='emacs'
 alias diff='diff -uNrp'
 alias python="python2.7"
 
+# Kill attrociously all the Postgres process
+alias fuck='killall postgres'
+
 # Shortcut when compiling Postgres extensions with PGXS
 alias makepg="make USE_PGXS=1"
 

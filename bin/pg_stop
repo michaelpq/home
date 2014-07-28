@@ -1,0 +1,64 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# pg_stop
+#	Stop PostgreSQL instances installed and launched by this framework.
+#	Copyright (c) 2010-2014, Michael Paquier
+#
+#	A simple way to clean up a development environment in one single
+#	command.
+#--------------------------------------------------------------------------
+
+FLAG_PATH=0
+EXPECTED_ARGS=0
+
+# Show help
+show_help()
+{
+	ERROR_NUM=$1
+	echo "Usage: `basename $0` [OPTION]..."
+	echo " "
+	echo "Options:"
+	echo "  -p PATH  Define installation folder"
+}
+
+# Treat options
+while getopts 'p:' OPTION
+do
+	case $OPTION in
+	p)  # Path to postgres install folder
+		FLAG_PATH=1
+		PSQL_USER_PATH="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		;;
+	?)  # Leave without an error code
+		show_help 0
+		;;
+	esac
+done
+
+
+# Check number of arguments
+if [ $# -ne $EXPECTED_ARGS ]
+then
+	# Leave with an error code
+	show_help 1
+fi
+
+# Set default PSQL install folder to the one wanted by user
+if [ "$FLAG_PATH" == 1 ]
+then
+	PSQL_FOLDER=$PSQL_USER_PATH
+else
+	# Set up default
+	PSQL_FOLDER=$HOME_POSTGRES_INSTALL
+	echo "Installation folder set to default $PSQL_FOLDER"
+fi
+
+# Immediately stop all servers having still an active PID
+for file in `find $HOME_POSTGRES_DATA -name postmaster.pid`
+do
+	# Get port number from 4th line of given postmaster.pid
+	NODE_PORT=`sed "4q;d" $file`
+	echo "Stopping server listening to port $NODE_PORT"
+	$PSQL_FOLDER/bin/pg_ctl stop -D `dirname $file` -m immediate
+done

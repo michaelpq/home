@@ -230,12 +230,13 @@ mkdir $NODE_ARCHIVE
 # USER, and the lack of support for local connections.
 if [[ $ENV_NAME == MINGW* ]]
 then
-	OPTIONS_PGHBA="host replication $USERNAME 127.0.0.1/32 trust$CONF_NEWLINE"\
-"host replication $USERNAME ::1/128 trust$CONF_NEWLINE"
+	CLUSTER_USER=$USERNAME
+	OPTIONS_PGHBA="host replication $CLUSTER_USER 127.0.0.1/32 trust$CONF_NEWLINE"\
+"host replication $CLUSTER_USER ::1/128 trust$CONF_NEWLINE"
 else
-	OPTIONS_PGHBA="host replication $USER 127.0.0.1/32 trust$CONF_NEWLINE"\
-"host replication $USER ::1/128 trust$CONF_NEWLINE"\
-"local replication $USER trust$CONF_NEWLINE"
+	OPTIONS_PGHBA="host replication $CLUSTER_USER 127.0.0.1/32 trust$CONF_NEWLINE"\
+"host replication $CLUSTER_USER ::1/128 trust$CONF_NEWLINE"\
+"local replication $CLUSTER_USER trust$CONF_NEWLINE"
 fi
 
 # Enforce deletion of data folder if it exists
@@ -286,7 +287,7 @@ else
 
 	# Node-related parameters for recovery.conf
 	OPTIONS_STANDBY_RECOVERY="restore_command = 'cp -i $ROOT_ARCHIVE/%f %p'$CONF_NEWLINE"\
-"primary_conninfo = 'host=localhost port=$ROOT_PORT application_name=node_$NODE_PORT'$CONF_NEWLINE"
+"primary_conninfo = 'host=localhost port=$ROOT_PORT user=$CLUSTER_USER application_name=node_$NODE_PORT'$CONF_NEWLINE"
 
 	# Initialize a standby with a fresh base backup
 	pg_basebackup -p $ROOT_PORT -D $NODE_DATA_FOLDER

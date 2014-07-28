@@ -51,7 +51,6 @@ then
 else
 	# Set up default
 	PSQL_FOLDER=$HOME_POSTGRES_INSTALL
-	echo "Installation folder set to default $PSQL_FOLDER"
 fi
 
 # Immediately stop all servers having still an active PID

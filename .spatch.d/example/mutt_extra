@@ -38,6 +38,8 @@ set signature = "echo $realname |"
 #set folder = "imaps://imap.gmail.com:993"
 #set spoolfile = "+INBOX"
 #set postponed = "+[Gmail]/Drafts"
+# Setting up record will result in duplicate emails as Gmail saves all
+# entries automatically.
 #set record = "+[Gmail]/Sent Mail"
 
 # SMTP Setup

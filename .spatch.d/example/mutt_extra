@@ -39,8 +39,10 @@ set signature = "echo $realname |"
 #set spoolfile = "+INBOX"
 #set postponed = "+[Gmail]/Drafts"
 # Setting up record will result in duplicate emails as Gmail saves all
-# entries automatically.
+# entries automatically. It is actually recommended to directly unset
+# it when using multiple boxes to avoid any overlapping.
 #set record = "+[Gmail]/Sent Mail"
+#unset record
 
 # SMTP Setup
 set smtp_url = "smtp://johnr@smtp.example.com:587/"
@@ -67,4 +69,5 @@ macro index,pager gi "<change-folder>=INBOX<enter>" "Go to inbox"
 
 # My Editor
 # Not really needed as this defaults to EDITOR, but uncomment in case
-#set editor='emacs -nw
+#set editor='emacs -nw'
+#set editor='lem'

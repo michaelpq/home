@@ -51,6 +51,19 @@ set smtp_pass = "My_password"
 # password as static data on your computer.
 #set smtp_pass=`getpassword email_id`
 
+# Management of multiple accounts and dynamic switches
+# Each account is managed with a separate file that gets loaded at will
+# with f1 and f2.
+# Account 1
+#source "~/.spatch.d/env/mutt_account1"
+#folder-hook $folder 'source ~/.spatch.d/env/mutt_account1'
+# Account 2
+#source "~/.spatch.d/env/mutt_account2"
+#folder-hook $folder 'source ~/.spatch.d/env/mutt_account2'
+# Switch between account with single key
+#macro index,pager <f1> '<sync-mailbox><enter-command>source ~/.spatch.d/env/mutt_account1<enter><change-folder>!<enter>'
+#macro index,pager <f2> '<sync-mailbox><enter-command>source ~/.spatch.d/env/mutt_account2<enter><change-folder>!<enter>'
+
 # Shortcuts
 # Uncomment where necessary
 # Generic ones

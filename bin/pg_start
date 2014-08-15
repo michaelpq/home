@@ -74,7 +74,10 @@ check_install()
 # On Linux/Unix only a pg_ctl start is enough while with Windows systems
 # it is better to register the service and then start it using the service
 # manager to make the instance global and not sticked only to the session
-# where this script was kicked.
+# where this script was kicked. Note that service registration only works
+# when the code has been compiled with MSVC as a build with MinGW creates
+# library dependencies that are not completely covered when using commands
+# in a prompt. This script can be safely kicked with msysgit though.
 start_node()
 {
 	PORT=$1

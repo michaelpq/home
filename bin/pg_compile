@@ -254,6 +254,10 @@ if [[ $ENV_NAME == MINGW* ]]
 then
 	# MinGW
 	CONFIGURE_OPTIONS+="--without-zlib "
+elif [[ $ENV_NAME == Darwin ]]
+then
+	# Darwin
+	CONFIGURE_OPTIONS+="--with-libxml "
 else
 	# Linux/Unix
 	CONFIGURE_OPTIONS+="--with-libxml "

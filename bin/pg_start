@@ -18,6 +18,9 @@ FLAG_CONFIG_SUFFIX=0
 FLAG_RECOVERY_SUFFIX=0
 FLAG_VERSION=0
 
+# Regex flags
+INT_FORMAT='^[0-9]+$'
+
 # Show utility help
 show_help()
 {
@@ -167,6 +170,12 @@ if [ $# -ne $EXPECTED_ARGS ]
 then
 	# Leave with an error code
 	show_help 1
+fi
+
+# Safety checks
+if ! [[ $NUM_SLAVES =~ $INT_FORMAT ]] ; then
+	echo "$NUM_SLAVES is not an integer"
+	exit 1
 fi
 
 # Set default suffix value of configuration settings

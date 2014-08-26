@@ -18,9 +18,6 @@ FLAG_CONFIG_SUFFIX=0
 FLAG_RECOVERY_SUFFIX=0
 FLAG_VERSION=0
 
-# Regex flags
-INT_FORMAT='^[0-9]+$'
-
 # Show utility help
 show_help()
 {
@@ -173,7 +170,10 @@ then
 fi
 
 # Safety checks
-if ! [[ $NUM_SLAVES =~ $INT_FORMAT ]] ; then
+# Check if there are any non-digit characters in number of slaves
+NUM_SLAVES_CHECK=`echo $NUM_SLAVES | tr -d "[:digit:]"`
+if [ ! -z $NUM_SLAVES_CHECK ]
+then
 	echo "$NUM_SLAVES is not an integer"
 	exit 1
 fi

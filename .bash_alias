@@ -39,5 +39,8 @@ alias fuck='killall -9 postgres'
 # Shortcut when compiling Postgres extensions with PGXS
 alias makepg="make USE_PGXS=1"
 
+# Detect Postgres process
+alias pspg="ps ux | grep postgres"
+
 # Redirect to root location of a git folder
 alias githome="cd \`git root\`"

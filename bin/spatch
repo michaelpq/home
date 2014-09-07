@@ -15,14 +15,6 @@ CONFIG_FOLDER=$HOME/.spatch.d # General config folder
 CURRENT_CONFIG_FILE_MARKER=$CONFIG_FOLDER/current # Where is stored current config
 VERSION="spatch version 1.0"
 
-# List of files
-FILES[0]=gitconfig_extra
-FILES[1]=bash_extra
-FILES[2]=bash_alias_extra
-FILES[3]=emacs_extra
-FILES[4]=mutt_extra
-FILES[5]=mutt_aliases
-
 show_help ()
 {
 	echo "usage: `basename $0` [--version] [--help] <command> [args]";
@@ -120,6 +112,21 @@ check_args ()
 		show_help
 		exit 1
 	fi
+}
+
+# Parse list of files for given configuration
+parse_list_files()
+{
+	SPATCH_CONF=$1
+	i=0
+
+	# Complete list of files
+	for entry in `cat $CONFIG_FOLDER/$SPATCH_CONF/FILES`
+	do
+		FILES[$i]=`echo $entry | cut -d ':' -f 1`
+		LINKS[$i]=`echo $entry | cut -d ':' -f 2`
+		i=`expr $i + 1`
+	done
 }
 
 # Execute command conf-new
@@ -239,7 +246,7 @@ command_confdesc ()
 }
 
 # Execute command conf-reset
-command_confreset ()
+command_confreset()
 {
 	# Get current configuration name and check existence
 	CURRENT_CONF=`get_current_conf_name`
@@ -251,13 +258,15 @@ command_confreset ()
 		echo "Removing configuration $CURRENT_CONF"
 	fi
 
-	# Remove all the files if they exit
-	for file in ${FILES[@]}
+	# Remove all the links if they exit
+	parse_list_files $CURRENT_CONF
+	for link in ${LINKS[@]}
 	do
-		if [ -h $HOME/.$file ]
+		#FILE=~/.bash_alias_extra
+		if [[ -h $HOME/$link ]]
 		then
-			echo "Removed link $file"
-			rm $HOME/.$file
+			echo "Removed link $HOME/$link"
+			rm $HOME/$link
 		fi
 	done
 
@@ -301,10 +310,14 @@ command_conf ()
 	command_confreset
 
 	# Link to the new objects
+	parse_list_files $NEW_CONF
+	i=0
 	for file in ${FILES[@]}
 	do
-		echo "Linking $HOME/.$file to $CONFIG_FOLDER/$NEW_CONF/$file"
-		ln -s $CONFIG_FOLDER/$NEW_CONF/$file $HOME/.$file
+		link=${LINKS[$i]}
+		echo "Linking $link to $CONFIG_FOLDER/$NEW_CONF/$file"
+		ln -s $CONFIG_FOLDER/$NEW_CONF/$file $HOME/$link
+		i=`expr $i + 1`
 	done
 
 	# Create current marker

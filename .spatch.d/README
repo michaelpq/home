@@ -14,8 +14,20 @@ files to be copied to your home repository.
 
 You can refer to the example set in $HOME/.spatch.d/example giving a model of
 how to set a configuration set. The set "default" can also be used as a base.
-Except "default" and "example", all the other configuration sets of are ignored
-by Home.
+Except "default" and "example", all the other configuration sets of are
+ignored by Home.
+
+Each profile needs a set of files to work properly:
+- DESCRIPTION, containing a description of a a given configuration
+- FILES, containing a list of files completed by the location to where those
+files files should be linked. A single entry looks like that:
+file_name:to/file/path.
+file_name2:.file_name2
+Note that each entry needs to be separated by a colon. The first entry
+corresponds to the file as named in the folder dedicated to configuration.
+The second entry is the location from $HOME of the link that will redirect
+to the first entry. Note that for example to/file/path will create a link
+as $HOME/to/file/path.
 
 Spatch has been created to be implemented in Home and respects the same
 license, so feel free to use it and contribute to it.

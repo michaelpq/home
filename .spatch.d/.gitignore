@@ -7,6 +7,7 @@
 
 # Files of example/
 !/example/DESCRIPTION
+!/example/FILES
 !/example/bash_alias_extra
 !/example/bash_extra
 !/example/emacs_extra
@@ -16,6 +17,7 @@
 
 # Files of default/
 !/default/DESCRIPTION
+!/default/FILES
 !/default/bash_alias_extra
 !/default/bash_extra
 !/default/gitconfig_extra

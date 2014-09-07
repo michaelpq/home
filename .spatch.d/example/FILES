@@ -1,0 +1,6 @@
+bash_alias_extra:.bash_alias_extra
+bash_extra:.bash_extra
+emacs_extra:.emacs_extra
+gitconfig_extra:.gitconfig_extra
+mutt_aliases:.mutt_aliases
+mutt_extra:.mutt_extra

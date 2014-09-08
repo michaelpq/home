@@ -15,7 +15,7 @@ CONFIG_FOLDER=$HOME/.spatch.d # General config folder
 CURRENT_CONFIG_FILE_MARKER=$CONFIG_FOLDER/current # Where is stored current config
 VERSION="spatch version 1.0"
 
-show_help ()
+show_help()
 {
 	echo "usage: `basename $0` [--version] [--help] <command> [args]";
 	echo "";
@@ -34,7 +34,7 @@ show_help ()
 # Check number of arguments for command
 # $1 = command type
 # $2 = number of arguments
-check_args ()
+check_args()
 {
 	COMMAND=$1
 	NUM_ARGS=$2
@@ -120,6 +120,15 @@ parse_list_files()
 	SPATCH_CONF=$1
 	i=0
 
+	FILE_LIST=$CONFIG_FOLDER/$SPATCH_CONF/FILES
+
+	if [ ! -f $FILE_LIST ]
+	then
+		echo "FILES is missing for configuration $SPATCH_CONF."
+		echo "This file is needed with the list of file entries to link."
+		exit 1
+	fi
+
 	# Complete list of files
 	for entry in `cat $CONFIG_FOLDER/$SPATCH_CONF/FILES`
 	do
@@ -185,7 +194,7 @@ command_confrm()
 }
 
 # Execute command conf-list
-command_conflist ()
+command_conflist()
 {
 	CURRENT_FOLDER=`get_current_conf_name`
 
@@ -207,7 +216,7 @@ command_conflist ()
 }
 
 # Execute command conf-desc
-command_confdesc ()
+command_confdesc()
 {
 	CONFIG_NAME=$1
 
@@ -220,7 +229,7 @@ command_confdesc ()
 	# Error if still empty
 	if [ -z "$CONFIG_NAME" ]
 	then
-		echo "No configuration set found"
+		echo "No current configuration found"
 		exit 1
 	fi
 
@@ -253,7 +262,8 @@ command_confreset()
 
 	if [ -z $CURRENT_CONF ]
 	then
-		echo "No configuration found, forcing reset"
+		echo "No current configuration found, hence leaving"
+		exit 0
 	else
 		echo "Removing configuration $CURRENT_CONF"
 	fi
@@ -278,7 +288,7 @@ command_confreset()
 }
 
 # Get current configuration name
-get_current_conf_name ()
+get_current_conf_name()
 {
 	# Be sure that current config exists or return null
 	if [  -f "$CURRENT_CONFIG_FILE_MARKER" ]
@@ -288,7 +298,7 @@ get_current_conf_name ()
 }
 
 # Execute command conf
-command_conf ()
+command_conf()
 {
 	NEW_CONF=$1
 
@@ -306,8 +316,11 @@ command_conf ()
 		exit 1
 	fi
 
-	# Then remove old configuration
-	command_confreset
+	# Then remove old configuration if any
+	if [ -f $CURRENT_CONFIG_FILE_MARKER ]
+	then
+		command_confreset
+	fi
 
 	# Link to the new objects
 	parse_list_files $NEW_CONF
@@ -326,7 +339,7 @@ command_conf ()
 
 
 # Execute command env
-command_env ()
+command_env()
 {
 	NEW_ENV=$1
 	if [ -z $NEW_ENV ]
@@ -349,7 +362,7 @@ command_env ()
 }
 
 # Execute command env-list
-command_envlist ()
+command_envlist()
 {
 	echo "List of Home environments:"
 	cd $HOME
@@ -357,7 +370,7 @@ command_envlist ()
 }
 
 # Execute command env-update
-command_envupdate ()
+command_envupdate()
 {
 	cd $HOME
 

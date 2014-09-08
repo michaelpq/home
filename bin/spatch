@@ -26,9 +26,6 @@ show_help()
 	echo "   conf-list  List possible configuration sets";
 	echo "   conf-desc  Describe given configuration set";
 	echo "   conf-reset Reset current configuration";
-	echo "   env        Switch environment";
-	echo "   env-list   List available environments";
-	echo "   env-update Update environments with latest data";
 }
 
 # Check number of arguments for command
@@ -43,27 +40,6 @@ check_args()
 	then
 		# Here we need new config type
 		if [ "$NUM_ARGS" -gt 2 ]
-		then
-			ERROR=1
-		fi
-	elif [ "$COMMAND" = "env" ]
-	then
-		# We need new environment name
-		if [ "$NUM_ARGS" -gt 2 ]
-		then
-			ERROR=1
-		fi
-	elif [ "$COMMAND" = "env-list" ]
-	then
-		# Here we do not need extra arguments
-		if [ "$NUM_ARGS" -gt 1 ]
-		then
-			ERROR=1
-		fi
-	elif [ "$COMMAND" = "env-update" ]
-	then
-		# Here we do not need extra arguments
-		if [ "$NUM_ARGS" -gt 1 ]
 		then
 			ERROR=1
 		fi
@@ -344,65 +320,6 @@ command_conf()
 	echo $NEW_CONF > $CURRENT_CONFIG_FILE_MARKER
 }
 
-
-# Execute command env
-command_env()
-{
-	NEW_ENV=$1
-	if [ -z $NEW_ENV ]
-	then
-		echo "Environment not specified"
-		show_help
-		exit 1
-	fi
-
-	# OK to switch environment
-	cd $HOME
-	git checkout $NEW_ENV > /dev/null 2>&1
-	ERROR=$?
-	if [ "$ERROR" = 0 ]
-	then
-		echo "Switched to environment \"$NEW_ENV\""
-	else
-		echo "Incorrect environment \"$NEW_ENV\""
-	fi
-}
-
-# Execute command env-list
-command_envlist()
-{
-	echo "List of Home environments:"
-	cd $HOME
-	git branch
-}
-
-# Execute command env-update
-command_envupdate()
-{
-	cd $HOME
-
-	# Check environment status
-	git status | grep "nothing to commit" > /dev/null 2>&1
-	NOTHING_TO_COMMIT=$?
-	if [ "$NOTHING_TO_COMMIT" != 0 ]
-	then
-		# Stash things that are not desired during pull
-		echo "Environment modifications detected, stashing them..."
-		git stash
-	fi
-
-	echo "Updating environments"
-	# Simply do a pull on all the branches
-	git pull
-
-	# Reapply stashed things
-	if [ "$NOTHING_TO_COMMIT" != 0 ]
-	then
-		echo "Reapplying stashed stuff"
-		git stash pop
-	fi
-}
-
 # Check the list of arguments
 check_args $COMMAND_TYPE $NUM_ARGS
 
@@ -415,15 +332,6 @@ then
 elif [ "$COMMAND_TYPE" = "--help" ]
 then
 	show_help
-elif [ "$COMMAND_TYPE" = "env" ]
-then
-	command_env $2
-elif [ "$COMMAND_TYPE" = "env-list" ]
-then
-	command_envlist
-elif [ "$COMMAND_TYPE" = "env-update" ]
-then
-	command_envupdate
 elif [ "$COMMAND_TYPE" = "conf-new" ]
 then
 	command_confnew $2

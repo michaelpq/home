@@ -118,6 +118,7 @@
 /doc
 /download
 /media
+/.Xresources
 /.xinitrc
 /.config
 

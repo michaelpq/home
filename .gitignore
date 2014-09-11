@@ -120,6 +120,7 @@
 /media
 /.Xresources
 /.xinitrc
+/.xsession
 /.config
 
 # Windows paths

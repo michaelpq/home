@@ -1,5 +1,5 @@
 !--------------------------------------------------------------------------
-! .Xresources_example
+! .xresources_example
 !	Settings for xterm. Note that those settings should be merged
 !	with the default values by calling xrdb -merge ~/.this_file
 !	in xinitrc to ensure correct initialization. The settings

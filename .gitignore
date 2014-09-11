@@ -118,10 +118,10 @@
 /doc
 /download
 /media
-/.Xresources
-/.xinitrc
-/.xsession
 /.config
+/.xinitrc
+/.xresources
+/.xsession
 
 # Windows paths
 /AppData

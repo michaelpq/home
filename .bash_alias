@@ -40,7 +40,7 @@ alias fuck='killall -9 postgres'
 alias makepg="make USE_PGXS=1"
 
 # Detect Postgres process
-alias pspg="ps ux | grep postgres"
+alias pspg="ps ux | grep --directories=skip postgres | grep -v 'grep --directories'"
 
 # Redirect to root location of a git folder
 alias githome="cd \`git root\`"

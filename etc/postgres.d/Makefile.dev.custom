@@ -7,3 +7,6 @@ CFLAGS += -DG
 
 # Profiling with perf
 CFLAGS += -fno-omit-frame-pointer
+
+# Let compiler generate some useful input for gdb
+# CFLAGS += -ggdb -g3

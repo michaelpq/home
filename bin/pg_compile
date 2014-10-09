@@ -295,7 +295,7 @@ then
 		exit 1
 	fi
 	./configure CC="ccache gcc" CCACHE_DIR=$HOME_CCACHE_DIR/$CCACHE_NAME \
-		$CONFIGURE_OPTIONS CFLAGS="$CFLAGS_DATA"
+		$CONFIGURE_OPTIONS CFLAGS="$HOME_POSTGRES_CFLAGS"
 else
 	# Platform-specific configure commands
 	# It happens that enforcing those variables fixes a couple of
@@ -304,9 +304,9 @@ else
 	then
 		PERL="perl" BISON="bison" FLEX="flex" \
 			MKDIR_P="mkdir -p" \
-			./configure $CONFIGURE_OPTIONS CFLAGS="$CFLAGS_DATA"
+			./configure $CONFIGURE_OPTIONS CFLAGS="$HOME_POSTGRES_CFLAGS"
 	else
-		./configure $CONFIGURE_OPTIONS CFLAGS="$CFLAGS_DATA"
+		./configure $CONFIGURE_OPTIONS CFLAGS="$HOME_POSTGRES_CFLAGS"
 	fi
 fi
 

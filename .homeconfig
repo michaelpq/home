@@ -33,6 +33,13 @@ export HOME_POSTGRES_ETC=$HOME_GLOBAL_ETC/postgres.d
 export HOME_POSTGRES_DATA=$HOME/data
 export HOME_POSTGRES_ARCHIVE=$HOME/archive
 
+# Custom CFLAGS for Postgres build, mainly used in pg_compile
+# Defining an empty variable here is particularly useful on OSX, which
+# is a platform that has the net effect of removing -O2 from the compiler
+# flags, something useful to shift around stack layouts able find some
+# clobbers.
+export HOME_POSTGRES_CFLAGS=""
+
 # Global base repository for ccache
 export HOME_CCACHE_DIR=$HOME/bin/ccache
 

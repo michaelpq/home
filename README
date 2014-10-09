@@ -56,7 +56,7 @@ environment and needs to have the profile reloaded each time.
 
 All the options available with spatch can be listed as follows:
 
-    spatch -h
+    spatch --help
 
 All those paths are ignored by Home. Those folders need to be created
 by user if needed as well. For more information, feel free to read

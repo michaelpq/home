@@ -49,7 +49,10 @@ There is as well a set of files that can be used for private settings:
 
 All those files can be linked automatically with spatch, a utility
 written in bash to manage multiple setting profiles in a single
-environment.
+environment. Note though that on NFS file systems, ln creates a copy
+of a file instead of soft-linking it, hence each update that occurs
+on a given profile file will not be noticed automatically by a Windows
+environment and needs to have the profile reloaded each time.
 
 All the options available with spatch can be listed as follows:
 

@@ -32,8 +32,7 @@ NEWSTR=$2
 
 for file in `git grep -l $OLDSTR`
 do
-	ENV_NAME=`uname`
-	if [ $ENV_NAME == 'Darwin' ]
+	if [ $HOME_ENV_NAME == 'Darwin' ]
 	then
 		# In OSX, sed has a mandatory value with option -i
 		sed -i "" "s/$OLDSTR/$NEWSTR/g" $file

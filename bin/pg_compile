@@ -202,9 +202,6 @@ then
 	exit 1
 fi
 
-# Grab environment variable before doing anything
-ENV_NAME=`uname`
-
 # Set input folder value
 if [ "$FLAG_SRC_FOLDER" == 1 ]
 then
@@ -250,11 +247,11 @@ CONFIGURE_OPTIONS="--enable-depend --enable-debug --enable-cassert "
 CONFIGURE_OPTIONS+="--prefix=$PSQL_INSTALL_FOLDER "
 
 # Add platform specific settings
-if [[ $ENV_NAME == MINGW* ]]
+if [[ $HOME_ENV_NAME == MINGW* ]]
 then
 	# MinGW
 	CONFIGURE_OPTIONS+="--without-zlib "
-elif [[ $ENV_NAME == Darwin ]]
+elif [[ $HOME_ENV_NAME == Darwin ]]
 then
 	# Darwin
 	CONFIGURE_OPTIONS+="--with-libxml "
@@ -289,7 +286,7 @@ cd $CONFIGURE_CALL_FOLDER
 if [ "$FLAG_CCACHE" == 1 ]
 then
 	# Error out on windows, ccache is not available there
-	if [[ $ENV_NAME == MINGW* ]]
+	if [[ $HOME_ENV_NAME == MINGW* ]]
 	then
 		echo "ccache is not available on Windows"
 		exit 1
@@ -300,7 +297,7 @@ else
 	# Platform-specific configure commands
 	# It happens that enforcing those variables fixes a couple of
 	# compilation issues with MinGW.
-	if [[ $ENV_NAME == MINGW* ]]
+	if [[ $HOME_ENV_NAME == MINGW* ]]
 	then
 		PERL="perl" BISON="bison" FLEX="flex" \
 			MKDIR_P="mkdir -p" \
@@ -330,7 +327,7 @@ fi
 # It seems to be the only correct way to do that with MinGW.
 # This has at least the merit to make pass all the install-sh
 # calls.
-if [[ $ENV_NAME == MINGW* ]]
+if [[ $HOME_ENV_NAME == MINGW* ]]
 then
 	sed -i "s#\$(SHELL)#bash#g" src/Makefile.global
 fi

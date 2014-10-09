@@ -63,8 +63,7 @@ do
 	# On Unix/Linux, server can be easily stopped with a stop command.
 	# On Windows the service manager is used for this purpose, and service
 	# is unregistered as well.
-	ENV_NAME=`uname`
-	if [[ $ENV_NAME == MINGW* ]]
+	if [[ $HOME_ENV_NAME == MINGW* ]]
 	then
 		SERVICE_NAME=postgres_$NODE_PORT
 		sc stop $SERVICE_NAME

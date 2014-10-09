@@ -1,4 +1,4 @@
-#!/bin/bash
+B1;2c#!/bin/bash
 #--------------------------------------------------------------------------
 # spatch
 #	Configuration manager for Home
@@ -259,8 +259,7 @@ command_confreset()
 		# basically creates a copy of a file without soft-linking it
 		# this will actually fail, so rely instead on a check on a
 		# file.
-		ENV_NAME=`uname`
-		if [[ $ENV_NAME == MINGW* ]]
+		if [[ $HOME_ENV_NAME == MINGW* ]]
 		then
 			if [[ -f $HOME/$link ]]
 			then

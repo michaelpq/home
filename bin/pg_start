@@ -82,8 +82,7 @@ start_node()
 {
 	PORT=$1
 	DATA_FOLDER=$2
-	ENV_NAME=`uname`
-	if [[ $ENV_NAME == MINGW* ]]
+	if [[ $HOME_ENV_NAME == MINGW* ]]
 	then
 		SERVICE_NAME=postgres_$PORT
 		$PSQL_FOLDER/bin/pg_ctl register -w -D $DATA_FOLDER \

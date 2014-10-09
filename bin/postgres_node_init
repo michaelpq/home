@@ -169,8 +169,7 @@ fi
 
 # Newline format, this changes depending on the platform where this
 # script is run (Looking at you, windows...)
-ENV_NAME=`uname`
-if [[ $ENV_NAME == MINGW* ]]
+if [[ $HOME_ENV_NAME == MINGW* ]]
 then
 	CONF_NEWLINE="\r\n"
 else
@@ -228,7 +227,7 @@ mkdir $NODE_ARCHIVE
 # Options of pg_hba.conf to allow replication. On Windows, we have special
 # needs caused by first the system user name tracked as USERNAME and not
 # USER, and the lack of support for local connections.
-if [[ $ENV_NAME == MINGW* ]]
+if [[ $HOME_ENV_NAME == MINGW* ]]
 then
 	CLUSTER_USER=$USERNAME
 	OPTIONS_PGHBA="host replication $CLUSTER_USER 127.0.0.1/32 trust$CONF_NEWLINE"\

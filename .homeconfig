@@ -7,6 +7,10 @@
 #	Copyright (c) 2010-2014, Michael Paquier
 #--------------------------------------------------------------------------
 
+# Environment definition, can be used here and there instead of calling
+# plainly uname or something related.
+export HOME_ENV_NAME=`uname`
+
 # Global etc folder for all programs containing usually generic
 # configuration files that can be fetched by development environments.
 export HOME_GLOBAL_ETC=$HOME/etc

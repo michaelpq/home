@@ -145,8 +145,6 @@
   (add-hook 'write-contents-hooks 'delete-trailing-whitespace nil t)))
 (add-hook 'sh-mode-hook '(lambda ()
   (add-hook 'write-contents-hooks 'delete-trailing-whitespace nil t)))
-(add-hook 'sgml-mode-hook '(lambda ()
-  (add-hook 'write-contents-hooks 'delete-trailing-whitespace nil t)))
 
 ;; Highlight lines with strictly more than 80 characters
 (defun 80-col-limit nil

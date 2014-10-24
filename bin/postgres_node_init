@@ -260,9 +260,9 @@ then
 	# development. On Windows though, localhost is more flexible.
 	if [[ $HOME_ENV_NAME == MINGW* ]]
 	then
-		"listen_addresses = 'localhost'$CONF_NEWLINE"
+		OPTIONS_POSTGRESQL+="listen_addresses = 'localhost'$CONF_NEWLINE"
 	else
-		"listen_addresses = ''$CONF_NEWLINE"
+		OPTIONS_POSTGRESQL+="listen_addresses = ''$CONF_NEWLINE"
 	fi
 
 	# Some logging information

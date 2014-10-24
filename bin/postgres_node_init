@@ -287,7 +287,7 @@ else
 
 	# Node-related parameters for recovery.conf
 	OPTIONS_STANDBY_RECOVERY="restore_command = 'cp -i $ROOT_ARCHIVE/%f %p'$CONF_NEWLINE"\
-"primary_conninfo = 'host=localhost port=$ROOT_PORT user=$CLUSTER_USER application_name=node_$NODE_PORT'$CONF_NEWLINE"
+"primary_conninfo = 'port=$ROOT_PORT user=$CLUSTER_USER application_name=node_$NODE_PORT'$CONF_NEWLINE"
 
 	# Initialize a standby with a fresh base backup
 	pg_basebackup -p $ROOT_PORT -D $NODE_DATA_FOLDER

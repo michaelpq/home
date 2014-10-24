@@ -256,6 +256,15 @@ then
 	# custom file is applied after those settings.
 	OPTIONS_POSTGRESQL="archive_command = 'cp -i %p $NODE_ARCHIVE/%f'$CONF_NEWLINE"
 
+	# Local unix sockets are prioritized for security purposes when running
+	# development. On Windows though, localhost is more flexible.
+	if [[ $HOME_ENV_NAME == MINGW* ]]
+	then
+		"listen_addresses = 'localhost'$CONF_NEWLINE"
+	else
+		"listen_addresses = ''$CONF_NEWLINE"
+	fi
+
 	# Some logging information
 	echo "Master node information..."
 	echo "- Port: $NODE_PORT"

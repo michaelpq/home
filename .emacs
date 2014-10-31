@@ -10,34 +10,46 @@
 
 ;; Remove splash screen
 (setq inhibit-splash-screen t)
+
 ;; enable visual feedback on selections
 (setq-default transient-mark-mode t)
+
 ;; Remove annoying backup files, creating files like aa.txt~
 (setq make-backup-files nil)
-; Disable auto save, creating files like #aa.txt#
+
+;; Disable auto save, creating files like #aa.txt#
 (setq auto-save-default nil)
+
 ;; Stop at the end of the file, not just add lines
 (setq next-line-add-newlines nil)
 (setq c-tab-always-indent nil)
+
 ;; Delete complete TAB when using backward delete and not convert into spaces
 (setq backward-delete-char-untabify-method nil)
+
 ;; Cursor color
 (set-cursor-color "blue")
+
 ;; Set the font
 (set-frame-font "-*-fixedsysttf-*-*-*-*-15-*-*-*-*-*-*-*")
-;; Display time
-(display-time)
+
 ;; Remove menu bar
 (menu-bar-mode -1)
-;; Remove tool bar
-;; This is possible only if a window system is used
-(if window-system
-  (tool-bar-mode -1))
+
 ;; Print column number
 (column-number-mode 1)
+
 ;; Suppress startup verbosity.
 (setq inhibit-startup-message t
       initial-scratch-message nil)
+
+;; Use the clipboard, pretty please, so that copy/paste "works"
+(setq x-select-enable-clipboard t)
+
+;; Highlight current line
+(global-hl-line-mode)
+;; Add line numbers on the left
+(global-linum-mode 1)
 
 ;;--------------------------------------------------------------------------
 ;; Formatting
@@ -176,6 +188,12 @@
 ;;--------------------------------------------------------------------------
 ;; Controls
 ;;--------------------------------------------------------------------------
+
+;; Under mac, have Command as Meta and keep Option for localized input
+(when (string-match "apple-darwin" system-configuration)
+  (setq mac-allow-anti-aliasing t)
+  (setq mac-command-modifier 'meta)
+  (setq mac-option-modifier 'none))
 
 ;; Deletion key
 (global-set-key [delete] 'delete-char)

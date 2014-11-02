@@ -84,6 +84,7 @@
 /.rtorrent.rc
 /.sh_history
 /.smb*
+/.sqlite_history
 /.ssh
 /.subversion
 /.swt

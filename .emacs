@@ -48,8 +48,6 @@
 
 ;; Highlight current line
 (global-hl-line-mode)
-;; Add line numbers on the left
-(global-linum-mode 1)
 
 ;; Always follow soft links to real files when opening them
 (setq vc-follow-symlinks t)

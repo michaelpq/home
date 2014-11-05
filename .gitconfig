@@ -16,6 +16,8 @@
 	root = rev-parse --show-toplevel
 	# Remove last commit
 	undo = reset --hard HEAD~1
+	# Check whitespaces
+	check-whitespace = !git diff-tree --check $(git hash-object -t tree /dev/null) HEAD
 [color]
 	# Print output in color if possible
 	ui = auto

@@ -28,3 +28,6 @@
 
 -- Print null values as "null" and not empty things
 \pset null 'null'
+
+-- Private parameters
+\i ~/.psqlrc_extra

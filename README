@@ -46,6 +46,7 @@ There is as well a set of files that can be used for private settings:
 - $HOME/.gitconfig_extra, for private settings of git
 - $HOME/.mutt_aliases, list of aliases for mutt
 - $HOME/.mutt_extra, for private settings of mutt
+- $HOME/.psqlrc_extra, for private settings of psql
 
 All those files can be linked automatically with spatch, a utility
 written in bash to manage multiple setting profiles in a single

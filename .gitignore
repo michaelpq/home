@@ -8,6 +8,7 @@
 /.homeconfig_extra
 /.mutt_aliases
 /.mutt_extra
+/.psqlrc_extra
 
 # Development paths
 /archive

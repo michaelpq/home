@@ -30,4 +30,5 @@
 \pset null 'null'
 
 -- Private parameters
+\! test ~/.psqlrc_extra && touch ~/.psqlrc_extra
 \i ~/.psqlrc_extra

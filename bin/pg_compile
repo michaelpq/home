@@ -5,7 +5,6 @@
 #	Copyright (c) 2010-2014, Michael Paquier
 #
 #	The code used for compilation is a copy of an original code.
-#	Run regressions if necessary or compile contrib modules.
 #--------------------------------------------------------------------------
 
 # Immediately leave in case of failure
@@ -15,14 +14,12 @@ set -e
 EXPECTED_ARGS=0
 FLAG_CCACHE=0
 FLAG_CONFIGURE=0
-FLAG_REGRESS=0
 FLAG_PATH=0
 FLAG_BRANCH=0
 FLAG_MAKEFILE=0
 # Code copy flags
 FLAG_SRC_FOLDER=0
 FLAG_TAG=0
-FLAG_CONTRIB=0
 
 # Show help
 show_help()
@@ -34,9 +31,7 @@ show_help()
 	echo "  -c       Leave after configure"
 	echo "  -e NAME  ccache code in given subpath"
 	echo "  -h       Show this help"
-	echo "  -m       Include contrib modules in installation"
 	echo "  -p PATH  Define installation folder"
-	echo "  -r       Run regressions"
 	echo "  -s FLAG  Choose custom Makefile.custom. This file is located"
 	echo "           in $HOME_POSTGRES_ETC and named as Makefile.$FLAG.custom."
 	echo "           Default is \"dev\"."
@@ -136,7 +131,7 @@ update_code_to_branch()
 USER_GIT_REMOTE="origin"
 
 #Treat options
-while getopts 'b:cde:h:mo:p:rs:t:' OPTION
+while getopts 'b:cde:h:o:p:s:t:' OPTION
 do
 	case $OPTION in
 	b)	# Branch to sync code with
@@ -156,10 +151,6 @@ do
 	h)	# Help
 		show_help 0
 		;;
-	m)	# Include contrib modules in install
-		FLAG_CONTRIB=1
-		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
-		;;
 	o)	# Remote to sync branches with
 		USER_GIT_REMOTE="$OPTARG"
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
@@ -168,10 +159,6 @@ do
 		FLAG_PATH=1
 		USER_INSTALL_FOLDER="$OPTARG"
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
-		;;
-	r)	# Run regressions
-		FLAG_REGRESS=1
-		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
 		;;
 	s)	# Custom Makefile
 		FLAG_MAKEFILE=1
@@ -317,12 +304,6 @@ fi
 # Compile...
 make
 
-# Run regressions if necessary
-if [ "$FLAG_REGRESS" == 1 ]
-then
-	make check
-fi
-
 # Before installation, change SHELL calls in Makefile Global,
 # It seems to be the only correct way to do that with MinGW.
 # This has at least the merit to make pass all the install-sh
@@ -335,11 +316,6 @@ fi
 # Install
 make install
 
-# Install contrib modules if requested
-if [ "$FLAG_CONTRIB" == 1 ]
-then
-	echo "Installing contrib modules"
-	cd contrib/
-	make
-	make install
-fi
+# Install contrib modules
+cd contrib/
+make install

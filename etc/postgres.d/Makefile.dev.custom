@@ -11,5 +11,8 @@ CFLAGS += -fno-omit-frame-pointer
 # Let compiler generate some useful input for gdb
 # CFLAGS += -ggdb -g3
 
+# For WAL debugging
+# CFLAGS += -DWAL_DEBUG
+
 # Test for cache-flush hazards
 # CFLAGS += -DCLOBBER_CACHE_ALWAYS

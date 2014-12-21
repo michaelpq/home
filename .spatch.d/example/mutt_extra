@@ -57,8 +57,9 @@ set signature = "echo $realname |"
 #set record = "+[Gmail]/Sent Mail"
 #unset record
 
-# SMTP Setup
+# SMTP Setup (normal or secured)
 set smtp_url = "smtp://johnr@smtp.example.com:587/"
+#set smtps_url = "smtps://johnr@smtp.example.com:465/"
 set smtp_pass = "My_password"
 # Uncomment and edit this trick if you do not want to store this
 # password as static data on your computer.

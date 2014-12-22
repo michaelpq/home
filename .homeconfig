@@ -32,7 +32,7 @@ export HOME_INCLUDE_EXTRA=$HOME/include
 
 # PostgreSQL development parameters
 export HOME_POSTGRES_SRC=$HOME/git/postgres
-export HOME_POSTGRES_INSTALL=$HOME/bin/pgsql
+export HOME_POSTGRES_INSTALL=$HOME/pgsql
 export HOME_POSTGRES_ETC=$HOME_GLOBAL_ETC/postgres.d
 export HOME_POSTGRES_DATA=$HOME/data
 export HOME_POSTGRES_ARCHIVE=$HOME/archive

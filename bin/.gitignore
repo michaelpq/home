@@ -1,9 +1,6 @@
 # Extra scripts, this is part of PATH by default
 /extra
 
-# Postgres install folder used for development
-/pgsql
-
 # Archives containing all the stable installations of different things
 # like Postgres. Installations in those paths are not contained in PATH,
 # so be sure to call stuff there with full path or dedicated scripts.

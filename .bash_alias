@@ -28,10 +28,15 @@ alias dc='cd'
 alias df='df -h'
 alias vi='vim'
 alias cdw='cd `pwd`'
-alias emacs='emacs -nw'
-alias emasc='emacs'
 alias diff='diff -uNrp'
 alias python="python2.7"
+
+# On Windows, use window mode because terminal sucks
+if [[ $HOME_ENV_NAME != MINGW* ]]
+then
+	alias emacs='emacs -nw'
+fi
+alias emasc='emacs'
 
 # Kill attrociously all the Postgres process
 alias fuck='killall -9 postgres'

@@ -229,9 +229,13 @@ fi
 # Copy file in source tree before running coonfigure
 cp $CUSTOM_MAKEFILE $HOME_POSTGRES_SRC/src/Makefile.custom
 
+# Get commit of current HEAD for custom version string
+GIT_CURRENT=`cd $HOME_POSTGRES_SRC && git rev-parse --short HEAD`
+
 # General options for configure
 CONFIGURE_OPTIONS="--enable-depend --enable-debug --enable-cassert "
 CONFIGURE_OPTIONS+="--prefix=$PSQL_INSTALL_FOLDER "
+CONFIGURE_OPTIONS+="--with-extra-version=-$GIT_CURRENT "
 
 # Add platform specific settings
 if [[ $HOME_ENV_NAME == MINGW* ]]

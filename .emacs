@@ -30,9 +30,6 @@
 ;; Cursor color
 (set-cursor-color "blue")
 
-;; Set the font
-(set-frame-font "-*-fixedsysttf-*-*-*-*-15-*-*-*-*-*-*-*")
-
 ;; Remove menu bar
 (menu-bar-mode -1)
 

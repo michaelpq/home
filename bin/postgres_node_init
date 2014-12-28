@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # postgres_node_init
 #	Initialize a new Postgres node, either standby or master.
-#	Copyright (c) 2010-2014, Michael Paquier
+#	Copyright (c) 2010-2015, Michael Paquier
 #
 #	Either a master or a standby can be created using this script. As this
 #	script is planned to be used with Home only, there is no possibility

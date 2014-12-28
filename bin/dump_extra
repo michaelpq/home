@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # dump_extra
 #	dump the extra setting files
-#	Copyright (c) 2010-2014, Michael Paquier
+#	Copyright (c) 2010-2015, Michael Paquier
 #
 #	Create a copy of the extra setting files (private settings) to
 #	a given folder

@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # pg_stop
 #	Stop PostgreSQL instances installed and launched by this framework.
-#	Copyright (c) 2010-2014, Michael Paquier
+#	Copyright (c) 2010-2015, Michael Paquier
 #
 #	A simple way to clean up a development environment in one single
 #	command.

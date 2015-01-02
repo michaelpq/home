@@ -39,9 +39,15 @@ chatnets = {
 };
 
 # PostgreSQL channel
-#channels = (
-#  { name = "#postgresql"; chatnet = "Freenode"; autojoin = "yes"; }
-#);
+channels = (
+  {
+    name = "#postgresql";
+    chatnet = "Freenode";
+    autojoin = "yes";
+    activity_msg_level = "PUBLIC";
+    beep_msg_level = "MSGS NOTICES DCC DCCMSGS HILIGHT PUBLIC";
+  }
+);
 
 aliases = {
   J = "join";
@@ -212,4 +218,9 @@ settings = {
   };
   "fe-text" = { actlist_sort = "refnum"; };
   "irc/core" = { alternate_nick = ""; };
+  "fe-common/core" = {
+    bell_beeps = "yes";
+    beep_msg_level = "MSGS NOTICES INVITES DCC DCCMSGS HILIGHT";
+    theme = "default";
+  };
 };

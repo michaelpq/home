@@ -17,3 +17,8 @@
 # Rejected files are not ignored because it is easier to track that with
 # commands of the type git status.
 *.orig
+
+# Files created by ./configure
+conftest.c
+conftest.err
+confdefs.h

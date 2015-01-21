@@ -10,6 +10,9 @@
 # Files created by emacs for unsaved changes
 .#*
 
+# Files created by vim for unsaved changes
+.*.swp
+
 # Temporary files created during compilation
 *.o-*
 

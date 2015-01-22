@@ -24,6 +24,9 @@
 [core]
 	# Exclusion of several file types
 	excludesfile = ~/.gitconfig_excludes
+[diff]
+	# Detect files renamed as well as copies
+	renames = copies
 [format]
 	pretty = format:%C(blue)commit: %H%C(reset)%n%C(green)author: %aN <%aE>%C(reset)%n%C(yellow)date: %aD%C(reset)%n%B
 [push]

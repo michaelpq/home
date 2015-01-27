@@ -16,7 +16,7 @@ export HOME_ENV_NAME=`uname`
 export HOME_GLOBAL_ETC=$HOME/etc
 
 # Folder where are located various stable installation versions
-export HOME_STABLE_BIN=$HOME/bin/stable
+export HOME_STABLE_BIN=$HOME/stable
 
 # Binary paths
 # Public binary path.

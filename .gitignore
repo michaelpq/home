@@ -20,6 +20,7 @@
 /lib
 /pgsql
 /postgres
+/stable
 /workspace
 
 # System-related paths

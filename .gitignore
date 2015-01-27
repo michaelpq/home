@@ -12,6 +12,7 @@
 
 # Development paths
 /archive
+/ccache
 /data
 /git
 /include

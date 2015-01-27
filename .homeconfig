@@ -45,7 +45,7 @@ export HOME_POSTGRES_ARCHIVE=$HOME/archive
 export HOME_POSTGRES_CFLAGS=""
 
 # Global base repository for ccache
-export HOME_CCACHE_DIR=$HOME/bin/ccache
+export HOME_CCACHE_DIR=$HOME/ccache
 
 # To SGML catalogs for PostgreSQL documentation
 export SGML_CATALOG_FILES=/etc/sgml/catalog:/usr/share/sgml/jade/catalog

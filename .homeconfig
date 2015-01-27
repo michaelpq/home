@@ -21,8 +21,8 @@ export HOME_STABLE_BIN=$HOME/bin/stable
 # Binary paths
 # Public binary path.
 export HOME_BIN=$HOME/bin
-# Private path ignored by HOME
-export HOME_BIN_EXTRA=$HOME/bin/extra
+# Private path ignored by HOME for binaries
+export HOME_BIN_EXTRA=$HOME/extra
 
 # Private library path, ignored by Home and included in LD_LIBRARY_PATH.
 export HOME_LIB_EXTRA=$HOME/lib

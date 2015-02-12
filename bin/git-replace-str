@@ -30,7 +30,7 @@ fi
 OLDSTR=$1
 NEWSTR=$2
 
-for file in `git grep -l $OLDSTR`
+for file in `git grep -l "$OLDSTR"`
 do
 	if [ $HOME_ENV_NAME == 'Darwin' ]
 	then

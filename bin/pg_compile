@@ -249,6 +249,7 @@ then
 else
 	# Linux/Unix
 	CONFIGURE_OPTIONS+="--with-libxml "
+	CONFIGURE_OPTIONS+="--enable-tap-tests "
 	CONFIGURE_OPTIONS+="--with-openssl "
 fi
 

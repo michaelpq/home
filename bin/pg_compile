@@ -237,17 +237,20 @@ CONFIGURE_OPTIONS="--enable-depend --enable-debug --enable-cassert "
 CONFIGURE_OPTIONS+="--prefix=$PSQL_INSTALL_FOLDER "
 CONFIGURE_OPTIONS+="--with-extra-version=-$GIT_CURRENT "
 
-# Add platform specific settings
+# Add platform specific settings, including number of cores to use
 if [[ $HOME_ENV_NAME == MINGW* ]]
 then
 	# MinGW
 	CONFIGURE_OPTIONS+="--without-zlib "
+	# One single core on Windows
+	NUM_CORES=1
 elif [[ $HOME_ENV_NAME == Darwin ]]
 then
-	# Darwin
+	NUM_CORES=`sysctl -n hw.ncpu`
 	CONFIGURE_OPTIONS+="--with-libxml "
 else
 	# Linux/Unix
+	NUM_CORES=`nproc`
 	CONFIGURE_OPTIONS+="--with-libxml "
 	CONFIGURE_OPTIONS+="--enable-tap-tests "
 	CONFIGURE_OPTIONS+="--with-openssl "
@@ -307,7 +310,7 @@ then
 fi
 
 # Compile...
-make
+make -j $NUM_CORES
 
 # Before installation, change SHELL calls in Makefile Global,
 # It seems to be the only correct way to do that with MinGW.

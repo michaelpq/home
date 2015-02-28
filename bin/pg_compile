@@ -12,7 +12,6 @@ set -e
 
 # Take and check options
 EXPECTED_ARGS=0
-FLAG_CCACHE=0
 FLAG_CONFIGURE=0
 FLAG_PATH=0
 FLAG_BRANCH=0
@@ -29,7 +28,6 @@ show_help()
 	echo " "
 	echo "Options:"
 	echo "  -c       Leave after configure"
-	echo "  -e NAME  ccache code in given subpath"
 	echo "  -h       Show this help"
 	echo "  -p PATH  Define installation folder"
 	echo "  -s FLAG  Choose custom Makefile.custom. This file is located"
@@ -131,7 +129,7 @@ update_code_to_branch()
 USER_GIT_REMOTE="origin"
 
 #Treat options
-while getopts 'b:cde:h:o:p:s:t:' OPTION
+while getopts 'b:cdh:o:p:s:t:' OPTION
 do
 	case $OPTION in
 	b)	# Branch to sync code with
@@ -142,11 +140,6 @@ do
 	c)	# Only configure
 		FLAG_CONFIGURE=1
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
-		;;
-	e)	# Enable ccache
-		FLAG_CCACHE=1
-		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
-		CCACHE_NAME="$OPTARG"
 		;;
 	h)	# Help
 		show_help 0
@@ -277,16 +270,33 @@ fi
 # Move to base folder of git tree to not trigger VPATH install
 cd $CONFIGURE_CALL_FOLDER
 
+# Check availability of ccache to improve compilation
+which ccache > /dev/null 2>&1
+ERR_NUM=$?
+if [ $ERR_NUM != 0 ]
+then
+	FLAG_CCACHE=0
+else
+	FLAG_CCACHE=1
+fi
+
+# Ensure that ccache folder is created
+if [ ! -d $HOME_CCACHE_DIR ]
+then
+	mkdir -p $HOME_CCACHE_DIR
+fi
+
 # Kick configure
 if [ "$FLAG_CCACHE" == 1 ]
 then
-	# Error out on windows, ccache is not available there
+	# Error out on windows, ccache is not available there. Note that we
+	# should never get there.
 	if [[ $HOME_ENV_NAME == MINGW* ]]
 	then
 		echo "ccache is not available on Windows"
 		exit 1
 	fi
-	./configure CC="ccache gcc" CCACHE_DIR=$HOME_CCACHE_DIR/$CCACHE_NAME \
+	./configure CC="ccache gcc" CCACHE_DIR=$HOME_CCACHE_DIR \
 		$CONFIGURE_OPTIONS CFLAGS="$HOME_POSTGRES_CFLAGS"
 else
 	# Platform-specific configure commands

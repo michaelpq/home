@@ -272,7 +272,7 @@ then
 	echo "- Archive folder: $NODE_ARCHIVE"
 
 	# Initialize the data folder of this node
-	$INITDB -D $NODE_DATA_FOLDER
+	$INITDB --noclean --nosync -D $NODE_DATA_FOLDER
 
 	# Set postgresql.conf
 	echo -e $OPTIONS_POSTGRESQL >> $NODE_DATA_FOLDER/postgresql.conf

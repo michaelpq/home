@@ -273,8 +273,8 @@ cd $CONFIGURE_CALL_FOLDER
 # Check availability of ccache to improve compilation
 set +e
 which ccache > /dev/null 2>&1
-set -e
 ERR_NUM=$?
+set -e
 if [ $ERR_NUM != 0 ]
 then
 	FLAG_CCACHE=0

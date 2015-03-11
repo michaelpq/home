@@ -7,9 +7,11 @@
 	# Check whitespaces
 	check-whitespace = !git diff-tree --check $(git hash-object -t tree /dev/null) HEAD
 	# Shorten diff for copied, renamed and deleted files
-	diffs = diff --find-renames --irreversible-delete --break-rewrites --find-copies
+	diff-short = diff --find-renames --irreversible-delete --break-rewrites --find-copies
 	# Execution of raw command
 	exec = "!exec "
+	# Shorten copied, renamed and deleted files for a patch generated
+	format-short = format-patch -find-renames --irreversible-delete --break-rewrites --find-copies
 	# Print graph of git commit history
 	graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
 	# Remove all files not tracked in tree

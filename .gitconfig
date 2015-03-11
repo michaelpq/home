@@ -14,10 +14,10 @@
 	format-short = format-patch -find-renames --irreversible-delete --break-rewrites --find-copies
 	# Print graph of git commit history
 	graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
+	# Shorten log information for copied, renamed and deleted files
+	log-short = log --find-renames --irreversible-delete --break-rewrites --find-copies -p
 	# Remove all files not tracked in tree
 	menage = clean -d -x -f
-	# Filter file rename, deletion and copy
-	record = log --find-renames --irreversible-delete --break-rewrites --find-copies -p
 	# Show top level repository
 	root = rev-parse --show-toplevel
 	# Remove last commit

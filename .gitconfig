@@ -4,6 +4,10 @@
 #	Copyright (c) 2010-2015, Michael Paquier
 #--------------------------------------------------------------------------
 [alias]
+	# Check whitespaces
+	check-whitespace = !git diff-tree --check $(git hash-object -t tree /dev/null) HEAD
+	# Shorten diff for copied, renamed and deleted files
+	diffs = diff --find-renames --irreversible-delete --break-rewrites --find-copies
 	# Execution of raw command
 	exec = "!exec "
 	# Print graph of git commit history
@@ -16,8 +20,6 @@
 	root = rev-parse --show-toplevel
 	# Remove last commit
 	undo = reset --hard HEAD~1
-	# Check whitespaces
-	check-whitespace = !git diff-tree --check $(git hash-object -t tree /dev/null) HEAD
 [color]
 	# Print output in color if possible
 	ui = auto

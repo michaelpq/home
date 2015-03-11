@@ -11,7 +11,7 @@
 	# Execution of raw command
 	exec = "!exec "
 	# Shorten copied, renamed and deleted files for a patch generated
-	format-short = format-patch -find-renames --irreversible-delete --break-rewrites --find-copies
+	format-patch-short = format-patch --find-renames --irreversible-delete --break-rewrites --find-copies
 	# Print graph of git commit history
 	graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
 	# Shorten log information for copied, renamed and deleted files

@@ -1,0 +1,12 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# xterm-start
+#		Custom command to start xterm
+#		Copyright (c) 2010-2015, Michael Paquier
+#
+#		This script has the specificity to start the new tab in the same
+#		location as original one.
+#-------------------------------------------------------------------------
+
+# Launch command
+exec xterm -e "/bin/bash; cd `pwd`" &

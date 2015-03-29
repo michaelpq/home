@@ -11,6 +11,13 @@
 # plainly uname or something related.
 export HOME_ENV_NAME=`uname`
 
+# Path where current working directory location is stored. This is used by
+# PROMPT_COMMAND to save the current location before starting a prompt, and
+# at the end of this script to switch to this location after starting the
+# prompt, something particularly useful for systems of the type tiling
+# window managers.
+export HOME_CWD=$HOME/.cwd
+
 # Global etc folder for all programs containing usually generic
 # configuration files that can be fetched by development environments.
 export HOME_GLOBAL_ETC=$HOME/etc

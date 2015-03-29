@@ -2,6 +2,7 @@
 /.bash_extra
 /.bash_alias_extra
 /.bash_history
+/.cwd
 /.emacs_extra
 /.gitconfig_extra
 /.git-credentials

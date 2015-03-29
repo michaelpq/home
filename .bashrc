@@ -84,7 +84,7 @@ fi
 # of ~/.git_prompt fetched from git itself. PROMPT_COMMAND is prefered to
 # PS1 because it is slightly faster. Please refer to this script as well
 # about the additional settings available that can be set through
-# environment variables. Template available is spatch gives as well more
+# environment variables. Template available in spatch gives as well more
 # details about them. The 3rd argument represents the output format of
 # printf using the first two arguments. Here we do not print out any
 # spaces to save some space.

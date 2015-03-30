@@ -12,10 +12,11 @@
 export HOME_ENV_NAME=`uname`
 
 # Path where current working directory location is stored. This is used by
-# PROMPT_COMMAND to save the current location before starting a prompt, and
-# at the end of this script to switch to this location after starting the
-# prompt, something particularly useful for systems of the type tiling
-# window managers.
+# PROMPT_COMMAND to save the current location before printing any new things
+# on a prompt, and at the end of .bashrc to switch to this location after
+# starting a new prompt session, something particularly useful for systems
+# of the type tiling window managers, type i3 or awesome. There are other
+# implementations available on the net, but this is simple and elegant.
 export HOME_CWD=$HOME/.cwd
 
 # Global etc folder for all programs containing usually generic

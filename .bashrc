@@ -88,7 +88,7 @@ fi
 # details about them. The 3rd argument represents the output format of
 # printf using the first two arguments. Here we do not print out any
 # spaces to save some space.
-# On Linux, we save the current folder location before starting the prompt.
+# On Linux, we save the current working directory at each status change.
 # On Mac OSX, appending the new prompt command is useful as it allows
 # a new tab to use the same working directory as current tab.
 ENV_NAME=`uname`
@@ -159,7 +159,7 @@ if [ -f $HOME/.bash_extra ]; then
 	. $HOME/.bash_extra
 fi
 
-# Switch to the current working directory if any defined
+# Switch to the current working directory if any defined.
 if [ -f "$HOME_CWD" ]; then
 	cd "$(< ${HOME}/.cwd)"
 fi

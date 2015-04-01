@@ -240,6 +240,7 @@ then
 elif [[ $HOME_ENV_NAME == Darwin ]]
 then
 	NUM_CORES=`sysctl -n hw.ncpu`
+	CONFIGURE_OPTIONS+="--enable-tap-tests "
 	CONFIGURE_OPTIONS+="--with-libxml "
 else
 	# Linux/Unix

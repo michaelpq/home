@@ -4,11 +4,13 @@ Spatch, Michael Paquier
 Spatch is an environment manager for Home. It can manipulate dynamically
 configuration files and environments available with simple commands.
 
-Please refer to the help for more information about functionalities.
+Please refer to the help for more information about available features.
 
 The configuration sets files that spatch can manipulate are located in folders
 of the type:
-$HOME/.spatch.d/$CONFIG_NAME
+
+    $HOME/.spatch.d/$CONFIG_NAME
+
 where $CONFIG_NAME is the name of the folder containing all the configuration
 files to be copied to your home repository.
 
@@ -20,14 +22,16 @@ ignored by Home.
 Each profile needs a set of files to work properly:
 - DESCRIPTION, containing a description of a a given configuration
 - FILES, containing a list of files completed by the location to where those
-files files should be linked. A single entry looks like that:
-file_name:to/file/path.
-file_name2:.file_name2
+files should be linked. A single entry looks like that:
+
+    file_name:to/file/path/.other_file_name
+    file_name2:.file_name2
+
 Note that each entry needs to be separated by a colon. The first entry
 corresponds to the file as named in the folder dedicated to configuration.
 The second entry is the location from $HOME of the link that will redirect
-to the first entry. Note that for example to/file/path will create a link
-as $HOME/to/file/path.
+to the first entry. Note that for example to/file/path/.other_file_name
+will create a link as $HOME/to/file/path/.other_file_name.
 
-Spatch has been created to be implemented in Home and respects the same
-license, so feel free to use it and contribute to it.
+Spatch has been created to be implemented in Home and follows the same
+license.

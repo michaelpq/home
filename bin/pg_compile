@@ -315,6 +315,15 @@ else
 	fi
 fi
 
+# Before installation, change SHELL calls in Makefile Global,
+# It seems to be the only correct way to do that with MinGW.
+# This has at least the merit to make pass all the install-sh
+# calls.
+if [[ $HOME_ENV_NAME == MINGW* ]]
+then
+	sed -i "s#\$(SHELL)#bash#g" src/Makefile.global
+fi
+
 # If only configure has been requested, leave now
 if [ "$FLAG_CONFIGURE" == 1 ]
 then
@@ -324,15 +333,6 @@ fi
 
 # Compile...
 make -j $NUM_CORES
-
-# Before installation, change SHELL calls in Makefile Global,
-# It seems to be the only correct way to do that with MinGW.
-# This has at least the merit to make pass all the install-sh
-# calls.
-if [[ $HOME_ENV_NAME == MINGW* ]]
-then
-	sed -i "s#\$(SHELL)#bash#g" src/Makefile.global
-fi
 
 # Install
 make install

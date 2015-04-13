@@ -107,6 +107,7 @@
   (perl-brace-offset . 0)
   (perl-brace-imaginary-offset . 0)
   (perl-label-offset . -2)
+  (setq indent-tabs-mode t)
 )
 (add-hook 'perl-mode-hook
            (lambda ()

@@ -154,7 +154,14 @@ fi
 
 
 # Remove old folders if any
-rm -r $DATA_OLD_VERSION $DATA_NEW_VERSION
+if [ -d $DATA_OLD_VERSION ]
+then
+	rm -r $DATA_OLD_VERSION
+fi
+if [ -d $DATA_NEW_VERSION ]
+then
+	rm -r $DATA_NEW_VERSION
+fi
 
 # Create cluster for old version
 # Note: it might be better to use pg_start here but it looks better to rely
@@ -174,7 +181,10 @@ $BIN_NEW_VERSION/pg_ctl start -D $DATA_NEW_VERSION
 sleep 2
 
 # Upload some objects in old cluster
-$BIN_OLD_VERSION/psql -f $SQL_FILE_UPLOAD -p 6665 postgres
+if [ "$FLAG_FILE" == 1 ]
+then
+	$BIN_OLD_VERSION/psql -f $SQL_FILE_UPLOAD -p 6665 postgres
+fi
 
 # Stop the nodes
 $BIN_OLD_VERSION/pg_ctl stop -D $DATA_OLD_VERSION
@@ -183,6 +193,3 @@ $BIN_NEW_VERSION/pg_ctl stop -D $DATA_NEW_VERSION
 # Perform the upgrade by using the version of the newest version
 $BIN_NEW_VERSION/pg_upgrade -b $BIN_OLD_VERSION -B $BIN_NEW_VERSION \
 	-d $DATA_OLD_VERSION -D $DATA_NEW_VERSION
-
-# Do necessary cleanup
-menage

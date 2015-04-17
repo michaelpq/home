@@ -109,12 +109,6 @@ do
 	esac
 done
 
-if [ $# == 0 ]
-then
-	echo "No arguments specified"
-	show_help 1
-fi
-
 # Check number of arguments
 if [ $# -ne $EXPECTED_ARGS ]
 then

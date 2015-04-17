@@ -15,6 +15,8 @@ set -e
 # Option-related variables
 EXPECTED_ARGS=0
 FLAG_FILE=0
+NEW_VERSION="dev"
+OLD_VERSION="dev"
 
 # Show utility help
 show_help()
@@ -134,22 +136,32 @@ fi
 check_version_available $OLD_VERSION
 check_version_available $NEW_VERSION
 
-# Data folders are installed in HOME_POSTGRES_INSTALL similarly to
-# the development version
-BIN_OLD_VERSION=$HOME_STABLE_BIN/$OLD_VERSION/bin
-BIN_NEW_VERSION=$HOME_STABLE_BIN/$NEW_VERSION/bin
-DATA_OLD_VERSION=$HOME_POSTGRES_INSTALL/$OLD_VERSION
-DATA_NEW_VERSION=$HOME_POSTGRES_INSTALL/$NEW_VERSION
-
 # If the old or new versions are tagged as dev, point to the
-# default installation
+# default installation of tree, and use the stable versions
+# if that is not the case.
 if [ $OLD_VERSION == "dev" ]
 then
 	BIN_OLD_VERSION=$HOME_POSTGRES_INSTALL/bin
+else
+	BIN_OLD_VERSION=$HOME_STABLE_BIN/$OLD_VERSION/bin
 fi
 if [ $NEW_VERSION == "dev" ]
 then
 	BIN_NEW_VERSION=$HOME_POSTGRES_INSTALL/bin
+else
+	BIN_NEW_VERSION=$HOME_STABLE_BIN/$NEW_VERSION/bin
+fi
+
+# Data folders are installed in HOME_POSTGRES_DATA similarly to
+# the development version
+DATA_OLD_VERSION=$HOME_POSTGRES_DATA/$OLD_VERSION
+DATA_NEW_VERSION=$HOME_POSTGRES_DATA/$NEW_VERSION
+
+# Take into account the case where an upgrade is done through the same
+# version.
+if [ "$DATA_OLD_VERSION" == "$DATA_NEW_VERSION" ]
+then
+	DATA_NEW_VERSION=${DATA_NEW_VERSION}_2
 fi
 
 
@@ -169,16 +181,13 @@ fi
 $BIN_OLD_VERSION/initdb -D $DATA_OLD_VERSION
 echo "port = 6665" >> $DATA_OLD_VERSION/postgresql.conf
 # Start it
-$BIN_OLD_VERSION/pg_ctl start -D $DATA_OLD_VERSION
+$BIN_OLD_VERSION/pg_ctl -w -D $DATA_OLD_VERSION start
 
 # Create cluster for new version
 $BIN_NEW_VERSION/initdb -D $DATA_NEW_VERSION
 echo "port = 6666" >> $DATA_NEW_VERSION/postgresql.conf
 # Start it
-$BIN_NEW_VERSION/pg_ctl start -D $DATA_NEW_VERSION
-
-# Sleep a bit before stopping the nodes to allow the upgrade
-sleep 2
+$BIN_NEW_VERSION/pg_ctl -w -D $DATA_NEW_VERSION start
 
 # Upload some objects in old cluster
 if [ "$FLAG_FILE" == 1 ]
@@ -187,8 +196,8 @@ then
 fi
 
 # Stop the nodes
-$BIN_OLD_VERSION/pg_ctl stop -D $DATA_OLD_VERSION
-$BIN_NEW_VERSION/pg_ctl stop -D $DATA_NEW_VERSION
+$BIN_OLD_VERSION/pg_ctl -w -D $DATA_OLD_VERSION -m immediate stop
+$BIN_NEW_VERSION/pg_ctl -w -D $DATA_NEW_VERSION -m immediate stop
 
 # Perform the upgrade by using the version of the newest version
 $BIN_NEW_VERSION/pg_upgrade -b $BIN_OLD_VERSION -B $BIN_NEW_VERSION \

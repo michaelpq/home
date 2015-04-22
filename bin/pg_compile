@@ -34,9 +34,6 @@ show_help()
 	echo "           in $HOME_POSTGRES_ETC and named as Makefile.$FLAG.custom."
 	echo "           Default is \"dev\"."
 	echo " "
-	echo "Code copy for installation:"
-	echo "  -i PATH  Original code folder (source)"
-	echo " "
 	echo "Code synchronization options"
 	echo "  -b BRANCH"
 	echo "           Sync source code with latest point of given branch"
@@ -129,7 +126,7 @@ update_code_to_branch()
 USER_GIT_REMOTE="origin"
 
 #Treat options
-while getopts 'b:cdh:o:p:s:t:' OPTION
+while getopts 'b:cho:p:s:t:' OPTION
 do
 	case $OPTION in
 	b)	# Branch to sync code with

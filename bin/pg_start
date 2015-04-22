@@ -45,26 +45,22 @@ check_install()
 	PSQL_INSTALL_PATH=$1
 
 	# Check presence of bin
-	if [ ! -d $PSQL_INSTALL_PATH/bin ]
-	then
+	if [ ! -d $PSQL_INSTALL_PATH/bin ]; then
 		echo "Missing folder $PSQL_INSTALL_PATH/bin in installation"
 		exit 1
 	fi
 	# Check presence of lib
-	if [ ! -d $PSQL_INSTALL_PATH/lib ]
-	then
+	if [ ! -d $PSQL_INSTALL_PATH/lib ]; then
 		echo "Missing folder $PSQL_INSTALL_PATH/lib in installation"
 		exit 1
 	fi
 	# Check presence of share
-	if [ ! -d $PSQL_INSTALL_PATH/share ]
-	then
+	if [ ! -d $PSQL_INSTALL_PATH/share ]; then
 		echo "Missing folder $PSQL_INSTALL_PATH/share in installation"
 		exit 1
 	fi
 	# Check presence of lib
-	if [ ! -d $PSQL_INSTALL_PATH/include ]
-	then
+	if [ ! -d $PSQL_INSTALL_PATH/include ]; then
 		echo "Missing folder $PSQL_INSTALL_PATH/include in installation"
 		exit 1
 	fi
@@ -82,8 +78,7 @@ start_node()
 {
 	PORT=$1
 	DATA_FOLDER=$2
-	if [[ $HOME_ENV_NAME == MINGW* ]]
-	then
+	if [[ $HOME_ENV_NAME == MINGW* ]]; then
 		SERVICE_NAME=postgres_$PORT
 		$PSQL_FOLDER/bin/pg_ctl register -w -D $DATA_FOLDER \
 			-N $SERVICE_NAME
@@ -99,8 +94,7 @@ start_node()
 check_error()
 {
 	ERRNUM=$1
-	if [ $ERRNUM != 0 ]
-	then
+	if [ $ERRNUM != 0 ]; then
 		exit $ERRNUM
 	fi
 }
@@ -111,8 +105,7 @@ show_version()
 	PSQL_INSTALL_PATH=$1
 
 	# Check that postgres binary exists
-	if [ ! -x $PSQL_INSTALL_PATH/bin/postgres ]
-	then
+	if [ ! -x $PSQL_INSTALL_PATH/bin/postgres ]; then
 		echo "Unexisting $PSQL_INSTALL_PATH/bin/postgres binary"
 		echo "You should check your installation"
 		exit 1
@@ -162,8 +155,7 @@ do
 done
 
 # Check number of arguments
-if [ $# -ne $EXPECTED_ARGS ]
-then
+if [ $# -ne $EXPECTED_ARGS ]; then
 	# Leave with an error code
 	show_help 1
 fi
@@ -171,27 +163,23 @@ fi
 # Safety checks
 # Check if there are any non-digit characters in number of slaves
 NUM_SLAVES_CHECK=`echo $NUM_SLAVES | tr -d "[:digit:]"`
-if [ ! -z $NUM_SLAVES_CHECK ]
-then
+if [ ! -z $NUM_SLAVES_CHECK ]; then
 	echo "$NUM_SLAVES is not an integer"
 	exit 1
 fi
 
 # Set default suffix value of configuration settings
-if [ "$FLAG_CONFIG_SUFFIX" == 0 ]
-then
+if [ "$FLAG_CONFIG_SUFFIX" == 0 ]; then
     CONFIG_SUFFIX="dev"
 fi
 
 # Set default suffix value of recovery settings
-if [ "$FLAG_RECOVERY_SUFFIX" == 0 ]
-then
+if [ "$FLAG_RECOVERY_SUFFIX" == 0 ]; then
     RECOVERY_SUFFIX="dev"
 fi
 
 # Set default PSQL install folder to the one wanted by user
-if [ "$FLAG_PATH" == 1 ]
-then
+if [ "$FLAG_PATH" == 1 ]; then
 	PSQL_FOLDER=$PSQL_USER_PATH
 else
 	# Set up default
@@ -203,14 +191,12 @@ fi
 check_install $PSQL_FOLDER
 
 # Show up version if requested
-if [ "$FLAG_VERSION" == 1 ]
-then
+if [ "$FLAG_VERSION" == 1 ]; then
 	show_version $PSQL_FOLDER
 fi
 
 # Check if data folder exists and create it if necessary
-if [ ! -d $HOME_POSTGRES_DATA ]
-then
+if [ ! -d $HOME_POSTGRES_DATA ]; then
 	mkdir $HOME_POSTGRES_DATA
 fi
 
@@ -225,8 +211,7 @@ check_error $?
 start_node $MASTER_PORT $MASTER_DATA
 
 # Now initialize and start the slaves if any
-if [ "$NUM_SLAVES" -gt 0 ]
-then
+if [ "$NUM_SLAVES" -gt 0 ]; then
 	i=1
 	while [ $i -le $NUM_SLAVES ]
 	do

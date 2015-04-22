@@ -42,40 +42,33 @@ check_version_available()
 {
 	VERSION_TO_CHECK=$1
 	# Check if a development version is used
-	if [ $VERSION_TO_CHECK == "dev" ]
-	then
-		if [ ! -d $HOME_POSTGRES_INSTALL ]
-		then
+	if [ $VERSION_TO_CHECK == "dev" ]; then
+		if [ ! -d $HOME_POSTGRES_INSTALL ]; then
 			echo "No installation available in $HOME_POSTGRES_INSTALL"
 			exit 1
 		fi
-		if [ ! -d $HOME_POSTGRES_INSTALL/bin ]
-		then
+		if [ ! -d $HOME_POSTGRES_INSTALL/bin ]; then
 			echo "No binaries available in $HOME_POSTGRES_INSTALL/bin"
 			exit 1
 		fi
-		if [ ! -d $HOME_POSTGRES_INSTALL/lib ]
-		then
+		if [ ! -d $HOME_POSTGRES_INSTALL/lib ]; then
 			echo "No libraries available in $HOME_POSTGRES_INSTALL/lib"
 			exit 1
 		fi
 	else
 		# Check the case of a normal version
 		CHECK_INSTALL_PATH=$HOME_STABLE_BIN/$VERSION_TO_CHECK
-		if [ ! -d $CHECK_INSTALL_PATH ]
-		then
+		if [ ! -d $CHECK_INSTALL_PATH ]; then
 			echo "No installation available in $CHECK_INSTALL_PATH"
 			echo "Be sure to run pg_binarchive to set up such versions"
 			exit 1
 		fi
-		if [ ! -d $CHECK_INSTALL_PATH/bin ]
-		then
+		if [ ! -d $CHECK_INSTALL_PATH/bin ]; then
 			echo "No binaries available in $CHECK_INSTALL_PATH/bin"
 			echo "Be sure to run pg_binarchive to set up such versions"
 			exit 1
 		fi
-		if [ ! -d $CHECK_INSTALL_PATH/lib ]
-		then
+		if [ ! -d $CHECK_INSTALL_PATH/lib ]; then
 			echo "No libraries available in $CHECK_INSTALL_PATH/lib"
 			echo "Be sure to run pg_binarchive to set up such versions"
 			exit 1
@@ -110,17 +103,14 @@ do
 done
 
 # Check number of arguments
-if [ $# -ne $EXPECTED_ARGS ]
-then
+if [ $# -ne $EXPECTED_ARGS ]; then
 	# Leave with an error code
 	show_help 1
 fi
 
 # Check file presence if any defined
-if [ "$FLAG_FILE" == 1 ]
-then
-	if [ ! -f $SQL_FILE_UPLOAD ]
-	then
+if [ "$FLAG_FILE" == 1 ]; then
+	if [ ! -f $SQL_FILE_UPLOAD ]; then
 		echo "File not found: $SQL_FILE_UPLOAD"
 		exit 1
 	fi
@@ -133,14 +123,12 @@ check_version_available $NEW_VERSION
 # If the old or new versions are tagged as dev, point to the
 # default installation of tree, and use the stable versions
 # if that is not the case.
-if [ $OLD_VERSION == "dev" ]
-then
+if [ $OLD_VERSION == "dev" ]; then
 	BIN_OLD_VERSION=$HOME_POSTGRES_INSTALL/bin
 else
 	BIN_OLD_VERSION=$HOME_STABLE_BIN/$OLD_VERSION/bin
 fi
-if [ $NEW_VERSION == "dev" ]
-then
+if [ $NEW_VERSION == "dev" ]; then
 	BIN_NEW_VERSION=$HOME_POSTGRES_INSTALL/bin
 else
 	BIN_NEW_VERSION=$HOME_STABLE_BIN/$NEW_VERSION/bin
@@ -153,19 +141,16 @@ DATA_NEW_VERSION=$HOME_POSTGRES_DATA/$NEW_VERSION
 
 # Take into account the case where an upgrade is done through the same
 # version.
-if [ "$DATA_OLD_VERSION" == "$DATA_NEW_VERSION" ]
-then
+if [ "$DATA_OLD_VERSION" == "$DATA_NEW_VERSION" ]; then
 	DATA_NEW_VERSION=${DATA_NEW_VERSION}_2
 fi
 
 
 # Remove old folders if any
-if [ -d $DATA_OLD_VERSION ]
-then
+if [ -d $DATA_OLD_VERSION ]; then
 	rm -r $DATA_OLD_VERSION
 fi
-if [ -d $DATA_NEW_VERSION ]
-then
+if [ -d $DATA_NEW_VERSION ]; then
 	rm -r $DATA_NEW_VERSION
 fi
 
@@ -184,8 +169,7 @@ echo "port = 6666" >> $DATA_NEW_VERSION/postgresql.conf
 $BIN_NEW_VERSION/pg_ctl -w -D $DATA_NEW_VERSION start
 
 # Upload some objects in old cluster
-if [ "$FLAG_FILE" == 1 ]
-then
+if [ "$FLAG_FILE" == 1 ]; then
 	$BIN_OLD_VERSION/psql -f $SQL_FILE_UPLOAD -p 6665 postgres
 fi
 

@@ -92,8 +92,7 @@ fi
 # On Mac OSX, appending the new prompt command is useful as it allows
 # a new tab to use the same working directory as current tab.
 ENV_NAME=`uname`
-if [ $ENV_NAME == 'Darwin' ]
-then
+if [ $ENV_NAME == 'Darwin' ]; then
 	PROMPT_COMMAND="$PROMPT_COMMAND __git_ps1 \"\u@\h:\w\" \"\\\$ \" \"(%s%s)\""
 else
 	PROMPT_COMMAND='pwd > "${HOME_CWD}"; __git_ps1 "\u@\h:\w" "\\\$ " "(%s%s)"'
@@ -128,16 +127,14 @@ export MANPATH=$HOME_POSTGRES_INSTALL/share/man:$MANPATH
 
 # Load alias definitions in external file
 # Those commands are kept separate for simplicity
-if [ -f $HOME/.bash_alias ]
-then
+if [ -f $HOME/.bash_alias ]; then
 	. $HOME/.bash_alias
 fi
 
 # Load the extra alias definitions
 # This file is ignored by the GIT repository of this system
 # So store all the aliases you want to keep private there
-if [ -f $HOME/.bash_alias_extra ]
-then
+if [ -f $HOME/.bash_alias_extra ]; then
 	. $HOME/.bash_alias_extra
 fi
 

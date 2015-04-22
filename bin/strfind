@@ -24,16 +24,14 @@ do
 	esac
 done
 
-if [ $# -ne $EXPECTED_ARGS ]
-then
+if [ $# -ne $EXPECTED_ARGS ]; then
 	echo "Usage: `basename $0` [-i] [filename] [string]"
 	echo "Exemple: `basename $0` \"[hc]\" text"
 	exit 1
 fi
 
 #Have only 2 or 3 arguments
-if [ "$EXPECTED_ARGS" = "2" ]
-then
+if [ "$EXPECTED_ARGS" = "2" ]; then
 	FILENAME=$1
 	TXTSTRING=$2
 else
@@ -45,8 +43,7 @@ fi
 OPTIONS="-Hn"
 
 #Don't care about large characters
-if [ "$IFLAG" = "1" ]
-then
+if [ "$IFLAG" = "1" ]; then
 	OPTIONS=$OPTIONS"i"
 fi
 

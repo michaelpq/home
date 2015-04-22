@@ -19,8 +19,7 @@ EXPECTED_ARGS=1
 # Grab the arguments
 FILE_NAME=$1
 
-if [ $# -ne $EXPECTED_ARGS ]
-then
+if [ $# -ne $EXPECTED_ARGS ]; then
 	# Leave with an error code
 	show_help 1
 fi

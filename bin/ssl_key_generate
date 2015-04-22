@@ -10,8 +10,7 @@ set -e
 
 `which openssl` > /dev/null 2>&1
 ERRNUM=$?
-if [ $? != 0 ]
-then
+if [ $? != 0 ]; then
 	echo "Could not found open ssl in PATH=$PATH"
 	exit 1
 fi

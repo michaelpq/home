@@ -57,8 +57,7 @@ update_code_to_commit()
 	# First check if given entry given by user is a valid tag
 	CHECKED_COMMIT_ID=`git show-ref --hash $UPDATE_TO_COMMIT`
 	RES=$?
-	if [ "$RES" != 0 ]
-	then
+	if [ "$RES" != 0 ]; then
 		echo "$UPDATE_TO_COMMIT is not a valid tag, falling back to SHA1 commit check"
 		CHECKED_COMMIT_ID=$UPDATE_TO_COMMIT
 	fi
@@ -68,8 +67,7 @@ update_code_to_commit()
 	# check
 	git log $CHECKED_COMMIT_ID &> /dev/null
 	RES=$?
-	if [ "$RES" != 0 ]
-	then
+	if [ "$RES" != 0 ]; then
 		echo "$UPDATE_TO_COMMIT is not a valid commit ID"
 		exit $RES
 	fi
@@ -100,8 +98,7 @@ update_code_to_branch()
 	git show-ref --quiet $UPDATE_TO_BRANCH
 	RES=$?
 	# Branch does not exist
-	if [ "$RES" != 0 ]
-	then
+	if [ "$RES" != 0 ]; then
 		echo "$UPDATE_TO_BRANCH is not an existing local branch"
 		exit $RES
 	fi
@@ -167,21 +164,18 @@ do
 done
 
 # Check number of arguments
-if [ $# -ne $EXPECTED_ARGS ]
-then
+if [ $# -ne $EXPECTED_ARGS ]; then
 	show_help 1
 fi
 
 # Branch and commit specifications cannot be used at the same time
-if [ "$FLAG_TAG" == 1 -a "$FLAG_BRANCH" == 1 ]
-then
+if [ "$FLAG_TAG" == 1 -a "$FLAG_BRANCH" == 1 ]; then
 	echo "Cannot specify both branch and commit/tag specification"
 	exit 1
 fi
 
 # Set input folder value
-if [ "$FLAG_SRC_FOLDER" == 1 ]
-then
+if [ "$FLAG_SRC_FOLDER" == 1 ]; then
 	PSQL_SRC_FOLDER=$USER_INPUT_FOLDER
 else
 	# Use global source folder as default
@@ -190,8 +184,7 @@ else
 fi
 
 # Define installation folder
-if [ "$FLAG_PATH" == 1 ]
-then
+if [ "$FLAG_PATH" == 1 ]; then
 	PSQL_INSTALL_FOLDER=$USER_INSTALL_FOLDER
 else
 	# Use global install folder as default
@@ -200,12 +193,10 @@ else
 fi
 
 # Copy custom Makefile
-if [ "$FLAG_MAKEFILE" == 1 ]
-then
+if [ "$FLAG_MAKEFILE" == 1 ]; then
 	CUSTOM_MAKEFILE=$HOME_POSTGRES_ETC/Makefile.$USER_MAKEFILE.custom
 	# Check its existence
-	if [ ! -f $CUSTOM_MAKEFILE ]
-	then
+	if [ ! -f $CUSTOM_MAKEFILE ]; then
 		echo "Custom Makefile $CUSTOM_MAKEFILE does not exist"
 		exit 1
 	fi
@@ -228,14 +219,12 @@ CONFIGURE_OPTIONS+="--prefix=$PSQL_INSTALL_FOLDER "
 CONFIGURE_OPTIONS+="--with-extra-version=-$GIT_CURRENT "
 
 # Add platform specific settings, including number of cores to use
-if [[ $HOME_ENV_NAME == MINGW* ]]
-then
+if [[ $HOME_ENV_NAME == MINGW* ]]; then
 	# MinGW
 	CONFIGURE_OPTIONS+="--without-zlib "
 	# One single core on Windows
 	NUM_CORES=1
-elif [[ $HOME_ENV_NAME == Darwin ]]
-then
+elif [[ $HOME_ENV_NAME == Darwin ]]; then
 	NUM_CORES=`sysctl -n hw.ncpu`
 	CONFIGURE_OPTIONS+="--enable-tap-tests "
 	CONFIGURE_OPTIONS+="--with-libxml "
@@ -255,13 +244,11 @@ cd $PSQL_SRC_FOLDER
 CONFIGURE_CALL_FOLDER=`git rev-parse --show-toplevel`
 
 # Update code to given tag if necessary
-if [ "$FLAG_TAG" == 1 ]
-then
+if [ "$FLAG_TAG" == 1 ]; then
 	update_code_to_commit $USER_GIT_COMMIT_TAG
 fi
 # Update code to given branch
-if [ "$FLAG_BRANCH" == 1 ]
-then
+if [ "$FLAG_BRANCH" == 1 ]; then
 	update_code_to_branch $USER_GIT_BRANCH $USER_GIT_REMOTE
 fi
 
@@ -273,26 +260,22 @@ set +e
 which ccache > /dev/null 2>&1
 ERR_NUM=$?
 set -e
-if [ $ERR_NUM != 0 ]
-then
+if [ $ERR_NUM != 0 ]; then
 	FLAG_CCACHE=0
 else
 	FLAG_CCACHE=1
 fi
 
 # Ensure that ccache folder is created
-if [ ! -d $HOME_CCACHE_DIR ]
-then
+if [ ! -d $HOME_CCACHE_DIR ]; then
 	mkdir -p $HOME_CCACHE_DIR
 fi
 
 # Kick configure
-if [ "$FLAG_CCACHE" == 1 ]
-then
+if [ "$FLAG_CCACHE" == 1 ]; then
 	# Error out on windows, ccache is not available there. Note that we
 	# should never get there.
-	if [[ $HOME_ENV_NAME == MINGW* ]]
-	then
+	if [[ $HOME_ENV_NAME == MINGW* ]]; then
 		echo "ccache is not available on Windows"
 		exit 1
 	fi
@@ -302,8 +285,7 @@ else
 	# Platform-specific configure commands
 	# It happens that enforcing those variables fixes a couple of
 	# compilation issues with MinGW.
-	if [[ $HOME_ENV_NAME == MINGW* ]]
-	then
+	if [[ $HOME_ENV_NAME == MINGW* ]]; then
 		PERL="perl" BISON="bison" FLEX="flex" \
 			MKDIR_P="mkdir -p" \
 			./configure $CONFIGURE_OPTIONS CFLAGS="$HOME_POSTGRES_CFLAGS"
@@ -316,14 +298,12 @@ fi
 # It seems to be the only correct way to do that with MinGW.
 # This has at least the merit to make pass all the install-sh
 # calls.
-if [[ $HOME_ENV_NAME == MINGW* ]]
-then
+if [[ $HOME_ENV_NAME == MINGW* ]]; then
 	sed -i "s#\$(SHELL)#bash#g" src/Makefile.global
 fi
 
 # If only configure has been requested, leave now
-if [ "$FLAG_CONFIGURE" == 1 ]
-then
+if [ "$FLAG_CONFIGURE" == 1 ]; then
 	echo "Only configure has been requested, leaving..."
 	exit 0
 fi

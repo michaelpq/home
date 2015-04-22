@@ -22,8 +22,7 @@ show_help()
 }
 
 # Check number of arguments
-if [ $# -ne $EXPECTED_ARGS ]
-then
+if [ $# -ne $EXPECTED_ARGS ]; then
 	# Leave with an error code
 	show_help 1
 fi
@@ -41,15 +40,13 @@ am=\"\$GIT_AUTHOR_EMAIL\"
 cn=\"\$GIT_COMMITTER_NAME\"
 cm=\"\$GIT_COMMITTER_EMAIL\"
 
-if [ \"\$GIT_COMMITTER_EMAIL\" = \"$EMAIL_TO_REPLACE\" ]
-then
+if [ \"\$GIT_COMMITTER_EMAIL\" = \"$EMAIL_TO_REPLACE\" ]; then
     an=\"$NEW_NAME\"
     am=\"$NEW_EMAIL\"
     cn=\"$NEW_NAME\"
     cm=\"$NEW_EMAIL\"
 fi
-if [ \"\$GIT_AUTHOR_EMAIL\" = \"$EMAIL_TO_REPLACE\" ]
-then
+if [ \"\$GIT_AUTHOR_EMAIL\" = \"$EMAIL_TO_REPLACE\" ]; then
     an=\"$NEW_NAME\"
     am=\"$NEW_EMAIL\"
     cn=\"$NEW_NAME\"

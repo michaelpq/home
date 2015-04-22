@@ -7,8 +7,7 @@
 #--------------------------------------------------------------------------
 
 # Sanity checks
-if [ -z "$EDITOR" ]
-then
+if [ -z "$EDITOR" ]; then
 	echo "EDITOR is not set, this is needed when opening a file with this"
 	echo "This is needed when opening a file with" `basename $0`
 	exit 1
@@ -27,19 +26,16 @@ EXPECTED_ARGS=1
 # Grab the arguments
 FILE_NAME=$1
 
-if [ $# -ne $EXPECTED_ARGS ]
-then
+if [ $# -ne $EXPECTED_ARGS ]; then
 	# Leave with an error code
 	show_help 1
 fi
 
 NUM_FILES=`git find $FILE_NAME | wc -l | tr -d ' '`
-if [ $NUM_FILES == 0 ]
-then
+if [ $NUM_FILES == 0 ]; then
 	echo "No files $FILE_NAME found in current path"
 	exit 1
-elif [ $NUM_FILES -gt 1 ]
-then
+elif [ $NUM_FILES -gt 1 ]; then
 	echo "Multiple finds $FILE_NAME found in current path, files are:"
 	git ls-files -- **/$FILE_NAME -- $FILE_NAME
 	exit 1

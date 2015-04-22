@@ -5,7 +5,6 @@
 #--------------------------------------------------------------------------
 
 # Load .bashrc
-if [ -f $HOME/.bashrc ]
-then
+if [ -f $HOME/.bashrc ]; then
 	. $HOME/.bashrc
 fi

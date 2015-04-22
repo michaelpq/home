@@ -12,8 +12,7 @@
 
 EXPECTED_ARGS=3
 
-if [ $# -ne $EXPECTED_ARGS ]
-then
+if [ $# -ne $EXPECTED_ARGS ]; then
 	echo "Usage: `basename $0` [extension] [old_str] [new_str]"
 	echo "Exemple: `basename $0` php old_text new_text"
 	exit 1
@@ -26,8 +25,7 @@ NEWSTR=$3
 #Simply replace string with sed and erase old file
 for file in `find . -name "*.$EXTENSION"`
 do
-	if [ $HOME_ENV_NAME == 'Darwin' ]
-	then
+	if [ $HOME_ENV_NAME == 'Darwin' ]; then
 		# In OSX, sed has a mandatory value with option -i
 		sed -i "" "s/$OLDSTR/$NEWSTR/g" $file
 	else

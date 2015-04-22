@@ -48,15 +48,13 @@ do
 done
 
 # Check number of arguments
-if [ $# -ne $EXPECTED_ARGS ]
-then
+if [ $# -ne $EXPECTED_ARGS ]; then
 	# Leave with an error code
 	show_help 1
 fi
 
 #Set default PSQL install folder to the one wanted by user
-if [ "$FLAG_PATH" == 1 ]
-then
+if [ "$FLAG_PATH" == 1 ]; then
 	PSQL_FOLDER=$PSQL_USER_PATH
 else
 	# Set up default

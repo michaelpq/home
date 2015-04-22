@@ -38,15 +38,13 @@ done
 
 
 # Check number of arguments
-if [ $# -ne $EXPECTED_ARGS ]
-then
+if [ $# -ne $EXPECTED_ARGS ]; then
 	# Leave with an error code
 	show_help 1
 fi
 
 # Set default PSQL install folder to the one wanted by user
-if [ "$FLAG_PATH" == 1 ]
-then
+if [ "$FLAG_PATH" == 1 ]; then
 	PSQL_FOLDER=$PSQL_USER_PATH
 else
 	# Set up default
@@ -63,8 +61,7 @@ do
 	# On Unix/Linux, server can be easily stopped with a stop command.
 	# On Windows the service manager is used for this purpose, and service
 	# is unregistered as well.
-	if [[ $HOME_ENV_NAME == MINGW* ]]
-	then
+	if [[ $HOME_ENV_NAME == MINGW* ]]; then
 		SERVICE_NAME=postgres_$NODE_PORT
 		sc stop $SERVICE_NAME
 		pg_ctl unregister -N $SERVICE_NAME

@@ -21,8 +21,7 @@ show_help()
 }
 
 # Check number of arguments
-if [ $# -ne $EXPECTED_ARGS ]
-then
+if [ $# -ne $EXPECTED_ARGS ]; then
 	# Leave with an error code
 	show_help 1
 fi
@@ -32,8 +31,7 @@ NEWSTR=$2
 
 for file in `git grep -l "$OLDSTR"`
 do
-	if [ $HOME_ENV_NAME == 'Darwin' ]
-	then
+	if [ $HOME_ENV_NAME == 'Darwin' ]; then
 		# In OSX, sed has a mandatory value with option -i
 		sed -i "" "s/$OLDSTR/$NEWSTR/g" $file
 	else

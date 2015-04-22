@@ -39,8 +39,7 @@ do
 done
 
 # Check number of arguments
-if [ $# -ne $EXPECTED_ARGS ]
-then
+if [ $# -ne $EXPECTED_ARGS ]; then
 	# Leave with an error code
 	show_help 1
 fi
@@ -49,15 +48,13 @@ fi
 # Check that ccache is installed
 which ccache > /dev/null 2>&1
 ERR_NUM=$?
-if [ $ERR_NUM != 0 ]
-then
+if [ $ERR_NUM != 0 ]; then
 	echo "ccache is not installed in this environment."
 	echo "You should add it in PATH."
 	exit 1
 fi
 # Specifying a branch is mandatory
-if [ $FLAG_BRANCH == 0 ]
-then
+if [ $FLAG_BRANCH == 0 ]; then
 	echo "Specifying a branch is mandatory"
 	show_help 1
 fi
@@ -66,8 +63,7 @@ fi
 CCACHE_FOLDER=$HOME_CCACHE_DIR/$CCACHE_BRANCH
 
 # If cache exists, remove it
-if [ -d $CCACHE_FOLDER ]
-then
+if [ -d $CCACHE_FOLDER ]; then
 	echo "Removing cache for branch $CCACHE_BRANCH"
 	rm -rf $CCACHE_FOLDER
 fi

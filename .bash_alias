@@ -32,8 +32,7 @@ alias diff='diff -uNrp'
 alias python="python2.7"
 
 # On Windows, use window mode because terminal sucks
-if [[ $HOME_ENV_NAME != MINGW* ]]
-then
+if [[ $HOME_ENV_NAME != MINGW* ]]; then
 	alias emacs='emacs -nw'
 fi
 alias emasc='emacs'

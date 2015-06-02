@@ -1,0 +1,27 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# git-menage
+#	Wrapper to perform global cleanup of a git repository. Contains
+#	some prevention mechanisms for stupid mistakes like ripping out
+#	completely a HOME repository.
+#	Copyright (c) 2010-2015, Michael Paquier
+#--------------------------------------------------------------------------
+
+# Check that the top-level folder is not equal to HOME, this prevents
+# stupid mistakes like launching this command on an environment fully
+# deployed using Home.
+TOP_LEVEL_PATH=`git rev-parse --show-toplevel`
+if [ "$HOME" == "$TOP_LEVEL_PATH" ]; then
+	echo "Cannot launch git-menage from path where current git repository"
+	echo "root is the top-level repository of your environment, defined by"
+	echo "\$HOME = $HOME."
+	echo ""
+	echo "Don't do the stupid mistake to rip off all the files of your"
+	echo "environment, you will regret it. If you want to commit suicide"
+	echo "though, this command is far better particularly if run as root:"
+	echo "rm -rf /"
+	exit 1
+fi
+
+# Launch the command
+git clean -d -x -f

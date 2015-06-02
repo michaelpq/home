@@ -16,8 +16,6 @@
 	graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
 	# Shorten log information for copied, renamed and deleted files
 	log-short = log --find-renames --irreversible-delete --break-rewrites --find-copies -p
-	# Remove all files not tracked in tree
-	menage = clean -d -x -f
 	# Show top level repository
 	root = rev-parse --show-toplevel
 	# Remove last commit

@@ -280,7 +280,10 @@ if [ "$FLAG_CCACHE" == 1 ]; then
 		exit 1
 	fi
 	./configure CC="ccache gcc" CCACHE_DIR=$HOME_CCACHE_DIR \
-		$CONFIGURE_OPTIONS CFLAGS="$HOME_POSTGRES_CFLAGS"
+				CFLAGS="$HOME_POSTGRES_CFLAGS" \
+				LDFLAGS="$HOME_POSTGRES_LDFLAGS" \
+				$CONFIGURE_OPTIONS
+
 else
 	# Platform-specific configure commands
 	# It happens that enforcing those variables fixes a couple of
@@ -288,9 +291,13 @@ else
 	if [[ $HOME_ENV_NAME == MINGW* ]]; then
 		PERL="perl" BISON="bison" FLEX="flex" \
 			MKDIR_P="mkdir -p" \
-			./configure $CONFIGURE_OPTIONS CFLAGS="$HOME_POSTGRES_CFLAGS"
+			./configure CFLAGS="$HOME_POSTGRES_CFLAGS" \
+						LDFLAGS="$HOME_POSTGRES_LDFLAGS" \
+						$CONFIGURE_OPTIONS
 	else
-		./configure $CONFIGURE_OPTIONS CFLAGS="$HOME_POSTGRES_CFLAGS"
+		./configure CFLAGS="$HOME_POSTGRES_CFLAGS" \
+					LDFLAGS="$HOME_POSTGRES_LDFLAGS" \
+					$CONFIGURE_OPTIONS
 	fi
 fi
 

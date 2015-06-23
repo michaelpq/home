@@ -1,31 +1,51 @@
 #!/bin/bash
 #--------------------------------------------------------------------------
 # ssl_key_generate
-#	Small utility to generate a self-signed SSL key.
+#	Small utility to generate a self-signed SSL key for Postgres
 #	Copyright (c) 2010-2015, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Immediately leave in case of failure
 set -e
 
-`which openssl` > /dev/null 2>&1
+which openssl > /dev/null 2>&1
 ERRNUM=$?
 if [ $? != 0 ]; then
 	echo "Could not found open ssl in PATH=$PATH"
 	exit 1
 fi
 
+# Details of the certificate
+SSL_DOMAIN=server.example.com
+SSL_COMMON_NAME=$SSL_DOMAIN
+SSL_COUNTRY=ER
+SSL_STATE=Earth
+SSL_LOCALITY=Planet
+SSL_ORGANIZATION=example.com
+SSL_ORGANIZATIONAL_UNIT=IT
+SSL_EMAIL=john.doe@example.com
+
+# Output names
+SSL_KEY=server.key # Key
+SSL_CSR=server.csr # Request
+SSL_CRT=server.crt # certificate
+
+# Not mandatory
+SSL_PASSWORD=some_password
+
 # 1) Generate a private key
-openssl genrsa -des3 -out server.key 1024 2>&1
+openssl genrsa -des3 -passout pass:$SSL_PASSWORD -out $SSL_KEY 2048 -noout
 
-# 2) Second, generate a CSR (Certificate Signing Request). This requires
-# a certain amount of information in input.
-openssl req -new -key server.key -out server.csr
+# 2) Remove passphrase from the key. Comment the line out to keep the
+# passphrase
+openssl rsa -in $SSL_KEY -passin pass:$SSL_PASSWORD -out $SSL_KEY
 
-# 3) Third remove the pass phrase from key
-cp server.key server.key.org
-openssl rsa -in server.key.org -out server.key
+# 3) Create the CSR request
+openssl req -new -key $SSL_KEY -out $SSL_CSR -passin pass:$SSL_PASSWORD \
+		-subj "/C=$SSL_COUNTRY/ST=$SSL_STATE/L=$SSL_LOCALITY/O=$SSL_ORGANIZATION/OU=$SSL_ORGANIZATIONAL_UNIT/CN=$SSL_COMMON_NAME/emailAddress=$SSL_EMAIL"
 
 # 4) Generate the self-signed certificate
-openssl x509 -req -days 365 -in server.csr \
-	-signkey server.key -out server.crt
+openssl x509 -req -days 365 -in $SSL_CSR -signkey $SSL_KEY -out $SSL_CRT
+
+# Permission needed by Postgres
+chmod 600 $SSL_KEY

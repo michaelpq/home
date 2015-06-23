@@ -213,27 +213,19 @@ cp $CUSTOM_MAKEFILE $HOME_POSTGRES_SRC/src/Makefile.custom
 # Get commit of current HEAD for custom version string
 GIT_CURRENT=`cd $HOME_POSTGRES_SRC && git rev-parse --short HEAD`
 
-# General options for configure
-CONFIGURE_OPTIONS="--enable-depend --enable-debug --enable-cassert "
+# General options for configure, used for all builds
 CONFIGURE_OPTIONS+="--prefix=$PSQL_INSTALL_FOLDER "
 CONFIGURE_OPTIONS+="--with-extra-version=-$GIT_CURRENT "
 
-# Add platform specific settings, including number of cores to use
+# Specify number of cores to use for compilation
 if [[ $HOME_ENV_NAME == MINGW* ]]; then
 	# MinGW
-	CONFIGURE_OPTIONS+="--without-zlib "
-	# One single core on Windows
 	NUM_CORES=1
 elif [[ $HOME_ENV_NAME == Darwin ]]; then
 	NUM_CORES=`sysctl -n hw.ncpu`
-	CONFIGURE_OPTIONS+="--enable-tap-tests "
-	CONFIGURE_OPTIONS+="--with-libxml "
 else
 	# Linux/Unix
 	NUM_CORES=`nproc`
-	CONFIGURE_OPTIONS+="--with-libxml "
-	CONFIGURE_OPTIONS+="--enable-tap-tests "
-	CONFIGURE_OPTIONS+="--with-openssl "
 fi
 
 # Perform configure, build and installation, here calling configure from
@@ -282,7 +274,7 @@ if [ "$FLAG_CCACHE" == 1 ]; then
 	./configure CC="ccache gcc" CCACHE_DIR=$HOME_CCACHE_DIR \
 				CFLAGS="$HOME_POSTGRES_CFLAGS" \
 				LDFLAGS="$HOME_POSTGRES_LDFLAGS" \
-				$CONFIGURE_OPTIONS
+				$CONFIGURE_OPTIONS $HOME_POSTGRES_CONFIGURE
 
 else
 	# Platform-specific configure commands
@@ -293,11 +285,11 @@ else
 			MKDIR_P="mkdir -p" \
 			./configure CFLAGS="$HOME_POSTGRES_CFLAGS" \
 						LDFLAGS="$HOME_POSTGRES_LDFLAGS" \
-						$CONFIGURE_OPTIONS
+						$CONFIGURE_OPTIONS $HOME_POSTGRES_CONFIGURE
 	else
 		./configure CFLAGS="$HOME_POSTGRES_CFLAGS" \
 					LDFLAGS="$HOME_POSTGRES_LDFLAGS" \
-					$CONFIGURE_OPTIONS
+					$CONFIGURE_OPTIONS $HOME_POSTGRES_CONFIGURE
 	fi
 fi
 

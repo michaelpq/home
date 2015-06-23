@@ -55,6 +55,9 @@ export HOME_POSTGRES_CFLAGS=""
 # Custom LDFLAGS for Postgres build
 export HOME_POSTGRES_LDFLAGS=""
 
+# Custom options for Postgres ./configure
+export HOME_POSTGRES_CONFIGURE=""
+
 # Global base repository for ccache
 export HOME_CCACHE_DIR=$HOME/ccache
 

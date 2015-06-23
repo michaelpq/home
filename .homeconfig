@@ -52,6 +52,9 @@ export HOME_POSTGRES_ARCHIVE=$HOME/archive
 # clobbers.
 export HOME_POSTGRES_CFLAGS=""
 
+# Custom LDFLAGS for Postgres build
+export HOME_POSTGRES_LDFLAGS=""
+
 # Global base repository for ccache
 export HOME_CCACHE_DIR=$HOME/ccache
 

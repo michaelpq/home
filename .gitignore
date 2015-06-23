@@ -63,7 +63,7 @@
 /.irssi
 /.jasspa
 /.java
-/.lesshst
+/.lesshs*
 /.lldb
 /.lldb-history
 /.local

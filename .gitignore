@@ -83,6 +83,7 @@
 /.p4*
 /.pki
 /.prism
+/.profile
 /.psql_history
 /.pulse-cookie
 /.pulse

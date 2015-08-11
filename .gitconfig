@@ -20,6 +20,8 @@
 	root = rev-parse --show-toplevel
 	# Remove last commit
 	undo = reset --hard HEAD~1
+	# Remove last commit
+	undo-soft = reset --soft HEAD~1
 [color]
 	# Print output in color if possible
 	ui = auto

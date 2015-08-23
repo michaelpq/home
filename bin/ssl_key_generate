@@ -62,7 +62,7 @@ chmod 600 $SSL_KEY
 # development purposes they can prove to be useful as well to generate some
 # information for MyProcPort->peer in a Postgres instance.
 # In postgresql.conf, ssl_ca_file will need to be updated as well with
-# the file name generated here, and ssl_ca_file = '$SSL_KEY'.
+# the file name generated here, and ssl_ca_file = '$SSL_CRT'.
 # Once generated this client certificate can be used to connect to Postgres
 # with the following connection string or similar:
 # host=127.0.0.1 sslmode=verify-full sslcert=$SSL_CA_CRT \

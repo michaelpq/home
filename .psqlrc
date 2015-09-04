@@ -4,6 +4,7 @@
 
 \echo 'Option menu:'
 \echo '\t:clear\t\t-- Clear screen'
+\echo '\t:pid\t\t-- Show process PID'
 \echo '\t:slaves\t\t-- Display slave activity'
 \echo '\t:uptime\t\t-- Session uptime'
 \echo '\t:version\t-- Show server version'
@@ -11,6 +12,7 @@
 
 -- Set some default commands
 \set clear '\\! clear;'
+\set pid 'SELECT pg_backend_pid() AS pid;'
 \set slaves 'SELECT application_name, pg_xlog_location_diff(sent_location, flush_location) AS replay_delta, sync_priority, sync_state FROM pg_stat_replication ORDER BY replay_delta ASC, application_name;'
 \set slots 'SELECT slot_name, plugin, slot_type, restart_lsn, active FROM pg_replication_slots;'
 \set uptime 'SELECT now() - backend_start AS uptime FROM pg_stat_activity WHERE pid = pg_backend_pid();'

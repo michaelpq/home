@@ -6,6 +6,7 @@
 \echo '\t:clear\t\t-- Clear screen'
 \echo '\t:pid\t\t-- Show process PID'
 \echo '\t:slaves\t\t-- Display slave activity'
+\echo '\t:slots\t\t-- Display slot information'
 \echo '\t:uptime\t\t-- Session uptime'
 \echo '\t:version\t-- Show server version'
 \echo ''

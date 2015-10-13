@@ -14,5 +14,8 @@ CFLAGS += -fno-omit-frame-pointer
 # For WAL debugging
 # CFLAGS += -DWAL_DEBUG
 
+# For emulation of Windows environment on Unix platforms
+# CFLAGS += -DEXEC_BACKEND
+
 # Test for cache-flush hazards
 # CFLAGS += -DCLOBBER_CACHE_ALWAYS

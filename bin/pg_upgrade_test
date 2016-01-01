@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # pg_upgrade_test
 #	Test pg_upgrade between 2 existing stable versions
-#	Copyright (c) 2010-2015, Michael Paquier
+#	Copyright (c) 2010-2016, Michael Paquier
 #
 #	When dev is specified as a version, the version installed in
 #	HOME_POSTGRES_INSTALL is used as second path. For simplicity,

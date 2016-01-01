@@ -2,7 +2,7 @@
 # .examples/asoundrc_example
 #	example of global extra settings for alsa. This file should be
 #	copied as $HOME/.asoundrc
-#	Copyright (c) 2010-2015, Michael Paquier
+#	Copyright (c) 2010-2016, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Those settings should be determined depending on the output of

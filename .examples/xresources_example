@@ -5,7 +5,7 @@
 !	in xinitrc to ensure correct initialization. The settings
 !	presented here use dina-font, which is a really elegant font
 !	for programming. Note that xrdb needs package xorg-xrdb.
-!	Copyright (C) 2010-2015, Michael Paquier
+!	Copyright (C) 2010-2016, Michael Paquier
 !--------------------------------------------------------------------------
 
 xterm*geometry:           80x25

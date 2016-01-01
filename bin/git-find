@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # git-find
 #	Look for file(s) with given name in git code tree.
-#	Copyright (c) 2010-2015, Michael Paquier
+#	Copyright (c) 2010-2016, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Show utility help

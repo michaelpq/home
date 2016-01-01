@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------
 # .bashrc
 #	bash settings
-#	Copyright (c) 2010-2015, Michael Paquier
+#	Copyright (c) 2010-2016, Michael Paquier
 #--------------------------------------------------------------------------
 
 # If not running interactively, do nothing

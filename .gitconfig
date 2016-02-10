@@ -26,6 +26,8 @@
 	# Print output in color if possible
 	ui = auto
 [core]
+	# 4 spaces per tab when using the pager
+	pager = less --tabs=4
 	# Exclusion of several file types
 	excludesfile = ~/.gitconfig_excludes
 [diff]

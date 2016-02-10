@@ -245,7 +245,7 @@ if [ "$FLAG_STANDBY" == 0 ]; then
 	if [[ $HOME_ENV_NAME == MINGW* ]]; then
 		OPTIONS_POSTGRESQL+="listen_addresses = 'localhost'$CONF_NEWLINE"
 	else
-		OPTIONS_POSTGRESQL+="listen_addresses = '*'$CONF_NEWLINE"
+		OPTIONS_POSTGRESQL+="listen_addresses = ''$CONF_NEWLINE"
 	fi
 
 	# Some logging information

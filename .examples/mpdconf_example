@@ -5,7 +5,7 @@
 #	Copyright (c) 2010-2016, Michael Paquier
 #--------------------------------------------------------------------------
 
-# Music directory, note that this paraemeter is mandatory
+# Music directory, note that this parameter is mandatory
 # Setting for Linux platforms
 music_directory "~/media"
 # Setting for OSX platforms

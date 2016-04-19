@@ -53,6 +53,7 @@
 /.gem
 /.gimp*
 /.gitp4*
+/.gitreview
 /.gnash
 /.gnupg
 /.gnuplot_history

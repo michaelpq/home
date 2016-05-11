@@ -36,6 +36,7 @@
 /.ccache
 /.cgminer
 /.clamav
+/.cpan
 /.csp_ovftool*
 /.cups
 /.dbus

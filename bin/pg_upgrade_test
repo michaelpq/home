@@ -174,8 +174,8 @@ if [ "$FLAG_FILE" == 1 ]; then
 fi
 
 # Stop the nodes
-$BIN_OLD_VERSION/pg_ctl -w -D $DATA_OLD_VERSION -m immediate stop
-$BIN_NEW_VERSION/pg_ctl -w -D $DATA_NEW_VERSION -m immediate stop
+$BIN_OLD_VERSION/pg_ctl -w -D $DATA_OLD_VERSION -m fast stop
+$BIN_NEW_VERSION/pg_ctl -w -D $DATA_NEW_VERSION -m fast stop
 
 # Perform the upgrade by using the version of the newest version
 $BIN_NEW_VERSION/pg_upgrade -b $BIN_OLD_VERSION -B $BIN_NEW_VERSION \

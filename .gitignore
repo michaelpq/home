@@ -115,6 +115,7 @@
 /.torrc
 /.ttytterkey
 /.uim.d
+/.vas*
 /.vboxclient*
 /.vim
 /.viminfo

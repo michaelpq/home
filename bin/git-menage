@@ -10,7 +10,7 @@
 # Check that the top-level folder is not equal to HOME, this prevents
 # stupid mistakes like launching this command on an environment fully
 # deployed using Home.
-TOP_LEVEL_PATH=`git rev-parse --show-toplevel`
+TOP_LEVEL_PATH=$(git rev-parse --show-toplevel)
 if [ "$HOME" == "$TOP_LEVEL_PATH" ]; then
 	echo "Cannot launch git-menage from path where current git repository"
 	echo "root is the top-level repository of your environment, defined by"

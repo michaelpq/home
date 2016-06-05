@@ -9,9 +9,10 @@
 show_help()
 {
 	ERROR_NUM=$1
-	echo "Usage: `basename $0` [FILENAME]"
-	echo "Example: `basename $0` *file*.h"
-	exit $ERROR_NUM
+	BASENAME=$(basename "$0")
+	echo "Usage: $BASENAME [FILENAME]"
+	echo "Example: $BASENAME *file*.h"
+	exit "$ERROR_NUM"
 }
 
 EXPECTED_ARGS=1
@@ -24,4 +25,4 @@ if [ $# -ne $EXPECTED_ARGS ]; then
 	show_help 1
 fi
 
-git ls-files -- **/$FILE_NAME -- $FILE_NAME
+git ls-files -- **/"$FILE_NAME" -- "$FILE_NAME"

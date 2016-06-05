@@ -9,6 +9,8 @@
 EXPECTED_ARGS=2
 IFLAG=0
 
+BASENAME=$(basename "$0")
+
 while getopts 'i' OPTION
 do
 	case $OPTION in
@@ -17,16 +19,16 @@ do
 		#+1 base argument
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
 		;;
-	?)	echo "Usage: `basename $0` [-i] [filename] [string]"
-		echo "Exemple: `basename $0` \"[hc]\" text"
+	?)	echo "Usage: $BASENAME [-i] [filename] [string]"
+		echo "Example: $BASENAME \"[hc]\" text"
 		exit 0
 		;;
 	esac
 done
 
-if [ $# -ne $EXPECTED_ARGS ]; then
-	echo "Usage: `basename $0` [-i] [filename] [string]"
-	echo "Exemple: `basename $0` \"[hc]\" text"
+if [ $# -ne "$EXPECTED_ARGS" ]; then
+	echo "Usage: $BASENAME [-i] [filename] [string]"
+	echo "Example: $BASENAME \"[hc]\" text"
 	exit 1
 fi
 
@@ -48,6 +50,5 @@ if [ "$IFLAG" = "1" ]; then
 fi
 
 #Execute command
-echo find . -name "$FILENAME" -exec grep $OPTIONS $TXTSTRING {} \;
-find . -name "$FILENAME" -exec grep $OPTIONS $TXTSTRING {} \;
+find . -name "$FILENAME" -exec grep "$OPTIONS" "$TXTSTRING" {} \;
 exit 0;

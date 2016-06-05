@@ -17,9 +17,10 @@ VERSION="spatch version 1.0"
 
 show_help()
 {
-	echo "usage: `basename $0` [--version] [--help] <command> [args]";
+	BASENAME=$(basename "$0")
+	echo "Usage: $BASENAME [--version] [--help] <command> [args]";
 	echo "";
-	echo "The commands usable with `basename $0` are:";
+	echo "Options:";
 	echo "   conf       Switch configuration set";
 	echo "   conf-new   Create new configuration set";
 	echo "   conf-rm    Remove configuration set";
@@ -85,25 +86,24 @@ parse_list_files()
 
 	FILE_LIST=$CONFIG_FOLDER/$SPATCH_CONF/FILES
 
-	if [ ! -f $FILE_LIST ]; then
+	if [ ! -f "$FILE_LIST" ]; then
 		echo "FILES is missing for configuration \"$SPATCH_CONF\"."
 		echo "This file is needed with the list of file entries to link."
 		exit 1
 	fi
 
 	# Complete list of files
-	for entry in `cat $FILE_LIST`
-	do
-		FILES[$i]=`echo $entry | cut -d ':' -f 1`
-		LINKS[$i]=`echo $entry | cut -d ':' -f 2`
+	while IFS= read -r entry; do
+		FILES[$i]=$(echo "$entry" | cut -d ':' -f 1)
+		LINKS[$i]=$(echo "$entry" | cut -d ':' -f 2)
 		# Sanity checks
-		if [ ! -f $CONFIG_FOLDER/$SPATCH_CONF/${FILES[$i]} ]; then
+		if [ ! -f "$CONFIG_FOLDER/$SPATCH_CONF/${FILES[$i]}" ]; then
 			file=${FILES[$i]}
 			echo "\"$file\" does not exist in configuration \"$SPATCH_CONF\" but it is listed in $FILE_LIST."
 			exit 1
 		fi
-		i=`expr $i + 1`
-	done
+		i=$((i + 1))
+	done < "$FILE_LIST"
 }
 
 # Execute command conf-new
@@ -112,20 +112,20 @@ command_confnew()
 	NEW_CONF=$1
 
 	# Check definition existence
-	if [ -z $NEW_CONF ]; then
+	if [ -z "$NEW_CONF" ]; then
 		echo "No configuration defined"
 		exit 1
 	fi
 
 	# Check if already exists
-	if [ -d $CONFIG_FOLDER/$NEW_CONF ]; then
+	if [ -d "$CONFIG_FOLDER"/"$NEW_CONF" ]; then
 		echo "Configuration already existing"
 		exit 1
 	fi
 
 	# Now create the new configuration
 	echo "Created new configuration \"$NEW_CONF\""
-	cp -r $CONFIG_FOLDER/default $CONFIG_FOLDER/$NEW_CONF
+	cp -r "$CONFIG_FOLDER"/default "$CONFIG_FOLDER"/"$NEW_CONF"
 }
 
 # Execute command conf-rm
@@ -134,44 +134,45 @@ command_confrm()
 	OLD_CONF=$1
 
 	# Check definition existence
-	if [ -z $OLD_CONF ]; then
+	if [ -z "$OLD_CONF" ]; then
 		echo "No configuration defined"
 		exit 1
 	fi
 
 	# Block removal of configuration default
-	if [ $OLD_CONF = "default" -o $OLD_CONF = "example" ]; then
+	if [ "$OLD_CONF" = "default" ] || [ "$OLD_CONF" = "example" ]; then
 		echo "Cannot remove configuration \"$OLD_CONF\""
 		exit 1
 	fi
 
 	# Check if really exists
-	if [ ! -d $CONFIG_FOLDER/$NEW_CONF ]; then
+	if [ ! -d "$CONFIG_FOLDER"/"$NEW_CONF" ]; then
 		echo "Configuration not existing"
 		exit 1
 	fi
 
 	# Now remove the configuration
 	echo "Remove configuration \"$OLD_CONF\""
-	rm -r $CONFIG_FOLDER/$OLD_CONF
+	rm -r ${"$CONFIG_FOLDER/$OLD_CONF"|?}
 }
 
 # Execute command conf-list
 command_conflist()
 {
-	CURRENT_FOLDER=`get_current_conf_name`
+	CURRENT_FOLDER=$(get_current_conf_name)
 
-	for folder in `ls $CONFIG_FOLDER`
-	do
-		if [ "$CURRENT_FOLDER" = "$folder" ]; then
+	for folder in $CONFIG_FOLDER/*; do
+		base_folder=$(basename "$folder")
+
+		if [ "$CURRENT_FOLDER" = "$base_folder" ]; then
 			PREFIX="*"
 		else
 			PREFIX=" "
 		fi
 
 		# Print only the folder names
-		if [ -d "$CONFIG_FOLDER/$folder" ]; then
-			echo "$PREFIX $folder"
+		if [ -d "$folder" ]; then
+			echo "$PREFIX $base_folder"
 		fi
 	done
 }
@@ -183,7 +184,7 @@ command_confdesc()
 
 	# If name is empty, fallback to current
 	if [ -z "$CONFIG_NAME" ]; then
-		CONFIG_NAME=`get_current_conf_name`
+		CONFIG_NAME=$(get_current_conf_name)
 	fi
 
 	# Error if still empty
@@ -195,29 +196,29 @@ command_confdesc()
 	# Now we are sure that the current configuration has been read or that
 	# There is a configuration defined, but we are not sure if it exists,
 	# So check it.
-	if [ ! -d $CONFIG_FOLDER/$CONFIG_NAME ]; then
+	if [ ! -d "$CONFIG_FOLDER"/"$CONFIG_NAME" ]; then
 		echo "Incorrect configuration set"
 		exit 1
 	fi
 
 	DESC_FILE=$CONFIG_FOLDER/$CONFIG_NAME/DESCRIPTION
 	# Check presence of a description file
-	if [ ! -f $DESC_FILE ]; then
+	if [ ! -f "$DESC_FILE" ]; then
 		echo "No description available"
 		exit 1
 	fi
 
 	# OK now print description of configuration set
-	echo `cat $DESC_FILE`
+	cat "$DESC_FILE"
 }
 
 # Execute command conf-reset
 command_confreset()
 {
 	# Get current configuration name and check existence
-	CURRENT_CONF=`get_current_conf_name`
+	CURRENT_CONF=$(get_current_conf_name)
 
-	if [ -z $CURRENT_CONF ]; then
+	if [ -z "$CURRENT_CONF" ]; then
 		echo "No current configuration found, hence leaving"
 		exit 0
 	else
@@ -225,29 +226,29 @@ command_confreset()
 	fi
 
 	# Remove all the links if they exit
-	parse_list_files $CURRENT_CONF
-	for link in ${LINKS[@]}
+	parse_list_files "$CURRENT_CONF"
+	for link in "${LINKS[@]}"
 	do
 		# On Windows, because of the limitation of NFS with ln that
 		# basically creates a copy of a file without soft-linking it
 		# this will actually fail, so rely instead on a check on a
 		# file.
-		if [[ $HOME_ENV_NAME == MINGW* ]]; then
-			if [[ -f $HOME/$link ]]; then
+		if [[ "$HOME_ENV_NAME" == MINGW* ]]; then
+			if [[ -f "$HOME/$link" ]]; then
 				echo "Removed file \"$HOME/$link\""
-				rm $HOME/$link
+				rm "$HOME/$link"
 			fi
 		else
-			if [[ -h $HOME/$link ]]; then
+			if [[ -h "$HOME/$link" ]]; then
 				echo "Removed link \"$HOME/$link\""
-				rm $HOME/$link
+				rm "$HOME/$link"
 			fi
 		fi
 	done
 
 	# Delete current configuration file marker
-	if [ -f $CURRENT_CONFIG_FILE_MARKER ]; then
-		rm $CURRENT_CONFIG_FILE_MARKER
+	if [ -f "$CURRENT_CONFIG_FILE_MARKER" ]; then
+		rm "$CURRENT_CONFIG_FILE_MARKER"
 	fi
 }
 
@@ -256,7 +257,7 @@ get_current_conf_name()
 {
 	# Be sure that current config exists or return null
 	if [  -f "$CURRENT_CONFIG_FILE_MARKER" ]; then
-		echo `cat $CURRENT_CONFIG_FILE_MARKER`
+		cat "$CURRENT_CONFIG_FILE_MARKER"
 	fi
 }
 
@@ -266,54 +267,54 @@ command_conf()
 	NEW_CONF=$1
 
 	# Error if no new conf defined
-	if [ -z $NEW_CONF ]; then
+	if [ -z "$NEW_CONF" ]; then
 		echo "No configuration defined"
 		exit 1
 	fi
 
 	# Check presence of new configuration
-	if [ ! -d $CONFIG_FOLDER/$NEW_CONF ]; then
+	if [ ! -d "$CONFIG_FOLDER/$NEW_CONF" ]; then
 		echo "Invalid configuration \"$NEW_CONF\", no configuration files"
 		exit 1
 	fi
 
 	# Then remove old configuration if any
-	if [ -f $CURRENT_CONFIG_FILE_MARKER ]; then
+	if [ -f "$CURRENT_CONFIG_FILE_MARKER" ]; then
 		command_confreset
 	fi
 
 	# Link to the new objects
-	parse_list_files $NEW_CONF
+	parse_list_files "$NEW_CONF"
 	i=0
-	for file in ${FILES[@]}
+	for file in "${FILES[@]}"
 	do
 		link=${LINKS[$i]}
 		echo "Linking \"$link\" to \"$CONFIG_FOLDER/$NEW_CONF/$file\""
-		ln -s $CONFIG_FOLDER/$NEW_CONF/$file $HOME/$link
-		i=`expr $i + 1`
+		ln -s "$CONFIG_FOLDER/$NEW_CONF/$file" "$HOME/$link"
+		i=$((i + 1))
 	done
 
 	# Create current marker
-	echo $NEW_CONF > $CURRENT_CONFIG_FILE_MARKER
+	echo "$NEW_CONF" > "$CURRENT_CONFIG_FILE_MARKER"
 }
 
 # Check the list of arguments
-check_args $COMMAND_TYPE $NUM_ARGS
+check_args "$COMMAND_TYPE" "$NUM_ARGS"
 
 if [ "$COMMAND_TYPE" = "conf" ]; then
-	command_conf $2
+	command_conf "$2"
 elif [ "$COMMAND_TYPE" = "--version" ]; then
-	echo $VERSION
+	echo "$VERSION"
 elif [ "$COMMAND_TYPE" = "--help" ]; then
 	show_help
 elif [ "$COMMAND_TYPE" = "conf-new" ]; then
-	command_confnew $2
+	command_confnew "$2"
 elif [ "$COMMAND_TYPE" = "conf-rm" ]; then
-	command_confrm $2
+	command_confrm "$2"
 elif [ "$COMMAND_TYPE" = "conf-list" ]; then
 	command_conflist
 elif [ "$COMMAND_TYPE" = "conf-desc" ]; then
-	command_confdesc $2
+	command_confdesc "$2"
 elif [ "$COMMAND_TYPE" = "conf-reset" ]; then
 	command_confreset
 else

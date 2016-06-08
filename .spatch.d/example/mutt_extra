@@ -80,6 +80,8 @@ set smtp_pass = "My_password"
 
 # Shortcuts
 # Uncomment where necessary
+# Group reply
+macro index,pager gr "<group-reply>" "Group Reply"
 # Generic ones
 macro index,pager gl "<change-folder>?" "Go to 'Label'"
 macro index,pager gi "<change-folder>=INBOX<enter>" "Go to inbox"

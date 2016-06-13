@@ -15,10 +15,12 @@ EXPECTED_ARGS=0
 show_help()
 {
 	ERROR_NUM=$1
-	echo "Usage: `basename $0` [OPTION]..."
-	echo " "
+	BASENAME=$(basename "$0")
+	echo "Usage: $BASENAME [OPTION]..."
+	echo ""
 	echo "Options:"
 	echo "  -p PATH  Define installation folder"
+	exit "$ERROR_NUM"
 }
 
 # Treat options
@@ -28,7 +30,7 @@ do
 	p)  # Path to postgres install folder
 		FLAG_PATH=1
 		PSQL_USER_PATH="$OPTARG"
-		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
+		EXPECTED_ARGS=$((EXPECTED_ARGS + 2))
 		;;
 	?)  # Leave without an error code
 		show_help 0
@@ -52,10 +54,10 @@ else
 fi
 
 # Immediately stop all servers having still an active PID
-for file in `find $HOME_POSTGRES_DATA -name postmaster.pid`
+for file in $HOME_POSTGRES_DATA/**/postmaster.pid
 do
 	# Get port number from 4th line of given postmaster.pid
-	NODE_PORT=`sed "4q;d" $file`
+	NODE_PORT=$(sed "4q;d" "$file")
 	echo "Stopping server listening to port $NODE_PORT"
 
 	# On Unix/Linux, server can be easily stopped with a stop command.
@@ -63,9 +65,10 @@ do
 	# is unregistered as well.
 	if [[ $HOME_ENV_NAME == MINGW* ]]; then
 		SERVICE_NAME=postgres_$NODE_PORT
-		sc stop $SERVICE_NAME
-		pg_ctl unregister -N $SERVICE_NAME
+		sc stop "$SERVICE_NAME"
+		pg_ctl unregister -N "$SERVICE_NAME"
 	else
-		$PSQL_FOLDER/bin/pg_ctl stop -D `dirname $file` -m immediate
+		DIRNAME=$(dirname "$file")
+		"$PSQL_FOLDER/bin/pg_ctl" stop -D "$DIRNAME" -m immediate
 	fi
 done

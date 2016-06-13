@@ -17,8 +17,9 @@ EXPECTED_ARGS=3
 show_help()
 {
 	ERROR_NUM=$1
-	echo "Usage: `basename $0` [EMAIL_TO_REPLACE] [NEW_NAME] [NEW_EMAIL]"
-	exit $ERROR_NUM
+	BASENAME=$(basename "$0")
+	echo "Usage: $BASENAME [EMAIL_TO_REPLACE] [NEW_NAME] [NEW_EMAIL]"
+	exit "$ERROR_NUM"
 }
 
 # Check number of arguments

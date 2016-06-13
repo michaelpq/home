@@ -9,14 +9,12 @@
 set -e
 
 which openssl > /dev/null 2>&1
-ERRNUM=$?
 if [ $? != 0 ]; then
 	echo "Could not found open ssl in PATH=$PATH"
 	exit 1
 fi
 
 # Details of the server certificate
-SSL_DOMAIN=127.0.0.1 # Use local address for development
 SSL_COMMON_NAME=127.0.0.1 # Use local address for development
 SSL_COUNTRY=ER
 SSL_STATE=Earth
@@ -67,7 +65,7 @@ chmod 600 $SSL_KEY
 # with the following connection string or similar:
 # host=127.0.0.1 sslmode=verify-full sslcert=$SSL_CA_CRT \
 #   sslkey=$SSL_CA_KEY sslrootcert=$SSL_CRT
-cat > $SSL_CA_CONF <<EOF
+cat > "$SSL_CA_CONF" <<EOF
 [ ssl_client ]
 basicConstraints = CA:FALSE
 nsCertType = client
@@ -79,6 +77,6 @@ EOF
 openssl req -new -nodes -keyout $SSL_CA_KEY -out $SSL_CA_CSR \
 		-subj "/C=$SSL_COUNTRY/ST=$SSL_STATE/L=$SSL_LOCALITY/O=$SSL_ORGANIZATION/OU=$SSL_ORGANIZATIONAL_UNIT/CN=$USER"
 openssl x509 -req -CAcreateserial -in $SSL_CA_CSR -CA $SSL_CRT \
-		-CAkey $SSL_KEY -out $SSL_CA_CRT -extfile $SSL_CA_CONF \
+		-CAkey $SSL_KEY -out $SSL_CA_CRT -extfile "$SSL_CA_CONF" \
 		-extensions ssl_client
 chmod 600 $SSL_CA_KEY

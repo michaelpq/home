@@ -17,7 +17,7 @@ do
 	i)	#Track in repo all untracked files
 		IFLAG=1
 		#+1 base argument
-		EXPECTED_ARGS=$(($EXPECTED_ARGS + 1))
+		EXPECTED_ARGS=$((EXPECTED_ARGS + 1))
 		;;
 	?)	echo "Usage: $BASENAME [-i] [filename] [string]"
 		echo "Example: $BASENAME \"[hc]\" text"

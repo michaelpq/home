@@ -14,20 +14,20 @@
 set -e
 
 # Create stable repository if it does not exist yet
-if [ ! -d $HOME_STABLE_BIN ]; then
+if [ ! -d "$HOME_STABLE_BIN" ]; then
 	echo "Creating inexisting folder $HOME_STABLE_BIN"
-	mkdir $HOME_STABLE_BIN
+	mkdir "$HOME_STABLE_BIN"
 fi
 
 # Update installation with latest stable versions
 for branch in REL9_1_STABLE REL9_2_STABLE REL9_3_STABLE REL9_4_STABLE REL9_5_STABLE
 do
 	# Remove existing version if any
-	if [ -d $HOME_STABLE_BIN/$branch ]; then
+	if [ -d "$HOME_STABLE_BIN/$branch" ]; then
 		echo "Removing old installation of $branch at $HOME_STABLE_BIN/$branch"
-		rm -r $HOME_STABLE_BIN/$branch
+		rm -r ${HOME_STABLE_BIN/$branch:?}
 	fi
 
 	# Install the latest version wanted
-	pg_compile -b $branch -o origin -p $HOME_STABLE_BIN/$branch
+	pg_compile -b $branch -o origin -p "$HOME_STABLE_BIN/$branch"
 done

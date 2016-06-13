@@ -13,8 +13,9 @@
 EXPECTED_ARGS=3
 
 if [ $# -ne $EXPECTED_ARGS ]; then
-	echo "Usage: `basename $0` [extension] [old_str] [new_str]"
-	echo "Exemple: `basename $0` php old_text new_text"
+	BASENAME=$(basename "$0")
+	echo "Usage: $BASENAME [extension] [old_str] [new_str]"
+	echo "Exemple: $BASENAME php old_text new_text"
 	exit 1
 fi
 
@@ -22,15 +23,16 @@ EXTENSION=$1
 OLDSTR=$2
 NEWSTR=$3
 
-#Simply replace string with sed and erase old file
-for file in `find . -name "*.$EXTENSION"`
+# Simply replace string with sed and erase old file
+CURRENT_DIR=$(pwd)
+while IFS= read -r -d '' file
 do
-	if [ $HOME_ENV_NAME == 'Darwin' ]; then
+	if [ "$HOME_ENV_NAME" == 'Darwin' ]; then
 		# In OSX, sed has a mandatory value with option -i
-		sed -i "" "s/$OLDSTR/$NEWSTR/g" $file
+		sed -i "" "s/$OLDSTR/$NEWSTR/g" "$file"
 	else
-		sed -i "s/$OLDSTR/$NEWSTR/g" $file
+		sed -i "s/$OLDSTR/$NEWSTR/g" "$file"
 	fi
-done
+done < <(find "$CURRENT_DIR" -name "*.$EXTENSION" -print0)
 
 exit $?

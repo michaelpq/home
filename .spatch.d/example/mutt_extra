@@ -99,4 +99,3 @@ macro index,pager gi "<change-folder>=INBOX<enter>" "Go to inbox"
 # My Editor
 # Not really needed as this defaults to EDITOR, but uncomment in case
 #set editor='emacs -nw'
-#set editor='lem'

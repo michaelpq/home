@@ -26,14 +26,11 @@ environment available:
 Private paths
 -------------
 
-Home provides paths to store private libraries, binaries, headers and
-settings to very adaptable to the user's needs. Default environment
-variables define those paths (which still need to be created btw):
+Home provides paths to store private binaries and settings to very
+adaptable to the user's needs. Default environment variables define
+those paths (which still need to be created btw):
 
-- $HOME_LIB_EXTRA, to store private libraries. LD_LIBRARY_PATH and
- LIBRARY_PATH use that.
 - $HOME_BIN_EXTRA, for private binaries. Included in PATH by default.
-- $HOME_INCLUDE_EXTRA, for private headers. Included in C_INCLUDE_PATH.
 
 It is not recommended to change those default values, as the same values
 are hardcoded as well in .gitignore in the dedicated paths.

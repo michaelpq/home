@@ -32,12 +32,6 @@ export HOME_BIN=$HOME/bin
 # Private path ignored by HOME for binaries
 export HOME_BIN_EXTRA=$HOME/extra
 
-# Private library path, ignored by Home and included in LD_LIBRARY_PATH.
-export HOME_LIB_EXTRA=$HOME/lib
-
-# Private include path, ignored by Home and included in C_INCLUDE_PATH.
-export HOME_INCLUDE_EXTRA=$HOME/include
-
 # PostgreSQL development parameters
 export HOME_POSTGRES_SRC=$HOME/git/postgres
 export HOME_POSTGRES_INSTALL=$HOME/pgsql

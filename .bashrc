@@ -97,15 +97,15 @@ PROMPT_COMMAND='pwd > "${HOME_CWD}"; __git_ps1 "\u@\h:\w" "\\\$ " "(%s%s)"'
 
 # LIBRARY_PATH is used by gcc before compilation to search for directories
 # containing libraries that need to be linked to your program
-export LIBRARY_PATH=$HOME_POSTGRES_INSTALL/lib:$HOME_LIB_EXTRA
+export LIBRARY_PATH=$HOME_POSTGRES_INSTALL/lib
 
 # Library paths
 # LD_LIBRARY_PATH is used to search for directories containing the libraries
 # after it has been successfully compiled and linked.
-export LD_LIBRARY_PATH=$HOME_POSTGRES_INSTALL/lib:$HOME_LIB_EXTRA
+export LD_LIBRARY_PATH=$HOME_POSTGRES_INSTALL/lib
 
 # Header paths
-export C_INCLUDE_PATH=$HOME_POSTGRES_INSTALL/include:$HOME_INCLUDE_EXTRA
+export C_INCLUDE_PATH=$HOME_POSTGRES_INSTALL/include
 
 # Include Postgres binaries in PATH. Priority is given to them, so add
 # then in first position.

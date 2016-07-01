@@ -107,6 +107,7 @@
 /.smb*
 /.sqlite_history
 /.ssh
+/.steam*
 /.subversion
 /.swt
 /.thumbnails

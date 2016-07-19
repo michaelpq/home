@@ -69,6 +69,7 @@
    (fill-column . 78)
    (indent-tabs-mode . t)
    (c-basic-offset   . 4)
+   (c-auto-align-backslashes . nil)
    (tab-width . 4)
    (c-offsets-alist . ((case-label . +)
                        (label . -)
@@ -85,17 +86,12 @@
         auto-mode-alist))
 
 ;; SGML documentation
-(defun pgsql-sgml-mode ()
-  "SGML mode adjusted for PostgreSQL project"
-  (interactive)
-  (sgml-mode)
-
-  (setq indent-tabs-mode nil)
-  (setq sgml-basic-offset 1)
-)
-(setq auto-mode-alist
-  (cons '("\\(postgres\\|pgsql\\).*\\.sgml\\'" . pgsql-sgml-mode)
-        auto-mode-alist))
+(add-hook 'sgml-mode-hook
+	  (defun postgresql-sgml-mode-hook ()
+	    (when (string-match "\\(postgres\\|pgsql\\).*\\.sgml\\'" buffer-file-name)
+	      (setq fill-column 78)
+	      (setq indent-tabs-mode nil)
+	                     (setq sgml-basic-offset 1))))
 
 ;; Perl settings
 (defun pgsql-perl-mode ()

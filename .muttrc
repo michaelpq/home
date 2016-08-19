@@ -11,6 +11,12 @@ set header_cache = ~/.mutt/cache/headers
 # Keepalive settings
 set imap_keepalive = 900
 
+# Sidebar
+set sidebar_visible = yes
+set sidebar_format = "%B%*  (%N)"
+set sidebar_new_mail_only = yes
+set sidebar_folder_indent = yes
+
 # Stop asking to "move read messages to mbox"
 set move = no
 

@@ -17,17 +17,17 @@ set signature = "echo $realname |"
 # Uncomment and edit this trick if you do not want to store this
 # password as static data on your computer.
 #set imap_pass = `getpassword email_id`
-# Storing passwords with gpg is safer
+# Storing passwords with gpg2 is safer
 # 1) Generate a key (name John Doe for example):
-# $ gpg --gen-key
+# $ gpg2 --gen-key
 # 2) Create a file with password like that (can be multiple):
 # $ cat $HOME/password_blank.txt
 # set my_mutt_passwd = my_wonderful_password
-# 3) Encrypt the blank password file with gpg, generating here
+# 3) Encrypt the blank password file with gpg2, generating here
 #    $HOME/password_blank.txt.gpg
-# $ gpg -e -r "John Doe" $HOME/password_blank.txt
+# $ gpg2 -e -r "John Doe" $HOME/password_blank.txt
 # 4) Source it in configuration file of mutt (actually uncomment here):
-#source "gpg -dq ~/.mutt/mutt_pass.gpg |"
+#source "gpg2 -dq ~/.mutt/mutt_pass.gpg |"
 # 5) Use the variable set in gpg file (uncomment here):
 #set smtp_pass = $my_mutt_passwd
 

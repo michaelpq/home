@@ -136,6 +136,11 @@ macro index,pager a "<create-alias>"
 bind index - collapse-thread
 bind index _ collapse-all
 
+# Sidebar control
+bind index gn sidebar-next-new
+bind index gm sidebar-prev-new
+bind index go sidebar-open
+
 #--------------------------------------------------------------------------
 # Hooks
 #--------------------------------------------------------------------------

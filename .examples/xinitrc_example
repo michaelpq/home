@@ -18,6 +18,9 @@ fi
 # xorg-xrdb)
 xrdb -merge ~/.xresources
 
+# Disk automount
+udiskie &
+
 # Execute i3 as window manager at startup
 exec i3
 

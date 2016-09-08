@@ -1,13 +1,15 @@
 !--------------------------------------------------------------------------
 ! .xresources_example
-!	Settings for urxvt. Note that those settings should be merged
-!	with the default values by calling xrdb -merge ~/.this_file
-!	in xinitrc to ensure correct initialization. The settings
-!	presented here use dina-font, which is a really elegant font
-!	for programming. Note that xrdb needs package xorg-xrdb.
+!	Settings for terminals. Note that those settings should be merged
+!	with the default values by calling xrdb -merge ~/.this_file in
+!	xinitrc to ensure correct initialization. The settings presented
+!	here use dina-font, which is a really elegant font for programming.
+!	Note that xrdb needs package xorg-xrdb.
+!
 !	Copyright (C) 2010-2016, Michael Paquier
 !--------------------------------------------------------------------------
 
+! Settings for urxvt
 URxvt*geometry:           80x25
 URxvt*faceName:           Terminus:style=Regular:size=10
 URxvt*font:               -*-dina-medium-r-*-*-16-*-*-*-*-*-*-*
@@ -24,3 +26,22 @@ URxvt*rightScrollBar:     true
 URxvt*jumpScroll:         true
 URxvt*multiScroll:        true
 URxvt*toolBar:            false
+
+! Settings for xterm
+! Just uncomment to enable.
+!xterm*geometry:           80x25
+!xterm*faceName:           Terminus:style=Regular:size=10
+!xterm*font:               -*-dina-medium-r-*-*-15-*-*-*-*-*-*-*
+!xterm*foreground:         Black
+!xterm*background:         White
+!xterm*dynamicColors:      true
+!xterm*utf8:               2
+!xterm*eightBitInput:      true
+!xterm*saveLines:          512
+!xterm*scrollTtyKeypress:  true
+!xterm*scrollTtyOutput:    false
+!xterm*scrollBar:          true
+!xterm*rightScrollBar:     true
+!xterm*jumpScroll:         true
+!xterm*multiScroll:        true
+!xterm*toolBar:            false

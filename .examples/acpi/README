@@ -1,0 +1,31 @@
+ACPI scripts
+============
+
+ACPI is a utility aimed at tracking keyboard events and interacts with
+power management of a machine. This repository contains a set of scripts
+that should be copied into /etc/acpi/.
+
+There are two repositories:
+- actions/, which contains working scripts that are invoked by the events.
+- events/, which is a set of scripts aimed at tracking custom events and
+kick actions based on what has been requested by the user.
+
+Note that, at least for ThinkPad laptops, the kernel module thinkpad_acpi
+needs to be loaded.
+
+In order to use acpi, the following packages need to be installed:
+
+    pacman -S acpi_call acpid
+
+After installation the acpid daemon needs to be launched:
+
+    systemctl enable acpid
+
+Then when setting up those scripts it is useful to test the keyboard events
+when pushing a given key, and acpi_listen is useful for this purpose after
+the acpid deamon has been activated and started.
+
+The set of scripts present here adds support for control of volume and
+brightness. For the volume control, the card used is 0 by default as needed
+by a ThinkPad. Note as well that the binary amixer is part of the package
+alsa-utils.

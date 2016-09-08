@@ -1,0 +1,10 @@
+Example scripts
+===============
+
+This repository contains a set of example scripts to set up easily a
+development environment on Linux:
+- xinitrc
+- mpd
+- xresources for terminals
+- acpi/ for keyboard events
+- etc.

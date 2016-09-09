@@ -3,16 +3,17 @@
 !	Settings for terminals. Note that those settings should be merged
 !	with the default values by calling xrdb -merge ~/.this_file in
 !	xinitrc to ensure correct initialization. The settings presented
-!	here use dina-font, which is a really elegant font for programming.
-!	Note that xrdb needs package xorg-xrdb.
+!	here use bitstream-vera, which is a really elegant font for
+!	programming. Note that xrdb needs package xorg-xrdb.
 !
 !	Copyright (C) 2010-2016, Michael Paquier
 !--------------------------------------------------------------------------
 
 ! Settings for urxvt
-URxvt*geometry:           80x25
+URxvt*geometry:           80x32
 URxvt*faceName:           Terminus:style=Regular:size=10
-URxvt*font:               -*-dina-medium-r-*-*-16-*-*-*-*-*-*-*
+URxvt.font:     xft:bitstream vera sans mono:size=16:antialias=true
+URxvt.boldFont: xft:bitstream vera sans mono:bold:size=16:antialias=true
 URxvt*foreground:         Black
 URxvt*background:         White
 URxvt*dynamicColors:      true
@@ -31,7 +32,8 @@ URxvt*toolBar:            false
 ! Just uncomment to enable.
 !xterm*geometry:           80x25
 !xterm*faceName:           Terminus:style=Regular:size=10
-!xterm*font:               -*-dina-medium-r-*-*-15-*-*-*-*-*-*-*
+!xterm.font:     xft:bitstream vera sans mono:size=16:antialias=true
+!xterm.boldFont: xft:bitstream vera sans mono:bold:size=16:antialias=true
 !xterm*foreground:         Black
 !xterm*background:         White
 !xterm*dynamicColors:      true

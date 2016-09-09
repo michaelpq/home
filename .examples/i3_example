@@ -112,7 +112,7 @@ bindsym $mod+Shift+c reload
 # upgrade i3)
 bindsym $mod+Shift+r restart
 # Exit i3 (logs out of current X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+e exit
 
 # Resize window (mouse can be used as well for that)
 mode "resize" {

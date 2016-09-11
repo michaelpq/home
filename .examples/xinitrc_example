@@ -21,6 +21,12 @@ xrdb -merge ~/.xresources
 # Disk automount
 udiskie &
 
+# Switch CAPS and ctrl on keyboard.
+# Doing so has the disadvantage to not work for TTY sessions, But the
+# advantage to not need a personal keymap and there is no need as well
+# to update the system-wide /etc/vconsole.conf.
+setxkbmap -option "ctrl:swapcaps"
+
 # Execute i3 as window manager at startup
 exec i3
 

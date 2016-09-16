@@ -22,6 +22,9 @@ font bitstream Sans Mono 8
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+# Set default layout to tabbed
+workspace_layout tabbed
+
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
 

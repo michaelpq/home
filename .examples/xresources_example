@@ -27,6 +27,9 @@ URxvt*rightScrollBar:     true
 URxvt*jumpScroll:         true
 URxvt*multiScroll:        true
 URxvt*toolBar:            false
+! Settings for input in Japanese with ibus
+URxvt.inputMethod:        ibus
+URxvt.preeditType:        OverTheSpot
 
 ! Settings for xterm
 ! Just uncomment to enable.

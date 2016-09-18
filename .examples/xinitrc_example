@@ -27,6 +27,14 @@ udiskie &
 # to update the system-wide /etc/vconsole.conf.
 setxkbmap -option "ctrl:swapcaps"
 
+# Settings for Japanese input
+export GTK_IM_MODULE='ibus'
+export QT_IM_MODULE='ibus'
+export XMODIFIERS=@im='ibus'
+
+# Then start the ibus daemon to control input
+ibus-daemon -drx
+
 # Execute i3 as window manager at startup
 exec i3
 

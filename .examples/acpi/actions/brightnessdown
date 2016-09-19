@@ -6,7 +6,7 @@
 
 # Set the static decrement value.  Keep in mind that this will
 # be done twice.
-DecVal=20
+DecVal=50
 
 # Set the Minimum we will accept.
 MinVal=0

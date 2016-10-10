@@ -49,6 +49,9 @@
 ;; Always follow soft links to real files when opening them
 (setq vc-follow-symlinks t)
 
+;; Disable Ctl-Z to prevent an unwanted exit
+(global-unset-key (kbd "C-z"))
+
 ;;--------------------------------------------------------------------------
 ;; Formatting
 ;;--------------------------------------------------------------------------

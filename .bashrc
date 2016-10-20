@@ -91,6 +91,47 @@ fi
 # status change.
 PROMPT_COMMAND='pwd > "${HOME_CWD}"; __git_ps1 "\u@\h:\w" "\\\$ " "(%s%s)"'
 
+# Dynamically set the title of the terminal tab. The following routine
+# is in charge of capturing what is going to show up in it. For now and
+# to keep things simple, only the last command run will appear in the
+# title itself. When the command used is EDITOR, just add the name of the
+# file open as title.
+function settitle () {
+	CURRENT_COMMAND=${@}
+
+	# Just print one command. The ESC character is \033, and the
+	# bell character is \007. The following rules allow the title fields
+	# to be updated dynamically via PROMPT_COMMAND:
+	# 1) ESC]0;stringBEL -- Set icon name and window title to string
+	# 2) ESC]1;stringBEL -- Set icon name to string
+	# 3) ESC]2;stringBEL -- Set window title to string
+	if [ "$PREV_COMMAND" = "" ]; then
+		# Check that the current command part matches the EDITOR
+		# If not just use the first command launched.
+		if [[ "${CURRENT_COMMAND}" == "${EDITOR}"* ]]; then
+			# Get the last part of the file defined here. We only
+			# want that in the window title to keep things short.
+			# XXX: Initialization goes through here as well. Why?
+			LAST_PART=${CURRENT_COMMAND##* }
+			LAST_PART=$(basename $LAST_PART)
+			echo -ne "\033]0;${LAST_PART}\007"
+		else
+			echo -ne "\033]0;${CURRENT_COMMAND}\007"
+		fi
+
+		# Prevent analysis of next sub-command(s). This keyword
+		# could be anything actually.
+		export PREV_COMMAND=done
+	fi
+}
+
+# Reset the command previously set
+export PROMPT_COMMAND=${PROMPT_COMMAND}'; export PREV_COMMAND=""'
+
+# This abuses the DEBUG signal too much, perhaps there are better and
+# cleaner methods.
+trap 'settitle "$BASH_COMMAND"' DEBUG
+
 #--------------------------------------------------------------------------
 # Compilation and development settings
 #--------------------------------------------------------------------------

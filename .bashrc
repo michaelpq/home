@@ -106,9 +106,13 @@ function settitle () {
 	# 2) ESC]1;stringBEL -- Set icon name to string
 	# 3) ESC]2;stringBEL -- Set window title to string
 	if [ "$PREV_COMMAND" = "" ]; then
-		# Check that the current command part matches the EDITOR
-		# If not just use the first command launched.
-		if [[ "${CURRENT_COMMAND}" == "${EDITOR}"* ]]; then
+		# Check that the current command part matches EDITOR. git-open
+		# and "git open" are exceptions present in this environment so
+		# handle them as well. If there is no match just use the first
+		# command launched and show it in title.
+		if [[ "${CURRENT_COMMAND}" == "${EDITOR}"* || \
+			  "${CURRENT_COMMAND}" == "git open"*  || \
+			  "${CURRENT_COMMAND}" == "git-open"* ]]; then
 			# Get the last part of the file defined here. We only
 			# want that in the window title to keep things short.
 			# XXX: Initialization goes through here as well. Why?

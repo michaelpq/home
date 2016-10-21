@@ -117,9 +117,17 @@ function settitle () {
 			# want that in the window title to keep things short.
 			# XXX: Initialization goes through here as well. Why?
 			LAST_PART=${CURRENT_COMMAND##* }
+			# Remove as well newlines from the output, those are proving
+			# to show up to the user anyway, troubling the result they
+			# would expect.
+			LAST_PART=${CURRENT_COMMAND##*\n}
 			LAST_PART=$(basename $LAST_PART)
 			echo -ne "\033]0;${LAST_PART}\007"
 		else
+			# Remove as well newlines from the output, those are proving
+			# to show up to the user anyway, troubling the result they
+			# would expect.
+			CURRENT_COMMAND=${CURRENT_COMMAND##*\n}
 			echo -ne "\033]0;${CURRENT_COMMAND}\007"
 		fi
 

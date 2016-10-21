@@ -120,8 +120,8 @@ function settitle () {
 			# Remove as well newlines from the output, those are proving
 			# to show up to the user anyway, troubling the result they
 			# would expect.
-			LAST_PART=${CURRENT_COMMAND##*\n}
-			LAST_PART=$(basename $LAST_PART)
+			LAST_PART=${LAST_PART##*'\n'}
+			LAST_PART=$(basename "$LAST_PART")
 			echo -ne "\033]0;${LAST_PART}\007"
 		else
 			# Remove as well newlines from the output, those are proving

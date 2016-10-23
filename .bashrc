@@ -127,7 +127,7 @@ function settitle () {
 			# Remove as well newlines from the output, those are proving
 			# to show up to the user anyway, troubling the result they
 			# would expect.
-			CURRENT_COMMAND=${CURRENT_COMMAND##*\n}
+			CURRENT_COMMAND=${CURRENT_COMMAND##*'\n'}
 			echo -ne "\033]0;${CURRENT_COMMAND}\007"
 		fi
 

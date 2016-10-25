@@ -12,15 +12,12 @@
 /.psqlrc_extra
 
 # Development paths
-/archive
-/ccache
 /data
 /extra
 /git
 /pgsql
 /postgres
 /stable
-/workspace
 
 # System-related paths
 /.adobe

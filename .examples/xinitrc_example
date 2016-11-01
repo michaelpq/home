@@ -35,6 +35,9 @@ export XMODIFIERS=@im='ibus'
 # Then start the ibus daemon to control input
 ibus-daemon -drx
 
+# Disable bell sound
+xset -b
+
 # Execute i3 as window manager at startup
 exec i3
 

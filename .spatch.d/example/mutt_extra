@@ -65,6 +65,12 @@ set smtp_pass = "My_password"
 # password as static data on your computer.
 #set smtp_pass=`getpassword email_id`
 
+# Settings for msmtp (uncomment if necessary)
+# Note that this needs .msmtprc set up appropriately. The account specified
+# here needs to match the one set in msmtprc.
+#set sendmail = "/usr/local/bin/msmtp -a john_doe"
+#set sendmail_wait = 0
+
 # Management of multiple accounts and dynamic switches
 # Each account is managed with a separate file that gets loaded at will
 # with f1 and f2.

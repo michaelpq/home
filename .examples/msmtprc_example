@@ -1,0 +1,32 @@
+#--------------------------------------------------------------------------
+# msmtprc_example
+#	Example of settings for msmtprc, useful for sending asynchronously
+#	emails to a queue transparently from the email client used.
+#	This file should be copied as $HOME/.mbsyncrc.
+#	Copyright (c) 2016, Michael Paquier
+#--------------------------------------------------------------------------
+
+# Settings for msmtp
+account john_doe
+
+# SMTP provider
+host smtp.example.com
+port 587
+# Likely the SSL port, uncomment if needed.
+#port 465
+
+protocol smtp
+auth on
+from johnr@example.com
+user johnr@example.com
+tls on
+
+# Be careful that this needs to be a copy of the public certificate of the
+# provider those smtp settings are trying to connect to. In order to
+# generate the file indicated by this path run the following command first:
+#    openssl s_client -starttls imap -connect smtp.example.com:port -showcerts
+# Note that this needs to be adapted depending on the account being used.
+# Then copy the certificate generated into the file defined by this parameter.
+tls_trust_file ~/.mutt/example_account_CA.cert
+
+account default : john_doe

@@ -1,0 +1,40 @@
+#--------------------------------------------------------------------------
+# mbsyncrc_example
+#	Example of settings for mbsyncrc, useful for backing up emails
+#	from an IMAP server and keep a local copy of them.
+#	This file should be copied as $HOME/.mbsyncrc.
+#	Copyright (c) 2016, Michael Paquier
+#--------------------------------------------------------------------------
+
+# Address to connect to
+Host imap.example.com
+Port 993
+User johnr@example.com
+PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.mailpass.gpg"
+UseIMAPS yes
+SSLType starttls
+SSLVersions TLSv1.2
+
+# The certificate file from the imap server needs to be stored on disk
+# to check for matches, this can be done with the following command.
+# Server name and port number need to change depending on your needs.
+#  openssl s_client -starttls imap -connect imap.example.com:port -showcerts
+CertificateFile ~/.mutt/imap_example.crt
+
+IMAPStore example_com_remote
+Account example_name
+
+MaildirStore example_com_local
+# The trailing "/" is important
+Path ~/.mail/example_com/
+Inbox ~/.mail/example_com/Inbox
+
+Channel servername
+Master :example_com_remote:
+Slave :example_com_local:
+Patterns *
+
+# Automatically create missing mailboxes, both locally and on the server
+Create Both
+# Save the synchronization state files in the relevant directory
+SyncState *

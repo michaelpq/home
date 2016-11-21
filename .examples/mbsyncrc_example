@@ -6,35 +6,38 @@
 #	Copyright (c) 2016, Michael Paquier
 #--------------------------------------------------------------------------
 
-# Address to connect to
+# Each section of this file should be kept in blocks, with no newlines
+# in each.
+
+# Section for example_com account
+IMAPAccount example_com
 Host imap.example.com
 Port 993
-User johnr@example.com
-PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.mailpass.gpg"
-UseIMAPS yes
-SSLType starttls
-SSLVersions TLSv1.2
-
-# The certificate file from the imap server needs to be stored on disk
-# to check for matches, this can be done with the following command.
-# Server name and port number need to change depending on your needs.
-#  openssl s_client -starttls imap -connect imap.example.com:port -showcerts
-CertificateFile ~/.mutt/imap_example.crt
+User john.doe@example.com
+PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.mail/example_com_pass.gpg"
+SSLType IMAPS
+# List of certificates.
+# The following line should work, if not it may be worth looking at
+# certificates produced by google with something like that:
+#   openssl s_client -connect imap.example_com.com:993 -showcerts
+# And then copy-paste the certificates needed.
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 
 IMAPStore example_com_remote
-Account example_name
+Account example_com
 
 MaildirStore example_com_local
-# The trailing "/" is important
 Path ~/.mail/example_com/
 Inbox ~/.mail/example_com/Inbox
 
-Channel servername
+Channel example_com
 Master :example_com_remote:
 Slave :example_com_local:
 Patterns *
-
-# Automatically create missing mailboxes, both locally and on the server
+# Exclude everything under the internal [Example_Com] folder, except the
+# interesting folders. This is useful for gmail.
+#Patterns * ![Gmail]* "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail"
+# Automatically create missing mailboxes, both locally and on the server.
 Create Both
-# Save the synchronization state files in the relevant directory
+# Save the synchronization state files in the relevant directory.
 SyncState *

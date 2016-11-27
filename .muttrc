@@ -16,6 +16,9 @@ set sidebar_visible = yes
 set sidebar_format = "%B%*  (%N)"
 set sidebar_new_mail_only = yes
 set sidebar_folder_indent = yes
+# Calculate statistics, necessary for incoming message count in
+# sidebar_format.
+set mail_check_stats = yes
 
 # Stop asking to "move read messages to mbox"
 set move = no

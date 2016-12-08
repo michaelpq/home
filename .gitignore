@@ -92,7 +92,7 @@
 /.pki
 /.prism
 /.profile
-/.psql_history
+/.psql_history*
 /.pulse-cookie
 /.pulse
 /.purple

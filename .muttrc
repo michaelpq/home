@@ -39,6 +39,9 @@ set mail_check = 120
 set ssl_starttls = yes
 set ssl_force_tls = yes
 
+# Don't add User-Agent in sent messages
+user_agent = no
+
 #--------------------------------------------------------------------------
 # Colors
 #--------------------------------------------------------------------------

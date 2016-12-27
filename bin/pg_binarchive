@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # pg_binarchive
 #	Update a series of archive containing stable Postgres versions
-#	Copyright (c) 2010-2016, Michael Paquier
+#	Copyright (c) 2010-2017, Michael Paquier
 #
 #	This is used for test purposes. Be sure to update LD_LIBRARY_PATH
 #	and call those archives with full path as they are not contained

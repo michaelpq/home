@@ -6,7 +6,7 @@
 !	here use bitstream-vera, which is a really elegant font for
 !	programming. Note that xrdb needs package xorg-xrdb.
 !
-!	Copyright (C) 2010-2016, Michael Paquier
+!	Copyright (C) 2010-2017, Michael Paquier
 !--------------------------------------------------------------------------
 
 ! Settings for urxvt

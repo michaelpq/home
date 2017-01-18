@@ -97,7 +97,7 @@
 /.pulse
 /.purple
 /.putty
-/.python_history
+/.python_history*
 /.RSA
 /.rediscli_history
 /.rnd

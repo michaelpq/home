@@ -310,9 +310,11 @@ fi
 # Compile...
 make -j $NUM_CORES
 
-# Install
+# Install, triggerring uninstall first to remove anything left previously.
+make uninstall
 make install
 
 # Install contrib modules
 cd contrib/
+make uninstall
 make install

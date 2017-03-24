@@ -5,8 +5,9 @@
 #	Copyright (c) 2010-2017, Michael Paquier
 #--------------------------------------------------------------------------
 
-# Immediately leave in case of failure
-set -e
+# Immediately leave in case of failure and avoid using unassigned
+# variables.
+set -eu
 
 which openssl > /dev/null 2>&1
 if [ $? != 0 ]; then

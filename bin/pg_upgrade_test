@@ -9,8 +9,9 @@
 #	This patch
 #--------------------------------------------------------------------------
 
-# Immediately leave in case of failure
-set -e
+# Immediately leave in case of failure and avoid using unassigned
+# variables.
+set -eu
 
 # Option-related variables
 EXPECTED_ARGS=0

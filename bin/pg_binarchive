@@ -10,8 +10,9 @@
 #	features like pg_upgrade when testing.
 #--------------------------------------------------------------------------
 
-# Immediately leave in case of failure
-set -e
+# Immediately leave in case of failure and avoid using unassigned
+# variables.
+set -eu
 
 # Create stable repository if it does not exist yet
 if [ ! -d "$HOME_STABLE_BIN" ]; then

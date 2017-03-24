@@ -29,8 +29,9 @@
 #	In the settings, WAL archiving is enabled.
 #--------------------------------------------------------------------------
 
-# Immediately leave in case of failure
-set -e
+# Immediately leave in case of failure and avoid using unassigned
+# variables.
+set -eu
 
 # Option check flags
 FLAG_PATH=0

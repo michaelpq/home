@@ -7,8 +7,9 @@
 #	The cluster is built using postgres_* infrastructure of Home.
 #--------------------------------------------------------------------------
 
-# Immediately leave in case of failure
-set -e
+# Immediately leave in case of failure and avoid using unassigned
+# variables.
+set -eu
 
 # Take and check options
 EXPECTED_ARGS=0

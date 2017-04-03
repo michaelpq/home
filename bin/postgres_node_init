@@ -285,9 +285,6 @@ else
 	# Initialize a standby with a fresh base backup
 	pg_basebackup -p $ROOT_PORT -D $NODE_DATA_FOLDER
 
-	# Remove log files, the ones from master are just useless noise
-	rm -r $NODE_DATA_FOLDER/pg_log/*
-
 	# Set recovery.conf
 	echo -e $OPTIONS_STANDBY_RECOVERY > $NODE_DATA_FOLDER/recovery.conf
 

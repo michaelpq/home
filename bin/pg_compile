@@ -315,17 +315,14 @@ if [ "$FLAG_CONFIGURE" == 1 ]; then
 	exit 0
 fi
 
-# Compile...
-make -j $NUM_CORES
-
 # Before installing anything, rip off completely the existing installation.
 # This avoids game dependencies for example with header files across major
 # versions.
 rm -rf $PSQL_INSTALL_FOLDER/*
 
-# Install main components
-make install
+# Compile and install
+make install -j $NUM_CORES
 
 # Install contrib modules
 cd contrib/
-make install
+make -j $NUM_CORES install

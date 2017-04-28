@@ -46,6 +46,9 @@ alias makepg="make USE_PGXS=1"
 # Detect Postgres process
 alias pspg="ps ux | grep --directories=skip postgres | grep -v 'grep --directories'"
 
+# To maximize speed of regression tests in Postgres
+alias pgcheck="cd \$HOME_POSTGRES_SRC && make check-world -j 4 PROVE_FLAGS='-j 4'"
+
 # Attach psql process to debugger, useful for client-side debugging.
 if [[ $HOME_ENV_NAME == Darwin ]]; then
 	alias psql_dbg="lldb -p \`pgrep psql\`"

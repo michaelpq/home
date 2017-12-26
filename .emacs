@@ -170,8 +170,9 @@
 ;; Display current function name in code
 (which-function-mode 1)
 
-;; Mutt settings
-(setq auto-mode-alist (append '(("/tmp/mutt.*" . mail-mode)) auto-mode-alist))
+;; Mutt settings to enable auto-fill-mode for messages.
+;; This is enabled for all files which include "mutt" in their names.
+(add-to-list 'auto-mode-alist '(".*mutt.*" . message-mode))
 
 ;;--------------------------------------------------------------------------
 ;; Navigation

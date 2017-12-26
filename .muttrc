@@ -7,6 +7,8 @@ set message_cachedir = ~/.mutt/cache/bodies
 set certificate_file = ~/.mutt/certificates
 # If created as a repository, this will contain one file per account.
 set header_cache = ~/.mutt/cache/headers
+# Path for temporary data, located directly in user's path
+set tmpdir = ~/.mutt/tmp
 
 # Keepalive settings
 set imap_keepalive = 900

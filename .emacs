@@ -174,6 +174,16 @@
 ;; This is enabled for all files which include "mutt" in their names.
 (add-to-list 'auto-mode-alist '(".*mutt.*" . message-mode))
 
+;; Git settings: auto-fill-mode for commits with dedicated mode.
+(define-derived-mode git-commit-mode text-mode "GitCommit"
+  "Mode for writing git commit files."
+  (setq fill-column 72)
+  (auto-fill-mode +1)
+  (set (make-local-variable 'comment-start-skip) "#.*$"))
+(add-to-list 'auto-mode-alist
+	     '("/\\(?:COMMIT\\|NOTES\\|TAG\\|PULLREQ\\)_EDITMSG\\'"
+	       . git-commit-mode))
+
 ;;--------------------------------------------------------------------------
 ;; Navigation
 ;;--------------------------------------------------------------------------

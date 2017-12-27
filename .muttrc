@@ -44,6 +44,10 @@ set ssl_force_tls = yes
 # Don't add User-Agent in sent messages
 set user_agent = no
 
+# Handling of reply messages
+# Always include replies
+set include = yes
+
 #--------------------------------------------------------------------------
 # Colors
 #--------------------------------------------------------------------------

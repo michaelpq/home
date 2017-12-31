@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # ssl_key_generate
 #	Small utility to generate a self-signed SSL key for Postgres
-#	Copyright (c) 2010-2017, Michael Paquier
+#	Copyright (c) 2010-2018, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Immediately leave in case of failure and avoid using unassigned

@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # git-replace-str
 #	Replace a string by another in a set of files in a git repository.
-#	Copyright (c) 2010-2017, Michael Paquier
+#	Copyright (c) 2010-2018, Michael Paquier
 #
 #	This is always useful for things like copyright updates or modification
 #	of variable names. This can be called as a subcommand of git called

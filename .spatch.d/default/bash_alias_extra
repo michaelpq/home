@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------
 # bash_alias_extra
 #	Extra settings for aliases
-#	Copyright (c) 2010-2017, Michael Paquier
+#	Copyright (c) 2010-2018, Michael Paquier
 #--------------------------------------------------------------------------
 
 # This is a default configuration file, so empty by default...

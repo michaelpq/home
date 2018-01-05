@@ -124,6 +124,7 @@
 /.viminfo
 /.VirtualBox
 /.vnc
+/.wget-hsts
 /.wine
 /.Xauthority
 /.xonotic

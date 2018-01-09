@@ -24,7 +24,7 @@ state_file "~/.mpd/state"
 # Listen to all the addresses available
 # bind_to_address "[::]:6600"
 # Bind to unix socket
-# bind_to_address "/home/user/.mpd/socket"
+# bind_to_address "~/.mpd/socket"
 
 # Control of the input
 input {

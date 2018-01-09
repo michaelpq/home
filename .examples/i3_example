@@ -12,6 +12,9 @@
 # This needs the package xorg-xsetroot installed.
 exec --no-startup-id xsetroot -solid "#336699"
 
+# Add network manager as part of the side bar
+exec --no-startup-id nm-applet --sm-disable
+
 # Central shortcut command variable. This is equivalent to the Windows
 # button.
 set $mod Mod4

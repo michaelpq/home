@@ -27,6 +27,7 @@ URxvt*rightScrollBar:     true
 URxvt*jumpScroll:         true
 URxvt*multiScroll:        true
 URxvt*toolBar:            false
+URxvt.cursorColor:        S_base1
 ! Settings for input in Japanese with ibus
 URxvt.inputMethod:        ibus
 URxvt.preeditType:        OverTheSpot

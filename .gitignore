@@ -129,6 +129,7 @@
 /.wine
 /.Xauthority
 /.xonotic
+/.xsession-errors*
 /1
 /dwhelper
 /MyMachines

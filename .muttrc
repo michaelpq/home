@@ -18,6 +18,7 @@ set sidebar_visible = yes
 set sidebar_format = "%B%*  (%N)"
 set sidebar_new_mail_only = no
 set sidebar_folder_indent = yes
+set sidebar_width = 25
 # Calculate statistics, necessary for incoming message count in
 # sidebar_format.
 set mail_check_stats = yes

@@ -33,6 +33,7 @@
 [diff]
 	# Detect files renamed as well as copies
 	renames = copies
+	algorithm = histogram
 [format]
 	pretty = format:%C(blue)commit: %H%C(reset)%n%C(green)author: %aN <%aE>%C(reset)%n%C(yellow)date: %cD%C(reset)%n%B
 [push]

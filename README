@@ -28,12 +28,12 @@ Private paths
 
 Home provides paths to store private binaries and settings to very
 adaptable to the user's needs. Default environment variables define
-those paths (which still need to be created btw):
+those paths (which still need to be created):
 
 - $HOME_BIN_EXTRA, for private binaries. Included in PATH by default.
 
 It is not recommended to change those default values, as the same values
-are hardcoded as well in .gitignore in the dedicated paths.
+are hard-coded as well in .gitignore in the dedicated paths.
 
 There is as well a set of files that can be used for private settings:
 
@@ -60,7 +60,7 @@ All those paths are ignored by Home. Those folders need to be created
 by user if needed as well. For more information, feel free to read
 .spatch.d/README about profile configuration with spatch.
 
-It is as well possible to hardcode them in the extra bash settings as
+It is as well possible to hard-code them in the extra bash settings as
 private settings are loaded after the settings of Home.
 
 Copyright

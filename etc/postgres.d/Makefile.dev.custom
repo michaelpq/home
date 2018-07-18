@@ -8,6 +8,9 @@ CFLAGS += -DG
 # Profiling with perf
 CFLAGS += -fno-omit-frame-pointer
 
+# Set of warnings for development versions
+CFLAGS += -Wformat
+
 # Let compiler generate some useful input for gdb
 # CFLAGS += -ggdb -g3
 

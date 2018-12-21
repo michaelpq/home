@@ -171,8 +171,10 @@
 (which-function-mode 1)
 
 ;; Mutt settings to enable auto-fill-mode for messages.
-;; This is enabled for all files which include "mutt" in their names.
-(add-to-list 'auto-mode-alist '(".*mutt.*" . message-mode))
+;; Open mail-mode when emacs is invoked by mutt.
+(add-to-list 'auto-mode-alist '("/mutt" . mail-mode))
+;; Wrap email body.
+(add-hook 'mail-mode-hook 'turn-on-auto-fill)
 
 ;; Git settings: auto-fill-mode for commits with dedicated mode.
 (define-derived-mode git-commit-mode text-mode "GitCommit"

@@ -57,8 +57,8 @@ show_help()
 	echo "  -h                  Show this help and leave"
 	echo "  -p PORT             Port of the node"
 	echo "  -q MASTER_PORT      Port of root node this standby needs to use"
-	echo "  -r RECOVERY_SUFFIX  Specify recovery.conf file suffix for"
-	echo "                      custom settings. Works only for standby node."
+	echo "  -r RECOVERY_SUFFIX  Specify file suffix for recovery parameters"
+	echo "                      Works only for standby node."
 	echo "  -s                  Create a standby"
 	echo " "
 	echo "Notes:"
@@ -69,7 +69,7 @@ show_help()
 	echo "  This is useful for debugging purposes or to plug in modules."
 	echo "  The suffix designates a file name of postgresql.$CONFIG_SUFFIX.conf."
 	echo "  This option has no effect for a standby node."
-	echo "- Similarly to CONFIG_SUFFIX, RECOVERY_SUFFIX works for recovery.conf"
+	echo "- Similarly to CONFIG_SUFFIX, RECOVERY_SUFFIX works recovery parameters"
 	echo "  and recovery.$RECOVERY_SUFFIX.conf. This option has no effect for"
 	echo "  a master node."
 	echo "- A standby node inherits its postgresql.conf parameters directly"
@@ -110,7 +110,7 @@ do
 		ROOT_PORT="$OPTARG"
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
 		;;
-	r)	# Specify recovery.conf file settings
+	r)	# Specify recovery file settings
 		FLAG_RECOVERY_SUFFIX=1
 		RECOVERY_SUFFIX="$OPTARG"
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
@@ -271,7 +271,7 @@ else
 	echo "- Archive folder: $NODE_ARCHIVE"
 	echo "- Root port: $ROOT_PORT"
 
-	# Node-related parameters for recovery.conf
+	# Node-related parameters for recovery
 	OPTIONS_STANDBY_RECOVERY="restore_command = 'cp $ROOT_ARCHIVE/%f %p'$CONF_NEWLINE"\
 "primary_conninfo = 'port=$ROOT_PORT user=$CLUSTER_USER application_name=node_$NODE_PORT'$CONF_NEWLINE"
 
@@ -279,10 +279,14 @@ else
 	pg_basebackup -p $ROOT_PORT -D $NODE_DATA_FOLDER
 
 	# Set recovery.conf
-	echo -e $OPTIONS_STANDBY_RECOVERY > $NODE_DATA_FOLDER/recovery.conf
+	echo -e $OPTIONS_STANDBY_RECOVERY >> $NODE_DATA_FOLDER/postgresql.conf
 
 	# Set custom parameters
-	cat $USER_RECOVERY_FILE >> $NODE_DATA_FOLDER/recovery.conf
+	cat $USER_RECOVERY_FILE >> $NODE_DATA_FOLDER/postgresql.conf
+
+	# Set standby and recovery states
+	touch $NODE_DATA_FOLDER/recovery.signal
+	touch $NODE_DATA_FOLDER/standby.signal
 fi
 
 # Node-related parameters for postgresql.conf. Those values need to

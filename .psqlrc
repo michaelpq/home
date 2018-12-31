@@ -1,6 +1,6 @@
 -- .psqlrc
 --	Custom settings for psql client
---	Copyright (c) 2010-2018, Michael Paquier
+--	Copyright (c) 2010-2019, Michael Paquier
 
 \echo 'Option menu:'
 \echo '\t:clear\t\t-- Clear screen'

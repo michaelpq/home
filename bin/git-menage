@@ -4,7 +4,7 @@
 #	Wrapper to perform global cleanup of a git repository. Contains
 #	some prevention mechanisms for stupid mistakes like ripping out
 #	completely a HOME repository.
-#	Copyright (c) 2010-2018, Michael Paquier
+#	Copyright (c) 2010-2019, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Check that the top-level folder is not equal to HOME, this prevents

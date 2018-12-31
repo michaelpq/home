@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------
 # .bash_logout
 #	bash logout settings
-#	Copyright (c) 2010-2018, Michael Paquier
+#	Copyright (c) 2010-2019, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Clear screen when disconnecting

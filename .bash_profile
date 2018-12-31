@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------
 # .bash_profile
 #	Bash profile settings, loaded when terminal is activated by ssh
-#	Copyright (c) 2010-2018, Michael Paquier
+#	Copyright (c) 2010-2019, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Load .bashrc

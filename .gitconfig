@@ -13,7 +13,7 @@
 	# Shorten copied, renamed and deleted files for a patch generated
 	format-patch-short = format-patch --find-renames --irreversible-delete --break-rewrites --find-copies
 	# Print graph of git commit history
-	graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad [%an] %Cgreen%d%Creset %s\" --all --date=short
+	graph = log --graph --date-order -C -M --pretty=format:\"<%h> %cd [%cn] %Cgreen%d%Creset %s\" --all --date=short
 	# Shorten log information for copied, renamed and deleted files
 	log-short = log --find-renames --irreversible-delete --break-rewrites --find-copies -p
 	# Show top level repository

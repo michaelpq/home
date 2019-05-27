@@ -23,4 +23,8 @@ make install
 cd $HOME_POSTGRES_SRC
 ./src/tools/pgindent/pgindent
 
+# Indent the perl code.  This needs to happen as well from the root of
+# the source tree, and has a dependency with perltidy.
+./src/tools/pgindent/pgperltidy
+
 echo "Indentation done!"

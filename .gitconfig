@@ -14,6 +14,9 @@
 	format-patch-short = format-patch --find-renames --irreversible-delete --break-rewrites --find-copies
 	# Print graph of git commit history
 	graph = log --graph --date-order -C -M --pretty=format:\"<%h> %cd [%cn] %Cgreen%d%Creset %s\" --all --date=short
+	# List files part of a commit.  Can be easily combined with git add.
+	# This needs a single commit number at its tail.
+	list-files = diff-tree --no-commit-id --name-only -r
 	# Shorten log information for copied, renamed and deleted files
 	log-short = log --find-renames --irreversible-delete --break-rewrites --find-copies -p
 	# Show top level repository

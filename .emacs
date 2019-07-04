@@ -52,6 +52,9 @@
 ;; Disable Ctl-Z to prevent an unwanted exit
 (global-unset-key (kbd "C-z"))
 
+;; Enable region-wide upper-case switch.
+(put 'upcase-region 'disabled nil)
+
 ;;--------------------------------------------------------------------------
 ;; Formatting
 ;;--------------------------------------------------------------------------

@@ -27,6 +27,9 @@ cd $HOME_POSTGRES_SRC
 # the source tree, and has a dependency with perltidy.
 ./src/tools/pgindent/pgperltidy
 
+# Run perlcritic and check state of the code while on it.
+./src/tools/perlcheck/pgperlcritic
+
 # Reformat the bootstrap catalog data files.
 cd src/include/catalog
 make reformat-dat-files

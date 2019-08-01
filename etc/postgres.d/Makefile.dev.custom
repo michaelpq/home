@@ -12,7 +12,10 @@ CFLAGS += -fno-omit-frame-pointer
 CFLAGS += -Wformat
 
 # Let compiler generate some useful input for gdb
-# CFLAGS += -ggdb -g3
+# CFLAGS += -Og -ggdb -g3
+
+# Test for string truncations
+# CFLAGS += -Wformat-overflow=2 -Wformat-truncation=2
 
 # For WAL debugging
 # CFLAGS += -DWAL_DEBUG

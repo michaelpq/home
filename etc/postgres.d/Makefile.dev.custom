@@ -8,6 +8,9 @@ CFLAGS += -DG
 # Profiling with perf
 CFLAGS += -fno-omit-frame-pointer
 
+# Write, read and copy of parsed plan trees
+# CFLAGS += -DWRITE_READ_PARSE_PLAN_TREES -DCOPY_PARSE_PLAN_TREES
+
 # Set of warnings for development versions
 CFLAGS += -Wformat
 

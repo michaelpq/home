@@ -37,7 +37,8 @@
 #   GIT_COMPLETION_CHECKOUT_NO_GUESS
 #
 #     When set to "1", do not include "DWIM" suggestions in git-checkout
-#     completion (e.g., completing "foo" when "origin/foo" exists).
+#     and git-switch completion (e.g., completing "foo" when "origin/foo"
+#     exists).
 
 case "$COMP_WORDBREAKS" in
 *:*) : great ;;
@@ -400,7 +401,8 @@ __gitcomp_builtin ()
 	if [ -z "$options" ]; then
 		# leading and trailing spaces are significant to make
 		# option removal work correctly.
-		options=" $incl $(__git ${cmd/_/ } --git-completion-helper) "
+		options=" $incl $(__git ${cmd/_/ } --git-completion-helper) " || return
+
 		for i in $excl; do
 			options="${options/ $i / }"
 		done
@@ -438,7 +440,7 @@ __gitcomp_nl ()
 # Callers must take care of providing only paths that match the current path
 # to be completed and adding any prefix path components, if necessary.
 # 1: List of newline-separated matching paths, complete with all prefix
-#    path componens.
+#    path components.
 __gitcomp_file_direct ()
 {
 	local IFS=$'\n'
@@ -853,9 +855,14 @@ __git_compute_merge_strategies ()
 	__git_merge_strategies=$(__git_list_merge_strategies)
 }
 
+__git_merge_strategy_options="ours theirs subtree subtree= patience
+	histogram diff-algorithm= ignore-space-change ignore-all-space
+	ignore-space-at-eol renormalize no-renormalize no-renames
+	find-renames find-renames= rename-threshold="
+
 __git_complete_revlist_file ()
 {
-	local pfx ls ref cur_="$cur"
+	local dequoted_word pfx ls ref cur_="$cur"
 	case "$cur_" in
 	*..?*:*)
 		return
@@ -863,14 +870,18 @@ __git_complete_revlist_file ()
 	?*:*)
 		ref="${cur_%%:*}"
 		cur_="${cur_#*:}"
-		case "$cur_" in
+
+		__git_dequote "$cur_"
+
+		case "$dequoted_word" in
 		?*/*)
-			pfx="${cur_%/*}"
-			cur_="${cur_##*/}"
+			pfx="${dequoted_word%/*}"
+			cur_="${dequoted_word##*/}"
 			ls="$ref:$pfx"
 			pfx="$pfx/"
 			;;
 		*)
+			cur_="$dequoted_word"
 			ls="$ref"
 			;;
 		esac
@@ -880,21 +891,10 @@ __git_complete_revlist_file ()
 		*)   pfx="$ref:$pfx" ;;
 		esac
 
-		__gitcomp_nl "$(__git ls-tree "$ls" \
-				| sed '/^100... blob /{
-				           s,^.*	,,
-				           s,$, ,
-				       }
-				       /^120000 blob /{
-				           s,^.*	,,
-				           s,$, ,
-				       }
-				       /^040000 tree /{
-				           s,^.*	,,
-				           s,$,/,
-				       }
-				       s/^.*	//')" \
-			"$pfx" "$cur_" ""
+		__gitcomp_file "$(__git ls-tree "$ls" \
+				| sed 's/^.*	//
+				       s/$//')" \
+			"$pfx" "$cur_"
 		;;
 	*...*)
 		pfx="${cur_%...*}..."
@@ -1003,10 +1003,19 @@ __git_complete_strategy ()
 	-s|--strategy)
 		__gitcomp "$__git_merge_strategies"
 		return 0
+		;;
+	-X)
+		__gitcomp "$__git_merge_strategy_options"
+		return 0
+		;;
 	esac
 	case "$cur" in
 	--strategy=*)
 		__gitcomp "$__git_merge_strategies" "" "${cur##--strategy=}"
+		return 0
+		;;
+	--strategy-option=*)
+		__gitcomp "$__git_merge_strategy_options" "" "${cur##--strategy-option=}"
 		return 0
 		;;
 	esac
@@ -1017,7 +1026,7 @@ __git_all_commands=
 __git_compute_all_commands ()
 {
 	test -n "$__git_all_commands" ||
-	__git_all_commands=$(git --list-cmds=main,others,alias,nohelpers)
+	__git_all_commands=$(__git --list-cmds=main,others,alias,nohelpers)
 }
 
 # Lists all set config variables starting with the given section prefix,
@@ -1170,6 +1179,7 @@ __git_count_arguments ()
 }
 
 __git_whitespacelist="nowarn warn error error-all fix"
+__git_patchformat="mbox stgit stgit-series hg mboxrd"
 __git_am_inprogress_options="--skip --continue --resolved --abort --quit --show-current-patch"
 
 _git_am ()
@@ -1182,6 +1192,10 @@ _git_am ()
 	case "$cur" in
 	--whitespace=*)
 		__gitcomp "$__git_whitespacelist" "" "${cur##--whitespace=}"
+		return
+		;;
+	--patch-format=*)
+		__gitcomp "$__git_patchformat" "" "${cur##--patch-format=}"
 		return
 		;;
 	--*)
@@ -1207,6 +1221,10 @@ _git_apply ()
 _git_add ()
 {
 	case "$cur" in
+	--chmod=*)
+		__gitcomp "+x -x" "" "${cur##--chmod=}"
+		return
+		;;
 	--*)
 		__gitcomp_builtin add
 		return
@@ -1266,6 +1284,8 @@ _git_bisect ()
 		;;
 	esac
 }
+
+__git_ref_fieldlist="refname objecttype objectsize objectname upstream push HEAD symref"
 
 _git_branch ()
 {
@@ -1350,6 +1370,9 @@ _git_cherry_pick ()
 		__gitcomp "$__git_cherry_pick_inprogress_options"
 		return
 	fi
+
+	__git_complete_strategy && return
+
 	case "$cur" in
 	--*)
 		__gitcomp_builtin cherry-pick "" \
@@ -1480,7 +1503,8 @@ _git_diff ()
 }
 
 __git_mergetools_common="diffuse diffmerge ecmerge emerge kdiff3 meld opendiff
-			tkdiff vimdiff gvimdiff xxdiff araxis p4merge bc codecompare
+			tkdiff vimdiff gvimdiff xxdiff araxis p4merge bc
+			codecompare smerge
 "
 
 _git_difftool ()
@@ -1511,6 +1535,10 @@ _git_fetch ()
 	case "$cur" in
 	--recurse-submodules=*)
 		__gitcomp "$__git_fetch_recurse_submodules" "" "${cur##--recurse-submodules=}"
+		return
+		;;
+	--filter=*)
+		__gitcomp "blob:none blob:limit= sparse:oid=" "" "${cur##--filter=}"
 		return
 		;;
 	--*)
@@ -1627,9 +1655,9 @@ _git_help ()
 	esac
 	if test -n "$GIT_TESTING_ALL_COMMAND_LIST"
 	then
-		__gitcomp "$GIT_TESTING_ALL_COMMAND_LIST $(git --list-cmds=alias,list-guide) gitk"
+		__gitcomp "$GIT_TESTING_ALL_COMMAND_LIST $(__git --list-cmds=alias,list-guide) gitk"
 	else
-		__gitcomp "$(git --list-cmds=main,nohelpers,alias,list-guide) gitk"
+		__gitcomp "$(__git --list-cmds=main,nohelpers,alias,list-guide) gitk"
 	fi
 }
 
@@ -1709,8 +1737,8 @@ __git_log_shortlog_options="
 	--all-match --invert-grep
 "
 
-__git_log_pretty_formats="oneline short medium full fuller email raw format:"
-__git_log_date_formats="relative iso8601 rfc2822 short local default raw"
+__git_log_pretty_formats="oneline short medium full fuller email raw format: mboxrd"
+__git_log_date_formats="relative iso8601 iso8601-strict rfc2822 short local default raw unix format:"
 
 _git_log ()
 {
@@ -2133,6 +2161,44 @@ _git_status ()
 	__git_complete_index_file "$complete_opt"
 }
 
+_git_switch ()
+{
+	case "$cur" in
+	--conflict=*)
+		__gitcomp "diff3 merge" "" "${cur##--conflict=}"
+		;;
+	--*)
+		__gitcomp_builtin switch
+		;;
+	*)
+		# check if --track, --no-track, or --no-guess was specified
+		# if so, disable DWIM mode
+		local track_opt="--track" only_local_ref=n
+		if [ "$GIT_COMPLETION_CHECKOUT_NO_GUESS" = "1" ] ||
+		   [ -n "$(__git_find_on_cmdline "--track --no-track --no-guess")" ]; then
+			track_opt=''
+		fi
+		# explicit --guess enables DWIM mode regardless of
+		# $GIT_COMPLETION_CHECKOUT_NO_GUESS
+		if [ -n "$(__git_find_on_cmdline "--guess")" ]; then
+			track_opt='--track'
+		fi
+		if [ -z "$(__git_find_on_cmdline "-d --detach")" ]; then
+			only_local_ref=y
+		else
+			# --guess --detach is invalid combination, no
+			# dwim will be done when --detach is specified
+			track_opt=
+		fi
+		if [ $only_local_ref = y -a -z "$track_opt" ]; then
+			__gitcomp_direct "$(__git_heads "" "$cur" " ")"
+		else
+			__git_complete_refs $track_opt
+		fi
+		;;
+	esac
+}
+
 __git_config_get_set_variables ()
 {
 	local prevword word config_file= c=$cword
@@ -2228,7 +2294,7 @@ _git_config ()
 		return
 		;;
 	diff.submodule)
-		__gitcomp "log short"
+		__gitcomp "$__git_diff_submodule_formats"
 		return
 		;;
 	help.format)
@@ -2395,6 +2461,10 @@ _git_remote ()
 _git_replace ()
 {
 	case "$cur" in
+	--format=*)
+		__gitcomp "short medium long" "" "${cur##--format=}"
+		return
+		;;
 	--*)
 		__gitcomp_builtin replace
 		return
@@ -2427,6 +2497,21 @@ _git_reset ()
 	__git_complete_refs
 }
 
+_git_restore ()
+{
+	case "$cur" in
+	--conflict=*)
+		__gitcomp "diff3 merge" "" "${cur##--conflict=}"
+		;;
+	--source=*)
+		__git_complete_refs --cur="${cur##--source=}"
+		;;
+	--*)
+		__gitcomp_builtin restore
+		;;
+	esac
+}
+
 __git_revert_inprogress_options="--continue --quit --abort"
 
 _git_revert ()
@@ -2436,6 +2521,7 @@ _git_revert ()
 		__gitcomp "$__git_revert_inprogress_options"
 		return
 	fi
+	__git_complete_strategy && return
 	case "$cur" in
 	--*)
 		__gitcomp_builtin revert "" \
@@ -2580,7 +2666,7 @@ _git_submodule ()
 {
 	__git_has_doubledash && return
 
-	local subcommands="add status init deinit update summary foreach sync"
+	local subcommands="add status init deinit update set-branch summary foreach sync absorbgitdirs"
 	local subcommand="$(__git_find_on_cmdline "$subcommands")"
 	if [ -z "$subcommand" ]; then
 		case "$cur" in
@@ -2610,6 +2696,9 @@ _git_submodule ()
 			--recommend-shallow --no-recommend-shallow
 			--force --rebase --merge --reference --depth --recursive --jobs
 		"
+		;;
+	set-branch,--*)
+		__gitcomp "--default --branch"
 		;;
 	summary,--*)
 		__gitcomp "--cached --files --summary-limit"
@@ -2895,7 +2984,7 @@ __git_main ()
 			then
 				__gitcomp "$GIT_TESTING_PORCELAIN_COMMAND_LIST"
 			else
-				__gitcomp "$(git --list-cmds=list-mainporcelain,others,nohelpers,alias,list-complete,config)"
+				__gitcomp "$(__git --list-cmds=list-mainporcelain,others,nohelpers,alias,list-complete,config)"
 			fi
 			;;
 		esac
@@ -2993,7 +3082,7 @@ if [[ -n ${ZSH_VERSION-} ]] &&
 
 		local IFS=$'\n'
 		compset -P '*[=:]'
-		compadd -Q -f -- ${=1} && _ret=0
+		compadd -f -- ${=1} && _ret=0
 	}
 
 	__gitcomp_file ()
@@ -3002,7 +3091,7 @@ if [[ -n ${ZSH_VERSION-} ]] &&
 
 		local IFS=$'\n'
 		compset -P '*[=:]'
-		compadd -Q -p "${2-}" -f -- ${=1} && _ret=0
+		compadd -p "${2-}" -f -- ${=1} && _ret=0
 	}
 
 	_git ()

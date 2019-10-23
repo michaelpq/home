@@ -23,6 +23,9 @@ CFLAGS += -Wformat
 # For WAL debugging
 # CFLAGS += -DWAL_DEBUG
 
+# For lock debugging
+# CFLAGS += -DLOCK_DEBUG
+
 # For planner debugging
 # CFLAGS += -DOPTIMIZER_DEBUG
 

@@ -37,6 +37,10 @@
 	# Detect files renamed as well as copies
 	renames = copies
 	algorithm = histogram
+	# Ordering of files in diffs, for PostgreSQL
+	# XXX: If this becomes annoying for other projects, this had better
+	# live as a local setting.
+	orderFile = ~/.gitconfig_orderfile
 [format]
 	pretty = format:%C(blue)commit: %H%C(reset)%n%C(green)author: %aN <%aE>%C(reset)%n%C(green)date: %aD%C(reset)%n%C(yellow)committer: %cN <%ce>%C(reset)%n%C(yellow)date: %cD%C(reset)%n%B
 [log]

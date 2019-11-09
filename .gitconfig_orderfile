@@ -1,0 +1,33 @@
+# Ordering of files showing up in diffs for PostgreSQL
+# Backend code
+src/include/*
+src/backend/*
+
+# Compatibility layers
+src/common/*
+src/port/*
+
+# Frontend code
+src/fe_utils/*
+src/bin/*
+
+# libpq client
+src/interfaces/libpq/*
+
+# Regression tests
+src/test/*
+
+# m4 rules
+config/*
+
+# Documentation
+doc/*
+
+# Contrib modules
+contrib/*
+
+# Others
+src/makefiles/*
+src/template/*
+src/pl/*
+src/interfaces/*

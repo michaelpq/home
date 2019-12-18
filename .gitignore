@@ -10,6 +10,7 @@
 /.mutt_aliases
 /.mutt_extra
 /.psqlrc_extra
+/.wallpaper
 
 # Development paths
 /data
@@ -44,6 +45,7 @@
 /.eclipse
 /.emacs.d
 /.esd_auth
+/.fehbg
 /.filezilla
 /.fontconfig
 /.gconf

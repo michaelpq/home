@@ -4,7 +4,7 @@
 #	contain parameters related directly to Home. System variables
 #	should be set firectly in ~/.bashrc is they impact all the
 #	enrivonments.
-#	Copyright (c) 2010-2019, Michael Paquier
+#	Copyright (c) 2010-2020, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Environment definition, can be used here and there instead of calling

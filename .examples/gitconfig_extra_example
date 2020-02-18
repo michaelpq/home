@@ -2,7 +2,7 @@
 # .examples/gitconfig_extra_example
 #	example of global extra settings for GIT. This file should be
 #	copied as $HOME/.gitconfig_extra.
-#	Copyright (c) 2010-2019, Michael Paquier
+#	Copyright (c) 2010-2020, Michael Paquier
 #--------------------------------------------------------------------------
 [user]
 	name = John Doe

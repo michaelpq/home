@@ -2,7 +2,7 @@
 # .examples/homeconfig_extra_example
 #	Extra private settings for Home. This file should be copied as
 #	$HOME/.homeconfig_extra.
-#	Copyright (c) 2010-2019, Michael Paquier
+#	Copyright (c) 2010-2020, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Add your extra settings here and then copy this file as .homeconfig_extra,

@@ -3,7 +3,7 @@
 #	Example of settings for mbsyncrc, useful for backing up emails
 #	from an IMAP server and keep a local copy of them.
 #	This file should be copied as $HOME/.mbsyncrc.
-#	Copyright (c) 2016-2019, Michael Paquier
+#	Copyright (c) 2016-2020, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Each section of this file should be kept in blocks, with no newlines

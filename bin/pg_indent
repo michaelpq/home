@@ -3,7 +3,7 @@
 # pg_indent
 #	Indent automatically PostgreSQL code, compiling all the needed tools
 #	at the same time.
-#	Copyright (c) 2010-2019, Michael Paquier
+#	Copyright (c) 2010-2020, Michael Paquier
 #
 #	This is used for programming purposes, and is a small wrapper on top
 #	of the in-core tool called pgindent which should be used before commit

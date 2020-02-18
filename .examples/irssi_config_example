@@ -2,7 +2,7 @@
 # .examples/irssi_config_example
 #	Example of configuration file for irssi. This file should be
 #	copied as $HOME/.irssi/config
-#	Copyright (c) 2010-2019, Michael Paquier
+#	Copyright (c) 2010-2020, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Connect to freenode

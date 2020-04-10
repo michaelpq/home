@@ -198,6 +198,7 @@ fi
 # Some environment variables
 PSQL_BIN=$PSQL_FOLDER/bin
 INITDB=$PSQL_BIN/initdb
+PGBASEBACKUP=$PSQL_BIN/pg_basebackup
 
 # Folder for archives, enforce its creation if it does not exist
 if [ ! -d $HOME_POSTGRES_ARCHIVE ]; then
@@ -276,7 +277,7 @@ else
 "primary_conninfo = 'port=$ROOT_PORT user=$CLUSTER_USER application_name=node_$NODE_PORT'$CONF_NEWLINE"
 
 	# Initialize a standby with a fresh base backup
-	pg_basebackup -p $ROOT_PORT -D $NODE_DATA_FOLDER
+	$PGBASEBACKUP -p $ROOT_PORT -D $NODE_DATA_FOLDER
 
 	# Set recovery.conf
 	echo -e $OPTIONS_STANDBY_RECOVERY >> $NODE_DATA_FOLDER/postgresql.conf

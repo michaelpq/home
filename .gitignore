@@ -94,6 +94,7 @@
 /.p4*
 /.perltidyrc
 /.pki
+/.postgresql
 /.prism
 /.profile
 /.psql_history*

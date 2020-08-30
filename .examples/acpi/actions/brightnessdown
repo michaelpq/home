@@ -1,18 +1,18 @@
 #!/bin/bash
-# Script to reduce down the brightness of a script
+#
+# Script to reduce down the brightness of screen
 #
 # This comes from the Gentoo wiki:
 # https://wiki.gentoo.org/wiki/ACPI/ThinkPad-special-buttons#Backlight_control
 
 # Set the static decrement value.  Keep in mind that this will
 # be done twice.
-DecVal=50
+DecVal=200
 
 # Set the Minimum we will accept.
 MinVal=0
 
 # Get the current brightness value.
-#CurrVal=$(cat /sys/class/backlight/intel_backlight/brightness);
 read -r CurrVal < "/sys/class/backlight/intel_backlight/brightness"
 
 # Set the new value minus the decrement value.
@@ -26,4 +26,4 @@ echo $ThresholdVal
 # Set the new value directly.
 echo -n $ThresholdVal > /sys/class/backlight/intel_backlight/brightness
 
-logger "[ACPI] brightnessdown |$CurrVal<nowiki>| |</nowiki>$NewVal| |$ThresholdVal|"
+logger "[ACPI] brightnessdown |$CurrVal| |$NewVal| |$ThresholdVal|"

@@ -1,4 +1,5 @@
 #!/bin/bash
+#
 # Script to increase the brightness of a script
 #
 # This comes from the Gentoo wiki:
@@ -9,11 +10,9 @@
 IncVal=50
 
 # Get the Maximum value for use.
-#MaxVal=$(cat /sys/class/backlight/intel_backlight/max_brightness);
 read -r MaxVal < "/sys/class/backlight/intel_backlight/max_brightness"
 
 # Get the current brightness value.
-#CurrVal=$(cat /sys/class/backlight/intel_backlight/brightness);
 read -r CurrVal < "/sys/class/backlight/intel_backlight/brightness"
 
 # Set the new value minus the decrement value.

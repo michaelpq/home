@@ -1,2 +1,2 @@
 event=button/volumeup
-action=amixer -c 0 sset -M Master 5%%+ unmute -q
+action=/etc/acpi/actions/soundup

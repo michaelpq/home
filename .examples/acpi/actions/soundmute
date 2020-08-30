@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+# Script to toggle on/off of sound mute
+
+# This is a command that can be used for ALSA.
+amixer -D pulse set Master toggle
+
+# Note that depending on your environment, depending on if pulseaudio
+# or alsa is used, it may be necessary to use a command for a session
+# user.  For security reasons, pulseaudio should be run in a user
+# session, and not system wide, so this command would be the normal
+# course of action to allow pulseaudio to get the toggling information.
+# Replace USERNAME with the account user in use normally.
+#su - USERNAME -c "amixer -D pulse set Master toggle"

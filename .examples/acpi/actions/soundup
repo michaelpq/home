@@ -1,0 +1,4 @@
+#!/bin/bash
+#
+# Script to increase the sound volume, based on ALSA.
+amixer -q set Master 3dB+

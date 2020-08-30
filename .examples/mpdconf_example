@@ -37,6 +37,11 @@ audio_output {
 	type "alsa"
 	name "ALSA Device"
 }
+# Example for pulseaudio
+#audio_output {
+#	type "pulse"
+#	name "PULSE Device"
+#}
 
 # Example of settings for audio device on OSX
 #audio_output {

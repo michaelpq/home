@@ -8,6 +8,9 @@ CFLAGS += -DG
 # Profiling with perf
 CFLAGS += -fno-omit-frame-pointer
 
+# Enforce restrictions with regression test names
+CFLAGS += -DENFORCE_REGRESSION_TEST_NAME_RESTRICTIONS
+
 # Write, read and copy of parsed plan trees
 CFLAGS += -DWRITE_READ_PARSE_PLAN_TREES -DCOPY_PARSE_PLAN_TREES
 

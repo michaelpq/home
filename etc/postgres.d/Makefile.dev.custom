@@ -37,3 +37,7 @@ CFLAGS += -Wformat
 
 # Test for cache-flush hazards
 # CFLAGS += -DCLOBBER_CACHE_ALWAYS
+
+# Force flush of relcache and catcache on relation close
+# This makes the runs much longer, so use with care.
+# CFLAGS += -DRELCACHE_FORCE_RELEASE -DCATCACHE_FORCE_RELEASE

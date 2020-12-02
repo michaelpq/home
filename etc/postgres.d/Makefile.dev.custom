@@ -8,6 +8,9 @@ CFLAGS += -DG
 # Profiling with perf
 CFLAGS += -fno-omit-frame-pointer
 
+# Uninitialized values
+CFLAGS += -Wmaybe-uninitialized
+
 # Enforce restrictions with regression test names
 CFLAGS += -DENFORCE_REGRESSION_TEST_NAME_RESTRICTIONS
 

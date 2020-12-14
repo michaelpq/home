@@ -26,9 +26,9 @@ do
 	# Remove existing version if any
 	if [ -d "$HOME_STABLE_BIN/$branch" ]; then
 		echo "Removing old installation of $branch at $HOME_STABLE_BIN/$branch"
-		rm -r ${HOME_STABLE_BIN/$branch:?}
+		rm -r "$HOME_STABLE_BIN/$branch"
 	fi
 
 	# Install the latest version wanted
-	pg_compile -b $branch -o origin -p "$HOME_STABLE_BIN/$branch"
+	pg_compile -b "$branch" -o origin -p "$HOME_STABLE_BIN/$branch"
 done

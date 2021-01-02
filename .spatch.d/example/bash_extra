@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------
 # .bash_extra
 #	Extra private settings for bash
-#	Copyright (c) 2010-2020, Michael Paquier
+#	Copyright (c) 2010-2021, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Settings for git prompt on terminal

@@ -5,7 +5,7 @@
 #	the author and commiter name and emails by some custom data. Both
 #	author and committer fields are updated to the same values and a email
 #	is used to determine what to replace.
-#	Copyright (c) 2010-2020, Michael Paquier
+#	Copyright (c) 2010-2021, Michael Paquier
 #
 #	This can be called as well as "git filter $ARGS"
 #--------------------------------------------------------------------------

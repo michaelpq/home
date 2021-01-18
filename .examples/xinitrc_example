@@ -21,6 +21,9 @@ xrdb -merge ~/.xresources
 # Disk automount
 udiskie &
 
+# Add link to secondary monitor
+#xrandr --output HDMI-2 --auto --right-of eDP-1
+
 # Switch CAPS and ctrl on keyboard.
 # Doing so has the disadvantage to not work for TTY sessions, But the
 # advantage to not need a personal keymap and there is no need as well

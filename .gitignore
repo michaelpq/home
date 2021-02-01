@@ -135,6 +135,7 @@
 /.Xauthority
 /.xonotic
 /.xsession-errors*
+/.xsessionrc
 /.zoom
 /1
 /dwhelper

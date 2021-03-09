@@ -159,13 +159,27 @@ fi
 # Note: it might be better to use pg_start here but it looks better to rely
 # on default options for this test
 $BIN_OLD_VERSION/initdb -D $DATA_OLD_VERSION
-echo "port = 6665" >> $DATA_OLD_VERSION/postgresql.conf
+cat <<EOF >> $DATA_OLD_VERSION/postgresql.conf
+port = 6665
+logging_collector = on
+log_statement = 'all'
+log_checkpoints = on
+log_directory = 'log'
+EOF
+
 # Start it
 $BIN_OLD_VERSION/pg_ctl -w -D $DATA_OLD_VERSION start
 
 # Create cluster for new version
 $BIN_NEW_VERSION/initdb -D $DATA_NEW_VERSION
-echo "port = 6666" >> $DATA_NEW_VERSION/postgresql.conf
+cat <<EOF >> $DATA_NEW_VERSION/postgresql.conf
+port = 6666
+logging_collector = on
+log_statement = 'all'
+log_checkpoints = on
+log_directory = 'log'
+EOF
+
 # Start it
 $BIN_NEW_VERSION/pg_ctl -w -D $DATA_NEW_VERSION start
 

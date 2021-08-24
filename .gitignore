@@ -21,6 +21,7 @@
 /stable
 
 # System-related paths
+/.%*.png
 /.adobe
 /.account
 /.android

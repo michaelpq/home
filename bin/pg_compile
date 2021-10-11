@@ -30,6 +30,7 @@ show_help()
 	echo "Options:"
 	echo "  -c       Leave after configure"
 	echo "  -h       Show this help"
+	echo "  -i PATH  Define source folder"
 	echo "  -p PATH  Define installation folder"
 	echo "  -s FLAG  Choose custom Makefile.custom. This file is located"
 	echo "           in $HOME_POSTGRES_ETC and named as Makefile.XXX.custom."
@@ -124,7 +125,7 @@ update_code_to_branch()
 USER_GIT_REMOTE="origin"
 
 #Treat options
-while getopts 'b:cho:p:s:t:' OPTION
+while getopts 'b:chi:o:p:s:t:' OPTION
 do
 	case $OPTION in
 	b)	# Branch to sync code with
@@ -138,6 +139,11 @@ do
 		;;
 	h)	# Help
 		show_help 0
+		;;
+	i)  # Source folder where the build happens.
+		FLAG_SRC_FOLDER=1
+		USER_SRC_FOLDER="$OPTARG"
+		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
 		;;
 	o)	# Remote to sync branches with
 		USER_GIT_REMOTE="$OPTARG"
@@ -177,7 +183,7 @@ fi
 
 # Set input folder value
 if [ "$FLAG_SRC_FOLDER" == 1 ]; then
-	PSQL_SRC_FOLDER=$USER_INPUT_FOLDER
+	PSQL_SRC_FOLDER=$USER_SRC_FOLDER
 else
 	# Use global source folder as default
 	PSQL_SRC_FOLDER=$HOME_POSTGRES_SRC
@@ -237,10 +243,11 @@ else
 fi
 
 # Perform configure, build and installation, here calling configure from
-# the local folder is enough.
+# the source folder is enough.
 cd $PSQL_SRC_FOLDER
 
-# Configure folder is the base folder of git tree
+# Get the root folder of the current source directory, to be able
+# to call ./configure.  This script does not support VPATH builds.
 CONFIGURE_CALL_FOLDER=`git rev-parse --show-toplevel`
 
 # Update code to given tag if necessary
@@ -252,7 +259,7 @@ if [ "$FLAG_BRANCH" == 1 ]; then
 	update_code_to_branch $USER_GIT_BRANCH $USER_GIT_REMOTE
 fi
 
-# Move to base folder of git tree to not trigger VPATH install
+# Move to root folder of git tree to not trigger VPATH install
 cd $CONFIGURE_CALL_FOLDER
 
 # Check availability of ccache to improve compilation

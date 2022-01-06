@@ -3,7 +3,7 @@
 #	Example of settings for msmtprc, useful for sending asynchronously
 #	emails to a queue transparently from the email client used.
 #	This file should be copied as $HOME/.msmtprc.
-#	Copyright (c) 2016-2021, Michael Paquier
+#	Copyright (c) 2016-2022, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Settings for msmtp

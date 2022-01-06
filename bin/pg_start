@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # pg_start
 #	Start a PostgreSQL cluster
-#	Copyright (c) 2010-2021, Michael Paquier
+#	Copyright (c) 2010-2022, Michael Paquier
 #
 #	The cluster is built using postgres_* infrastructure of Home.
 #--------------------------------------------------------------------------

@@ -17,6 +17,9 @@ CFLAGS += -DENFORCE_REGRESSION_TEST_NAME_RESTRICTIONS
 # Write, read and copy of parsed plan trees
 CFLAGS += -DWRITE_READ_PARSE_PLAN_TREES -DCOPY_PARSE_PLAN_TREES
 
+# Tests for raw_expression_tree_walker()
+CFLAGS += -DRAW_EXPRESSION_COVERAGE_TEST
+
 # Set of warnings for development versions
 CFLAGS += -Wformat
 

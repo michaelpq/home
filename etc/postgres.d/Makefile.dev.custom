@@ -5,6 +5,9 @@
 # Debugger flag
 CFLAGS += -DG
 
+# 32-bit builds (gcc only)
+# CFLAGS += -m32
+
 # Profiling with perf
 CFLAGS += -fno-omit-frame-pointer
 

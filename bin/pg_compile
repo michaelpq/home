@@ -333,3 +333,19 @@ make install -j $NUM_CORES
 # Install contrib modules
 cd contrib/
 make -j $NUM_CORES install
+cd ..
+
+# The regression library is not installed by default, so copy it
+# in $libdir to make it loadable.  This improves the portability
+# of the main regression test suite.
+DLSUFFIX=".so"
+if [[ $HOME_ENV_NAME == MINGW* ]]; then
+	DLSUFFIX=".dll"
+elif [[ $HOME_ENV_NAME == Darwin ]]; then
+	DLSUFFIX=".so"
+elif [[ $HOME_ENV_NAME == Linux ]]; then
+	DLSUFFIX=".so"
+fi
+
+LIBDIR=$($PSQL_INSTALL_FOLDER/bin/pg_config --libdir)
+cp src/test/regress/regress${DLSUFFIX} ${LIBDIR}

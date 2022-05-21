@@ -262,50 +262,19 @@ fi
 # Move to root folder of git tree to not trigger VPATH install
 cd $CONFIGURE_CALL_FOLDER
 
-# Check availability of ccache to improve compilation
-set +e
-which ccache > /dev/null 2>&1
-ERR_NUM=$?
-set -e
-if [ $ERR_NUM != 0 ]; then
-	FLAG_CCACHE=0
-else
-	FLAG_CCACHE=1
-fi
-
-# Ensure that ccache folder is created
-if [ ! -d $HOME_CCACHE_DIR ]; then
-	mkdir -p $HOME_CCACHE_DIR
-fi
-
-# Kick configure
-if [ "$FLAG_CCACHE" == 1 ]; then
-	# Error out on windows, ccache is not available there. Note that we
-	# should never get there.
-	if [[ $HOME_ENV_NAME == MINGW* ]]; then
-		echo "ccache is not available on Windows"
-		exit 1
-	fi
-	./configure CC="ccache gcc" CCACHE_DIR=$HOME_CCACHE_DIR \
-				CFLAGS="$HOME_POSTGRES_CFLAGS" \
-				LDFLAGS="$HOME_POSTGRES_LDFLAGS" \
-				$CONFIGURE_OPTIONS $HOME_POSTGRES_CONFIGURE
-
-else
-	# Platform-specific configure commands
-	# It happens that enforcing those variables fixes a couple of
-	# compilation issues with MinGW.
-	if [[ $HOME_ENV_NAME == MINGW* ]]; then
-		PERL="perl" BISON="bison" FLEX="flex" \
-			MKDIR_P="mkdir -p" \
-			./configure CFLAGS="$HOME_POSTGRES_CFLAGS" \
-						LDFLAGS="$HOME_POSTGRES_LDFLAGS" \
-						$CONFIGURE_OPTIONS $HOME_POSTGRES_CONFIGURE
-	else
+# Platform-specific configure commands
+# It happens that enforcing those variables fixes a couple of
+# compilation issues with MinGW.
+if [[ $HOME_ENV_NAME == MINGW* ]]; then
+	PERL="perl" BISON="bison" FLEX="flex" \
+		MKDIR_P="mkdir -p" \
 		./configure CFLAGS="$HOME_POSTGRES_CFLAGS" \
 					LDFLAGS="$HOME_POSTGRES_LDFLAGS" \
 					$CONFIGURE_OPTIONS $HOME_POSTGRES_CONFIGURE
-	fi
+else
+	./configure CFLAGS="$HOME_POSTGRES_CFLAGS" \
+				LDFLAGS="$HOME_POSTGRES_LDFLAGS" \
+				$CONFIGURE_OPTIONS $HOME_POSTGRES_CONFIGURE
 fi
 
 # Before installation, change SHELL calls in Makefile Global,

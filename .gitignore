@@ -31,7 +31,6 @@
 /.bitcoin
 /.boot2docker
 /.cache
-/.ccache
 /.cgminer
 /.clamav
 /.cpan

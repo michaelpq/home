@@ -21,7 +21,7 @@ if [ ! -d "$HOME_STABLE_BIN" ]; then
 fi
 
 # Update installation with latest stable versions
-for branch in REL_10_STABLE REL_11_STABLE REL_12_STABLE REL_13_STABLE REL_14_STABLE
+for branch in REL_10_STABLE REL_11_STABLE REL_12_STABLE REL_13_STABLE REL_14_STABLE REL_15_STABLE
 do
 	# Remove existing version if any
 	if [ -d "$HOME_STABLE_BIN/$branch" ]; then

@@ -20,15 +20,16 @@ if [ ! -d "$HOME_STABLE_BIN" ]; then
 	mkdir "$HOME_STABLE_BIN"
 fi
 
-# Update installation with latest stable versions
-for branch in REL_10_STABLE REL_11_STABLE REL_12_STABLE REL_13_STABLE REL_14_STABLE REL_15_STABLE
-do
-	# Remove existing version if any
+# Update installation with latest stable versions.
+for version in {10..15}; do
+	branch=REL_${version}_STABLE
+
+	# Remove existing version if any.
 	if [ -d "$HOME_STABLE_BIN/$branch" ]; then
 		echo "Removing old installation of $branch at $HOME_STABLE_BIN/$branch"
 		rm -r "$HOME_STABLE_BIN/$branch"
 	fi
 
-	# Install the latest version wanted
-	pg_compile -b "$branch" -o origin -p "$HOME_STABLE_BIN/$branch"
+	# Install the latest version wanted.
+	pg_compile -i "${HOME}/git/pg${version}" -p "$HOME/stable/${branch}"
 done

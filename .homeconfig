@@ -23,6 +23,9 @@ export HOME_CWD=$HOME/.cwd
 # configuration files that can be fetched by development environments.
 export HOME_GLOBAL_ETC=$HOME/etc
 
+# Base path for all git repositories.
+export HOME_GIT=$HOME/git
+
 # Folder where are located various stable installation versions
 export HOME_STABLE_BIN=$HOME/stable
 
@@ -33,7 +36,7 @@ export HOME_BIN=$HOME/bin
 export HOME_BIN_EXTRA=$HOME/extra
 
 # PostgreSQL development parameters
-export HOME_POSTGRES_SRC=$HOME/git/postgres
+export HOME_POSTGRES_SRC=$HOME_GIT/postgres
 export HOME_POSTGRES_INSTALL=$HOME/pgsql
 export HOME_POSTGRES_ETC=$HOME_GLOBAL_ETC/postgres.d
 export HOME_POSTGRES_DATA=$HOME/data

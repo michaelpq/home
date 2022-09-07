@@ -1,0 +1,25 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# pg_sync_code
+#	Update a series of stable branches at their latest git point
+#
+#	Copyright (c) 2010-2022, Michael Paquier
+#
+#	The source code of each stable branch is located at
+#   $HOME_GIT/pg${version}.
+#
+#--------------------------------------------------------------------------
+
+# Immediately leave in case of failure and avoid using unassigned
+# variables.
+set -eu
+
+# Update installation with latest stable versions.
+for version in {10..15}; do
+	branch=REL_${version}_STABLE
+	path="${HOME_GIT}/pg${version}"
+
+	echo "Syncing branch ${branch} at ${path}"
+	cd "${path}"
+	git merge origin/${branch} 1> /dev/null
+done

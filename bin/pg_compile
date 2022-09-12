@@ -195,7 +195,7 @@ DLSUFFIX=".so"
 if [[ $HOME_ENV_NAME == MINGW* ]]; then
 	DLSUFFIX=".dll"
 elif [[ $HOME_ENV_NAME == Darwin ]]; then
-	DLSUFFIX=".so"
+	DLSUFFIX=".dylib"
 elif [[ $HOME_ENV_NAME == Linux ]]; then
 	DLSUFFIX=".so"
 fi

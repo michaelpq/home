@@ -47,7 +47,7 @@ alias makepg="make USE_PGXS=1"
 alias pspg="ps ux | head -n1 && ps ux | grep --directories=skip postgres | grep -v 'grep --directories'"
 
 # Process all regression tests in Postgres at full speed
-alias pgcheck="cd \$HOME_POSTGRES_SRC && make check-world -j 4 PROVE_FLAGS='-j 4' && echo result: $?"
+alias pgcheck="cd \$HOME_POSTGRES_SRC && make check-world -j 4 PROVE_FLAGS='-j 4' && echo result: \$?"
 
 # Compile from scratch and run all tests in Postgres
 alias pgall="cd \$HOME_POSTGRES_SRC && git menage && pg_compile 2> compile.txt && pgcheck"

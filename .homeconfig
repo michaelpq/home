@@ -41,6 +41,8 @@ export HOME_POSTGRES_INSTALL=$HOME/pgsql
 export HOME_POSTGRES_ETC=$HOME_GLOBAL_ETC/postgres.d
 export HOME_POSTGRES_DATA=$HOME/data
 export HOME_POSTGRES_ARCHIVE=$HOME_POSTGRES_DATA/archive
+# Base path for all the builds, subdivided then per branch or component.
+export HOME_POSTGRES_BUILD=$HOME/build
 
 # Custom CFLAGS for Postgres build, mainly used in pg_compile
 # Defining an empty variable here is particularly useful on OSX, which

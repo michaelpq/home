@@ -15,7 +15,6 @@ set -eu
 EXPECTED_ARGS=0
 FLAG_CONFIGURE=0
 FLAG_PATH=0
-FLAG_MAKEFILE=0
 # Code copy flags
 FLAG_SRC_FOLDER=0
 
@@ -30,9 +29,6 @@ show_help()
 	echo "  -h       Show this help"
 	echo "  -i PATH  Define source folder"
 	echo "  -p PATH  Define installation folder"
-	echo "  -s FLAG  Choose custom Makefile.custom. This file is located"
-	echo "           in $HOME_POSTGRES_ETC and named as Makefile.XXX.custom."
-	echo "           Default is \"dev\"."
 
 	exit $ERROR_NUM
 }
@@ -56,11 +52,6 @@ do
 	p)	# Installation folder
 		FLAG_PATH=1
 		USER_INSTALL_FOLDER="$OPTARG"
-		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
-		;;
-	s)	# Custom Makefile
-		FLAG_MAKEFILE=1
-		USER_MAKEFILE="$OPTARG"
 		EXPECTED_ARGS=$(($EXPECTED_ARGS + 2))
 		;;
 	?)	# Help
@@ -98,24 +89,6 @@ if [ -z "$PSQL_INSTALL_FOLDER" ]; then
 	echo "Installation folder undefined"
 	exit 1
 fi
-
-# Copy custom Makefile
-if [ "$FLAG_MAKEFILE" == 1 ]; then
-	CUSTOM_MAKEFILE=$HOME_POSTGRES_ETC/Makefile.$USER_MAKEFILE.custom
-	# Check its existence
-	if [ ! -f $CUSTOM_MAKEFILE ]; then
-		echo "Custom Makefile $CUSTOM_MAKEFILE does not exist"
-		exit 1
-	fi
-	echo "Using custom Makefile $CUSTOM_MAKEFILE"
-else
-	# Use default instead
-	CUSTOM_MAKEFILE=$HOME_POSTGRES_ETC/Makefile.dev.custom
-	echo "Using default custom Makefile $CUSTOM_MAKEFILE"
-fi
-
-# Copy file in source tree before running coonfigure
-cp $CUSTOM_MAKEFILE $HOME_POSTGRES_SRC/src/Makefile.custom
 
 # Get commit of current HEAD for custom version string
 GIT_CURRENT=`cd $HOME_POSTGRES_SRC && git rev-parse --short HEAD`

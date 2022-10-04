@@ -57,6 +57,9 @@ export HOME_POSTGRES_LDFLAGS=""
 # Custom options for Postgres ./configure
 export HOME_POSTGRES_CONFIGURE=""
 
+# Custom options for Postgres meson
+export HOME_POSTGRES_MESON=""
+
 # To SGML catalogs for PostgreSQL documentation
 export SGML_CATALOG_FILES=/etc/sgml/catalog:/usr/share/sgml/jade/catalog
 

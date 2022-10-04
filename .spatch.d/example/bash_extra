@@ -35,8 +35,11 @@ export GIT_PS1_STATESEPARATOR=""
 # Default editor to use
 export EDITOR="emacs -nw"
 
-# Postgres build
+# Postgres build with ./configure
 export HOME_POSTGRES_CONFIGURE="--enable-depend --enable-debug --enable-cassert "
+
+# Postgres build with meson
+export HOME_POSTGRES_MESON="-Dcassert=true -Ddebug=true "
 
 # Settings related to proxy
 no_proxy=localhost,127.0.0.1

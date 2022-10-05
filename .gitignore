@@ -26,12 +26,15 @@
 /.account
 /.android
 /.anthy
+/.anyconnect
+/.aws
 /.bash_sessions
 /.bfgminer
 /.bitcoin
 /.boot2docker
 /.cache
 /.cgminer
+/.cisco
 /.clamav
 /.cpan
 /.csp_ovftool*
@@ -77,6 +80,7 @@
 /.macromedia
 /.mail
 /.mbsyncrc
+/.midway
 /.minecraft
 /.moc
 /.mozilla
@@ -138,6 +142,8 @@
 /.xsession-errors*
 /.xsessionrc
 /.zoom
+/.zsh_history
+/.zsh_sessions
 /1
 /dwhelper
 /MyMachines

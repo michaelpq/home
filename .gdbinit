@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------
 # .gdbinit
 #	Settings for gdb
-#	Copyright (c) 2010-2022, Michael Paquier
+#	Copyright (c) 2010-2023, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Custom macros that help in the case of Postgres

@@ -4,7 +4,7 @@
 #		File executed by startx (run your window manager from here) that
 #		should be copied as ~/.xinitrc for a X11 environment, preferably
 #		on Linux or Unix systems.
-#       Copyright (c) 2010-2022, Michael Paquier
+#       Copyright (c) 2010-2023, Michael Paquier
 #--------------------------------------------------------------------------
 
 if [ -d /etc/X11/xinit/xinitrc.d ]; then

@@ -4,7 +4,7 @@
 #	as ~/.i3/config. The configuration presented here is not the
 #	default, and has been optimized to improve experience when using
 #	it on a VM.
-#	Copyright (c) 2010-2022, Michael Paquier
+#	Copyright (c) 2010-2023, Michael Paquier
 #-------------------------------------------------------------------------
 
 # Set a solid font as desktop background. That's perhaps rough, but

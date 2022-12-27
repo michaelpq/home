@@ -2,7 +2,7 @@
 #--------------------------------------------------------------------------
 # strreplace
 #	Replace string in file of given extension
-#	Copyright (c) 2010-2022, Michael Paquier
+#	Copyright (c) 2010-2023, Michael Paquier
 #
 #	List of arguments:
 #	1) file extension type

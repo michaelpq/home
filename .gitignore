@@ -1,7 +1,7 @@
 # Private settings of Home
 /.bash_extra
 /.bash_alias_extra
-/.bash_history
+/.bash_history*
 /.cwd
 /.emacs_extra
 /.gitconfig_extra

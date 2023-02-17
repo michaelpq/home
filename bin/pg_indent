@@ -21,7 +21,7 @@ make install
 # And now indent PostgreSQL code, which needs to happen from the root of
 # the source tree.
 cd $HOME_POSTGRES_SRC
-./src/tools/pgindent/pgindent
+./src/tools/pgindent/pgindent $HOME_POSTGRES_SRC
 
 # Indent the perl code.  This needs to happen as well from the root of
 # the source tree, and has a dependency with perltidy.

@@ -14,8 +14,11 @@
 # variables.
 set -eu
 
+# Move to the root of the Postgres tree
+cd $HOME_POSTGRES_SRC
+
 # Compile pg_bsd_indent which is used for the indentation.
-cd $HOME/git/pg_bsd_indent/
+cd $HOME_POSTGRES_SRC/src/tools/pg_bsd_indent/
 make install
 
 # And now indent PostgreSQL code, which needs to happen from the root of

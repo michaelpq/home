@@ -10,8 +10,6 @@
 	editor = emacs -nw
 [credential]
 	helper = store
-[http]
-	proxy = http://proxy.example.co.jp:8080/
 
 # Add your other settings here, then copy or link this file
 # as $HOME/.gitconfig_extra to make it effective.

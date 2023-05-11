@@ -35,25 +35,93 @@ export GIT_PS1_STATESEPARATOR=""
 # Default editor to use
 export EDITOR="emacs -nw"
 
-# Postgres build with ./configure
+# Postgres build with ./configure (comment out at will)
 export HOME_POSTGRES_CONFIGURE="--enable-depend --enable-debug --enable-cassert "
+# Tests
+HOME_POSTGRES_CONFIGURE+="--enable-tap-tests "
+#HOME_POSTGRES_CONFIGURE+="--enable-coverage "
+# Libraries
+HOME_POSTGRES_CONFIGURE+="--enable-nls "
+HOME_POSTGRES_CONFIGURE+="--with-icu "
+HOME_POSTGRES_CONFIGURE+="--with-ldap "
+HOME_POSTGRES_CONFIGURE+="--with-libxml "
+HOME_POSTGRES_CONFIGURE+="--with-lz4 "
+HOME_POSTGRES_CONFIGURE+="--with-openssl "
+HOME_POSTGRES_CONFIGURE+="--with-tcl "
+HOME_POSTGRES_CONFIGURE+="--with-gssapi "
+HOME_POSTGRES_CONFIGURE+="--with-uuid=e2fs "
+HOME_POSTGRES_CONFIGURE+="--with-zstd "
+#HOME_POSTGRES_CONFIGURE+="--without-zlib "
+# PL modules
+HOME_POSTGRES_CONFIGURE+="--with-python "
+HOME_POSTGRES_CONFIGURE+="--with-perl "
 
-# Postgres build with meson
+# Compilation flags (comment out at will)
+# Debugger flag
+export HOME_POSTGRES_CFLAGS="-DG "
+# Profiling with perf
+HOME_POSTGRES_CFLAGS+="-fno-omit-frame-pointer "
+# Missing braces
+HOME_POSTGRES_CFLAGS+="-Werror=missing-braces "
+# Uninitialized values
+HOME_POSTGRES_CFLAGS+="-Wmaybe-uninitialized "
+# Enforce restrictions with regression test names
+HOME_POSTGRES_CFLAGS+="-DENFORCE_REGRESSION_TEST_NAME_RESTRICTIONS "
+# Write, read and copy of parsed plan trees
+HOME_POSTGRES_CFLAGS+="-DWRITE_READ_PARSE_PLAN_TREES -DCOPY_PARSE_PLAN_TREES "
+# Tests for raw_expression_tree_walker()
+HOME_POSTGRES_CFLAGS+="-DRAW_EXPRESSION_COVERAGE_TEST "
+# Set of warnings for development versions
+HOME_POSTGRES_CFLAGS+="-Wformat "
+# 32-bit builds (gcc only)
+#HOME_POSTGRES_CFLAGS+="-m32 "
+# Let compiler generate some useful input for gdb
+#HOME_POSTGRES_CFLAGS+="-Og -ggdb -g3 "
+# Test for string truncations
+#HOME_POSTGRES_CFLAGS+="-Wformat-overflow=2 -Wformat-truncation=2 "
+# For WAL debugging
+#HOME_POSTGRES_CFLAGS+="-DWAL_DEBUG "
+# For lock debugging
+#HOME_POSTGRES_CFLAGS+="-DLOCK_DEBUG "
+# For planner debugging
+#HOME_POSTGRES_CFLAGS+="-DOPTIMIZER_DEBUG "
+# For emulation of Windows environment on Unix platforms
+#HOME_POSTGRES_CFLAGS+="-DEXEC_BACKEND "
+# Test for cache-flush hazards
+#HOME_POSTGRES_CFLAGS+="-DCLOBBER_CACHE_ALWAYS "
+# Force flush of relcache and catcache on relation close
+# This makes the runs much much longer, so use with care, or use it
+# to run an instance initialized without these flags.
+#HOME_POSTGRES_CFLAGS+="-DRELCACHE_FORCE_RELEASE -DCATCACHE_FORCE_RELEASE "
+
+# Postgres build with meson (comment out at will)
+# By default, meson uses automatic detection of libraries, this list
+# enables or disables these checks, making them deterministic.
 export HOME_POSTGRES_MESON="-Dcassert=true -Ddebug=true "
-
-# Settings related to proxy
-no_proxy=localhost,127.0.0.1
-NO_PROXY=localhost,127.0.0.1
-all_proxy=http://proxy.example.com:8080/
-ALL_PROXY=http://proxy.example.com:8080/
-http_proxy=http://proxy.example.com:8080/
-HTTP_PROXY=http://proxy.example.com:8080/
-https_proxy=http://proxy.example.com:8080/
-HTTPS_PROXY=http://proxy.example.com:8080/
-ftp_proxy=http://proxy.example.com:8080/
-FTP_PROXY=http://proxy.example.com:8080/
-ftps_proxy=http://proxy.example.com:8080/
-FTPS_PROXY=http://proxy.example.com:8080/
+# Tests
+HOME_POSTGRES_MESON+="-Dtap_tests=enabled "
+HOME_POSTGRES_MESON+="-DPG_TEST_EXTRA='ssl,ldap,kerberos' "
+# Coverage report
+#HOME_POSTGRES_MESON+="-Db_coverage=true "
+# Libraries
+HOME_POSTGRES_MESON+="-Dgssapi=enabled "
+HOME_POSTGRES_MESON+="-Dicu=enabled "
+HOME_POSTGRES_MESON+="-Dldap=enabled "
+HOME_POSTGRES_MESON+="-Dlibxslt=enabled "
+HOME_POSTGRES_MESON+="-Dlibxml=enabled "
+HOME_POSTGRES_MESON+="-Dlz4=enabled "
+HOME_POSTGRES_MESON+="-Dnls=enabled "
+HOME_POSTGRES_MESON+="-Dpam=enabled "
+HOME_POSTGRES_MESON+="-Dselinux=enabled "
+HOME_POSTGRES_MESON+="-Dssl=openssl "
+HOME_POSTGRES_MESON+="-Dsystemd=enabled "
+HOME_POSTGRES_MESON+="-Duuid=e2fs "
+HOME_POSTGRES_MESON+="-Dzstd=enabled "
+HOME_POSTGRES_MESON+="-Dzlib=enabled "
+# PL Modules
+HOME_POSTGRES_MESON+="-Dplperl=enabled "
+HOME_POSTGRES_MESON+="-Dplpython=enabled "
+HOME_POSTGRES_MESON+="-Dpltcl=enabled "
 
 # Add your extra settings here and then copy or link this file
 # as $HOME/.bash_extra to make it effective.

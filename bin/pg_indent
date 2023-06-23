@@ -28,10 +28,10 @@ cd $HOME_POSTGRES_SRC
 
 # Indent the perl code.  This needs to happen as well from the root of
 # the source tree, and has a dependency with perltidy.
-./src/tools/pgindent/pgperltidy
+./src/tools/pgindent/pgperltidy $HOME_POSTGRES_SRC
 
 # Run perlcritic and check state of the code while on it.
-./src/tools/perlcheck/pgperlcritic
+./src/tools/perlcheck/pgperlcritic $HOME_POSTGRES_SRC
 
 # Reformat the bootstrap catalog data files.
 cd src/include/catalog

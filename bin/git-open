@@ -3,7 +3,7 @@
 # git-open
 #	Environment editor is coupled with `git ls-files` to launch a file
 #	with given name by looking for it from current repository.
-#	Copyright (c) 2010-2023, Michael Paquier
+#	Copyright (c) 2010-2024, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Sanity checks

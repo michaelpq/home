@@ -3,7 +3,7 @@
 #	Example of configuration file for freshclam, database updater of
 #	clamav. This file should be copied as $HOME/.clamav/freshclam.conf.
 #	USERNAME should be replaced with your own user name.
-#	Copyright (c) 2010-2023, Michael Paquier
+#	Copyright (c) 2010-2024, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Location of configuration file of freshclam

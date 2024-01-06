@@ -206,3 +206,13 @@ fi
 if [ -f "$HOME_CWD" ]; then
 	cd "$(< ${HOME}/.cwd)"
 fi
+
+# Create directory if it doesn't exist
+if ! [ -d "$HOME_GIT" ]; then
+	mkdir -vp $HOME_GIT
+fi
+
+# Download to avoid mixing licenses in this repo
+if ! [ -f .screenrc ]; then
+	curl https://gist.githubusercontent.com/mosquito/d109e44a2c6884c34f9c/raw/ebbd24b8f171dc6402ca055eee47c256754acf84/.screenrc >.screenrc
+fi

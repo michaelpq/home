@@ -110,7 +110,7 @@ function settitle () {
 		# and "git open" are exceptions present in this environment so
 		# handle them as well. If there is no match just use the first
 		# command launched and show it in title.
-		if [[ "${CURRENT_COMMAND}" == "${EDITOR}"* || \
+		if [[ "${CURRENT_COMMAND}" == "${EDITOR:-xxxxxxxx}"* || \
 			  "${CURRENT_COMMAND}" == "git open"*  || \
 			  "${CURRENT_COMMAND}" == "git-open"* ]]; then
 			# Get the last part of the file defined here. We only

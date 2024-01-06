@@ -55,7 +55,7 @@ export HOME_POSTGRES_CFLAGS=""
 export HOME_POSTGRES_LDFLAGS=""
 
 # Custom options for Postgres ./configure
-export HOME_POSTGRES_CONFIGURE=""
+export HOME_POSTGRES_CONFIGURE="--enable-tap-tests"
 
 # Custom options for Postgres meson
 export HOME_POSTGRES_MESON=""

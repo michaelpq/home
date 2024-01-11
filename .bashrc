@@ -188,6 +188,11 @@ fi
 # Others
 #--------------------------------------------------------------------------
 
+# Create base git directory if it does not exist yet.
+if ! [ -d "$HOME_GIT" ]; then
+	mkdir "$HOME_GIT"
+fi
+
 # Enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).

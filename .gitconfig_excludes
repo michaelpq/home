@@ -25,6 +25,9 @@
 TAGS
 tags
 
+# Logs created at compilation, at the root of the tree.
+compile.txt
+
 # Files created by ./configure
 conftest.c
 conftest.err

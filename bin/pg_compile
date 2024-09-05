@@ -161,6 +161,11 @@ cd contrib/
 make -j $NUM_CORES install
 cd ..
 
+# Install test modules
+cd src/test/modules
+make -j $NUM_CORES install
+cd ../../..
+
 # The regression library is not installed by default, so copy it
 # in $libdir to make it loadable.  This improves the portability
 # of the main regression test suite.

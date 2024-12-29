@@ -2,7 +2,7 @@
 # .mpdconf_example
 #	Simple example of mpd configuration file. This should be copied
 #	as $HOME/.mpdconf.
-#	Copyright (c) 2010-2024, Michael Paquier
+#	Copyright (c) 2010-2025, Michael Paquier
 #--------------------------------------------------------------------------
 
 # Music directory, note that this parameter is mandatory

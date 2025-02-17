@@ -33,6 +33,8 @@
 	pager = less --tabs=4
 	# Exclusion of several file types
 	excludesfile = ~/.gitconfig_excludes
+	# Commit hashes limited to 12 characters
+	abbrev=12
 [diff]
 	# Detect files renamed as well as copies
 	renames = copies
@@ -42,7 +44,7 @@
 	# live as a local setting.
 	orderFile = ~/.gitconfig_orderfile
 [format]
-	pretty = format:%C(blue)commit: %<(14,trunc)%H%C(reset)%n%C(green)author: %aN <%aE>%C(reset)%n%C(green)date: %aD%C(reset)%n%C(yellow)committer: %cN <%ce>%C(reset)%n%C(yellow)date: %cD%C(reset)%n%B
+	pretty = format:%C(blue)commit: %h%C(reset)%n%C(green)author: %aN <%aE>%C(reset)%n%C(green)date: %aD%C(reset)%n%C(yellow)committer: %cN <%ce>%C(reset)%n%C(yellow)date: %cD%C(reset)%n%B
 [log]
 	# Do not use any mailmap file to map author name and emails.
 	mailmap = false

@@ -39,6 +39,11 @@
 	# Detect files renamed as well as copies
 	renames = copies
 	algorithm = histogram
+	# Remove source and destination prefixes, "a/" and "b/" by default.
+	# This is annoying when copy-pasting around paths, and diff commands
+	# do not show that.
+	srcPrefix = ""
+	dstPrefix = ""
 	# Ordering of files in diffs, for PostgreSQL
 	# XXX: If this becomes annoying for other projects, this had better
 	# live as a local setting.

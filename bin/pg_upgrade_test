@@ -194,5 +194,5 @@ $BIN_NEW_VERSION/pg_ctl -w -D $DATA_NEW_VERSION -m fast stop
 
 # Perform the upgrade by using the version of the newest version
 $BIN_NEW_VERSION/pg_upgrade -b $BIN_OLD_VERSION -B $BIN_NEW_VERSION \
-		-d $DATA_OLD_VERSION -D $DATA_NEW_VERSION \
-		--retain
+	-d $DATA_OLD_VERSION -D $DATA_NEW_VERSION \
+	--retain

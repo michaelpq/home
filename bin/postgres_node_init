@@ -162,13 +162,8 @@ else
 	echo "Installation folder set to default $PSQL_FOLDER"
 fi
 
-# Newline format, this changes depending on the platform where this
-# script is run (Looking at you, windows...)
-if [[ $HOME_ENV_NAME == MINGW* ]]; then
-	CONF_NEWLINE="\r\n"
-else
-	CONF_NEWLINE="\n"
-fi
+# Newline format.
+CONF_NEWLINE="\n"
 
 # Set configuration suffix if specified by user. Take also care of the
 # default value "dev".
@@ -213,19 +208,11 @@ if [ -d $NODE_ARCHIVE ]; then
 fi
 mkdir $NODE_ARCHIVE
 
-# Options of pg_hba.conf to allow replication. On Windows, we have special
-# needs caused by first the system user name tracked as USERNAME and not
-# USER, and the lack of support for local connections.
-if [[ $HOME_ENV_NAME == MINGW* ]]; then
-	CLUSTER_USER=$USERNAME
-	OPTIONS_PGHBA="host replication $CLUSTER_USER 127.0.0.1/32 trust$CONF_NEWLINE"\
-"host replication $CLUSTER_USER ::1/128 trust$CONF_NEWLINE"
-else
-	CLUSTER_USER=$USER
-	OPTIONS_PGHBA="host replication $CLUSTER_USER 127.0.0.1/32 trust$CONF_NEWLINE"\
+# Options of pg_hba.conf to allow replication.
+CLUSTER_USER=$USER
+OPTIONS_PGHBA="host replication $CLUSTER_USER 127.0.0.1/32 trust$CONF_NEWLINE"\
 "host replication $CLUSTER_USER ::1/128 trust$CONF_NEWLINE"\
 "local replication $CLUSTER_USER trust$CONF_NEWLINE"
-fi
 
 # Enforce deletion of data folder if it exists
 if [ -d $NODE_DATA_FOLDER ]; then
@@ -236,12 +223,8 @@ fi
 # Create a master node
 if [ "$FLAG_STANDBY" == 0 ]; then
 	# Local unix sockets are prioritized for security purposes when running
-	# development. On Windows though, localhost is more flexible.
-	if [[ $HOME_ENV_NAME == MINGW* ]]; then
-		OPTIONS_POSTGRESQL+="listen_addresses = 'localhost'$CONF_NEWLINE"
-	else
-		OPTIONS_POSTGRESQL+="listen_addresses = ''$CONF_NEWLINE"
-	fi
+	# development.
+	OPTIONS_POSTGRESQL+="listen_addresses = ''$CONF_NEWLINE"
 
 	# Some logging information
 	echo "Master node information..."

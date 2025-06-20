@@ -67,28 +67,12 @@ check_install()
 	fi
 }
 
-# Start node depending on environment
-# On Linux/Unix only a pg_ctl start is enough while with Windows systems
-# it is better to register the service and then start it using the service
-# manager to make the instance global and not sticked only to the session
-# where this script was kicked. Note that service registration only works
-# when the code has been compiled with MSVC as a build with MinGW creates
-# library dependencies that are not completely covered when using commands
-# in a prompt. This script can be safely kicked with msysgit though.
+# Start node
 start_node()
 {
 	PORT=$1
 	DATA_FOLDER=$2
-	if [[ $HOME_ENV_NAME == MINGW* ]]; then
-		SERVICE_NAME=postgres_$PORT
-		$PSQL_FOLDER/bin/pg_ctl register -w -D $DATA_FOLDER \
-			-N $SERVICE_NAME
-		sc start $SERVICE_NAME
-		sleep 1
-	else
-		# Slaves need the base backup of master first, so start it
-		$PSQL_FOLDER/bin/pg_ctl start -w -D $DATA_FOLDER
-	fi
+	$PSQL_FOLDER/bin/pg_ctl start -w -D $DATA_FOLDER
 }
 
 # Check an non-zero code, exit if found

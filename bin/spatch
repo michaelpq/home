@@ -229,20 +229,9 @@ command_confreset()
 	parse_list_files "$CURRENT_CONF"
 	for link in "${LINKS[@]}"
 	do
-		# On Windows, because of the limitation of NFS with ln that
-		# basically creates a copy of a file without soft-linking it
-		# this will actually fail, so rely instead on a check on a
-		# file.
-		if [[ "$HOME_ENV_NAME" == MINGW* ]]; then
-			if [[ -f "$HOME/$link" ]]; then
-				echo "Removed file \"$HOME/$link\""
-				rm "$HOME/$link"
-			fi
-		else
-			if [[ -h "$HOME/$link" ]]; then
-				echo "Removed link \"$HOME/$link\""
-				rm "$HOME/$link"
-			fi
+		if [[ -h "$HOME/$link" ]]; then
+			echo "Removed link \"$HOME/$link\""
+			rm "$HOME/$link"
 		fi
 	done
 

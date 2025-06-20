@@ -98,10 +98,7 @@ CONFIGURE_OPTIONS+="--prefix=$PSQL_INSTALL_FOLDER "
 CONFIGURE_OPTIONS+="--with-extra-version=-$GIT_CURRENT "
 
 # Specify number of cores to use for compilation
-if [[ $HOME_ENV_NAME == MINGW* ]]; then
-	# MinGW
-	NUM_CORES=1
-elif [[ $HOME_ENV_NAME == Darwin ]]; then
+if [[ $HOME_ENV_NAME == Darwin ]]; then
 	NUM_CORES=`sysctl -n hw.ncpu`
 else
 	# Linux/Unix
@@ -120,27 +117,9 @@ CONFIGURE_CALL_FOLDER=`git rev-parse --show-toplevel`
 cd $CONFIGURE_CALL_FOLDER
 
 # Platform-specific configure commands
-# It happens that enforcing those variables fixes a couple of
-# compilation issues with MinGW.
-if [[ $HOME_ENV_NAME == MINGW* ]]; then
-	PERL="perl" BISON="bison" FLEX="flex" \
-		MKDIR_P="mkdir -p" \
-		./configure CFLAGS="$HOME_POSTGRES_CFLAGS" \
-					LDFLAGS="$HOME_POSTGRES_LDFLAGS" \
-					$CONFIGURE_OPTIONS $HOME_POSTGRES_CONFIGURE
-else
-	./configure CFLAGS="$HOME_POSTGRES_CFLAGS" \
-				LDFLAGS="$HOME_POSTGRES_LDFLAGS" \
-				$CONFIGURE_OPTIONS $HOME_POSTGRES_CONFIGURE
-fi
-
-# Before installation, change SHELL calls in Makefile Global,
-# It seems to be the only correct way to do that with MinGW.
-# This has at least the merit to make pass all the install-sh
-# calls.
-if [[ $HOME_ENV_NAME == MINGW* ]]; then
-	sed -i "s#\$(SHELL)#bash#g" src/Makefile.global
-fi
+./configure CFLAGS="$HOME_POSTGRES_CFLAGS" \
+	LDFLAGS="$HOME_POSTGRES_LDFLAGS" \
+	$CONFIGURE_OPTIONS $HOME_POSTGRES_CONFIGURE
 
 # If only configure has been requested, leave now
 if [ "$FLAG_CONFIGURE" == 1 ]; then
@@ -170,12 +149,8 @@ cd ../../..
 # in $libdir to make it loadable.  This improves the portability
 # of the main regression test suite.
 DLSUFFIX=".so"
-if [[ $HOME_ENV_NAME == MINGW* ]]; then
-	DLSUFFIX=".dll"
-elif [[ $HOME_ENV_NAME == Darwin ]]; then
+if [[ $HOME_ENV_NAME == Darwin ]]; then
 	DLSUFFIX=".dylib"
-elif [[ $HOME_ENV_NAME == Linux ]]; then
-	DLSUFFIX=".so"
 fi
 
 LIBDIR=$($PSQL_INSTALL_FOLDER/bin/pg_config --libdir)

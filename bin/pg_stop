@@ -60,15 +60,7 @@ do
 	NODE_PORT=$(sed "4q;d" "$file")
 	echo "Stopping server listening to port $NODE_PORT"
 
-	# On Unix/Linux, server can be easily stopped with a stop command.
-	# On Windows the service manager is used for this purpose, and service
-	# is unregistered as well.
-	if [[ $HOME_ENV_NAME == MINGW* ]]; then
-		SERVICE_NAME=postgres_$NODE_PORT
-		sc stop "$SERVICE_NAME"
-		pg_ctl unregister -N "$SERVICE_NAME"
-	else
-		DIRNAME=$(dirname "$file")
-		"$PSQL_FOLDER/bin/pg_ctl" stop -D "$DIRNAME" -m immediate
-	fi
+	# Stop the server.
+	DIRNAME=$(dirname "$file")
+	"$PSQL_FOLDER/bin/pg_ctl" stop -D "$DIRNAME" -m immediate
 done

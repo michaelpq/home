@@ -158,7 +158,7 @@ fi
 # Create cluster for old version
 # Note: it might be better to use pg_start here but it looks better to rely
 # on default options for this test
-$BIN_OLD_VERSION/initdb -D $DATA_OLD_VERSION
+$BIN_OLD_VERSION/initdb --data-checksums -D $DATA_OLD_VERSION
 cat <<EOF >> $DATA_OLD_VERSION/postgresql.conf
 port = 6665
 logging_collector = on
@@ -171,7 +171,7 @@ EOF
 $BIN_OLD_VERSION/pg_ctl -w -D $DATA_OLD_VERSION start
 
 # Create cluster for new version
-$BIN_NEW_VERSION/initdb -D $DATA_NEW_VERSION
+$BIN_NEW_VERSION/initdb --data-checksums -D $DATA_NEW_VERSION
 cat <<EOF >> $DATA_NEW_VERSION/postgresql.conf
 port = 6666
 logging_collector = on

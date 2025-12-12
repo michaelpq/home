@@ -73,6 +73,14 @@
                     indent-tabs-mode nil
                     sgml-basic-offset 1))))
 
+;; po-mode, for translation files
+;; Requires gettext-el on Debian to get the configuration.
+(setq auto-mode-alist
+      (cons '("\\.po\\'\\|\\.po\\." . po-mode)
+              auto-mode-alist))
+;; Not really required, still keep for future references:
+;; (autoload 'po-mode "po-mode" "Major mode for translators to edit PO files" t)
+
 ;; Perl settings
 (defun pgsql-perl-mode ()
   "Perl style adjusted for PostgreSQL project"

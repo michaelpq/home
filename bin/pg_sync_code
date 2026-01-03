@@ -3,7 +3,7 @@
 # pg_sync_code
 #	Update a series of stable branches at their latest git point
 #
-#	Copyright (c) 2010-2025, Michael Paquier
+#	Copyright (c) 2010-2026, Michael Paquier
 #
 #	The source code of each stable branch is located at
 #   $HOME_GIT/pg${version}.

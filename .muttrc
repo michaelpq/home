@@ -86,25 +86,30 @@ color quoted6 red black
 color quoted7 green black
 
 # Default colors
-color hdrdefault white green
-color signature brightmagenta black
-color indicator black cyan
 color attachment black green
-color error red black
-color message white black
-color search brightwhite magenta
-color status brightyellow blue
-color tree brightblue black
-color normal white black
-color tilde green black
 color bold brightyellow black
-color underline magenta black
+color error red black
+color hdrdefault white green
+color indicator black cyan
 color markers brightcyan black
+color message white black
+color normal white black
+color search brightwhite magenta
+color signature brightmagenta black
+color status brightyellow blue
+color tilde green black
+color tree brightblue black
+color underline magenta black
+
+# Sidebar colors
+color sidebar_highlight brightcyan black
+color sidebar_flagged white black
+color sidebar_new white black
 
 # Mono screen colors
 mono bold bold
-mono underline underline
 mono indicator reverse
+mono underline underline
 
 #--------------------------------------------------------------------------
 # Key bindings

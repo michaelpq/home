@@ -12,3 +12,6 @@ macro define AssertVariableIsOfTypeMacro(x, y) ((void)0)
 # Keep track of command history for reuse across sessions
 set history filename ~/.gdb_history
 set history save
+
+# Remove debug info download
+set debuginfod enabled off

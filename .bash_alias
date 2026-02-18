@@ -45,6 +45,9 @@ alias pspg="ps ux | head -n1 && ps ux | grep --directories=skip postgres | grep 
 # Process all regression tests in Postgres at full speed
 alias pgcheck="cd \$HOME_POSTGRES_SRC && make check-world -j 4 PROVE_FLAGS='-j 4' && echo result: \$?"
 
+# Generate coverage report, feeding on any option flags set.
+alias pgcoverage="cd \$HOME_POSTGRES_SRC && make coverage-html LCOVFLAGS=\"\$LCOVFLAGS\" GENHTML_FLAGS=\"\$GENHTML_FLAGS\""
+
 # Compile from scratch and run all tests in Postgres
 alias pgall="cd \$HOME_POSTGRES_SRC && git menage && pg_compile 2> compile.txt && pgcheck"
 

@@ -99,6 +99,7 @@
 /.oracle_jre_usage
 /.ovftool*
 /.p4*
+/.parallel
 /.perltidyrc
 /.pki
 /.postgresql

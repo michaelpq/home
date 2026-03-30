@@ -116,6 +116,9 @@ CONFIGURE_CALL_FOLDER=`git rev-parse --show-toplevel`
 # Move to root folder of git tree to not trigger VPATH install
 cd $CONFIGURE_CALL_FOLDER
 
+# Build ctags for emacs mode, with symlinks to ease first lookup.
+./src/tools/make_ctags -e
+
 # Platform-specific configure commands
 ./configure CFLAGS="$HOME_POSTGRES_CFLAGS" \
 	LDFLAGS="$HOME_POSTGRES_LDFLAGS" \

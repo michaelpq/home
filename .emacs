@@ -156,6 +156,17 @@
 (add-to-list 'auto-mode-alist
              '("/\\(?:COMMIT\\|NOTES\\|TAG\\|PULLREQ\\)_EDITMSG\\'" . git-commit-mode))
 
+;; Set a TAGS file to be always at the root of a git repository.
+(setq tags-table-list nil)
+(defun my/set-tags-table-to-git-root ()
+  "Set TAGS file path to the root of the current git repository."
+  (let ((git-root (string-trim-right
+                   (shell-command-to-string "git rev-parse --show-toplevel"))))
+    (when (and git-root (not (string-match-p "fatal" git-root)))
+      (setq tags-file-name (expand-file-name "TAGS" git-root)))))
+
+(add-hook 'find-file-hook #'my/set-tags-table-to-git-root)
+
 ;;--------------------------------------------------------------------------
 ;; Navigation and Controls
 ;;--------------------------------------------------------------------------

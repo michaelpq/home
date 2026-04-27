@@ -30,6 +30,14 @@ set sort_aux = 'reverse-last-date-received'
 # Always include replies
 set include = yes
 
+# Message output format
+# Always include message-id in the output.  This avoids some extra calls
+# to display-toggle-weed.
+unignore Message-ID
+# Ignore X-Mailer and User-Agent, not useful to know
+ignore X-Mailer
+ignore User-Agent
+
 # Aliases
 set alias_file = ~/.mutt_aliases
 set sort_alias = alias

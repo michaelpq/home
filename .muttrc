@@ -38,6 +38,19 @@ unignore Message-ID
 ignore X-Mailer
 ignore User-Agent
 
+# Format of attachments in messages.
+# For reference:
+# %u  unlink flag
+# %D  deleted flag
+# %I  disposition (inline/attachment)
+# %t  tagged flag
+# %4n attachment number
+# %T  tree indentation
+# %d  description (or filename if no description)
+# %m  MIME type
+# %s  size
+set attach_format="%u%D%I %t%4n %T%d [%m, %s]"
+
 # Aliases
 set alias_file = ~/.mutt_aliases
 set sort_alias = alias

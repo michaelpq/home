@@ -27,8 +27,12 @@ shopt -s histappend
 # Enable core files for all sizes
 ulimit -c unlimited
 
-# Enable git completion script
-. $HOME/.git_completion
+# Enable bash completion
+if [ -f /etc/profile.d/bash_completion.sh ]; then
+	. /etc/profile.d/bash_completion.sh
+elif [ -f /usr/share/bash-completion/bash_completion ]; then
+	. /usr/share/bash-completion/bash_completion
+fi
 
 # Enable git prompt
 . $HOME/.git_prompt

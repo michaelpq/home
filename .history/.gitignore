@@ -1,0 +1,5 @@
+# Ignore all the sets of configuration
+*
+
+# This file needs to remain
+!/.gitignore

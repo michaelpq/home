@@ -11,6 +11,13 @@
 # History settings
 #--------------------------------------------------------------------------
 
+# bash history file
+export HISTFILE="$HOME/.history/bash_history"
+# Keep 10,000 commands
+HISTSIZE=10000
+# Keep up to 20,000 lines
+HISTFILESIZE=20000
+
 # Don't put duplicate lines in the history. See bash(1) for more options
 # Don't overwrite GNU Midnight Commander's setting of `ignorespace'.
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
@@ -19,6 +26,9 @@ export HISTCONTROL=ignoreboth
 # Append to the history file, don't overwrite it
 shopt -s histappend
 # For setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+
+# psql history file
+export PSQL_HISTORY="$HOME/.history/psql_history"
 
 #--------------------------------------------------------------------------
 # Development

@@ -181,7 +181,7 @@
 /media
 /.config
 /.xinitrc
-/.xresources
+/.xresources*
 /.xsession
 
 # Windows paths

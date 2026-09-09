@@ -185,16 +185,19 @@
         mac-option-modifier 'none))
 
 ;; Key bindings
-(global-set-key [delete] 'delete-char)
-(global-set-key [kp-delete] 'delete-char)
-(global-set-key [f4] 'goto-line)
-(global-set-key [f5] 'query-replace)
-(global-set-key [f6] 'switch-to-buffer)
-(global-set-key "\C-t" 'copy-region-as-kill)
-(global-set-key "\C-w" 'kill-region)
-(global-set-key "\C-y" 'yank)
-(global-set-key (kbd "TAB") 'tab-to-tab-stop)
-(global-set-key "\C-u" 'set-mark-command)
+(global-set-key (kbd "<delete>") #'delete-char)
+(global-set-key (kbd "M-g g") #'goto-line)
+(global-set-key (kbd "M-%")   #'query-replace)
+(global-set-key (kbd "C-x b") #'switch-to-buffer)
+(global-set-key (kbd "C-t") #'copy-region-as-kill)
+(global-set-key (kbd "C-w") #'kill-region)
+(global-set-key (kbd "C-y") #'yank)
+(global-set-key (kbd "TAB") #'tab-to-tab-stop)
+(global-set-key (kbd "C-u") #'set-mark-command)
+;; Tags
+(global-set-key (kbd "M-.") #'xref-find-definitions)
+(global-set-key (kbd "M-,") #'xref-go-back)
+(global-set-key (kbd "M-*") #'xref-go-back)
 
 ;;--------------------------------------------------------------------------
 ;; Load additional private settings

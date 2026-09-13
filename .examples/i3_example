@@ -44,11 +44,12 @@ bindsym $mod+Shift+q kill
 # Not that this needs the package dmenu installed.
 bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
-# Change focus
-bindsym $mod+h focus left
-bindsym $mod+j focus down
-bindsym $mod+k focus up
-bindsym $mod+l focus right
+# Change focus.  This configuration is based on the physical home position
+# on a keyboard.
+bindsym $mod+j focus left
+bindsym $mod+k focus down
+bindsym $mod+l focus up
+bindsym $mod+semicolon focus right
 # Same, with cursor keys
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
@@ -56,10 +57,10 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # Move focused window
-bindsym $mod+Shift+h move left
-bindsym $mod+Shift+j move down
-bindsym $mod+Shift+k move up
-bindsym $mod+Shift+l move right
+bindsym $mod+Shift+j move left
+bindsym $mod+Shift+k move down
+bindsym $mod+Shift+l move up
+bindsym $mod+Shift+semicolon move right
 # Same, with cursor keys
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
@@ -70,14 +71,14 @@ bindsym $mod+Shift+Right move right
 bindsym $mod+f fullscreen
 
 # Split container (Horizontal=h and Vertical=v)
-bindsym $mod+z split h
-bindsym $mod+x split v
+bindsym $mod+h split h
+bindsym $mod+v split v
 
-# Change container layout (stacked, tabbed, split horizontal/vertical)
-bindsym $mod+s layout stacking
-bindsym $mod+t layout tabbed
-bindsym $mod+v layout splith
-bindsym $mod+b layout splitv
+# Change container layout (stacked, tabbed, toggle split)
+bindsym $mod+shift+s layout stacking
+bindsym $mod+shift+t layout tabbed
+bindsym $mod+shift+h layout splith
+bindsym $mod+shift+v layout splitv
 
 # Toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
@@ -95,7 +96,6 @@ bindsym $mod+6 workspace 6
 bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
-bindsym $mod+0 workspace 10
 
 # Move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1
@@ -107,7 +107,6 @@ bindsym $mod+Shift+6 move container to workspace 6
 bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
-bindsym $mod+Shift+0 move container to workspace 10
 
 # Move focused workspace between monitors
 bindsym $mod+Ctrl+greater move workspace to output right
@@ -124,15 +123,14 @@ bindsym $mod+Shift+e exit
 # Resize window (mouse can be used as well for that)
 mode "resize" {
     # These bindings trigger as soon as you enter the resize mode
-
-    # Pressing left will shrink the window's width.
-    # Pressing right will grow the window's width.
-    # Pressing up will shrink the window's height.
-    # Pressing down will grow the window's height.
-    bindsym h resize shrink width 10 px or 10 ppt
-    bindsym j resize grow height 10 px or 10 ppt
-    bindsym k resize shrink height 10 px or 10 ppt
-    bindsym l resize grow width 10 px or 10 ppt
+    # j = shrink width (left)
+    # k = grow height  (down)
+    # l = shrink height (up)
+    # ; = grow width   (right)
+    bindsym j resize shrink width 10 px or 10 ppt
+    bindsym k resize grow height 10 px or 10 ppt
+    bindsym l resize shrink height 10 px or 10 ppt
+    bindsym semicolon resize grow width 10 px or 10 ppt
 
     # Same bindings, but for the arrow keys
     bindsym Left resize shrink width 10 px or 10 ppt

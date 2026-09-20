@@ -146,6 +146,11 @@ bind index _ collapse-all
 bind index gn sidebar-next
 bind index gm sidebar-prev
 bind index go sidebar-open
+# Moves for entries and pages
+bind index \Cn next-entry
+bind index \Cp previous-entry
+bind index \Cf next-page
+bind index \Cb previous-page
 
 #--------------------------------------------------------------------------
 # Hooks

@@ -33,3 +33,14 @@ URxvt.jumpScroll:         true
 ! skipScroll defaults to true and may drop frames under heavy output.
 ! Uncomment to force every line to be drawn.
 !URxvt.skipScroll:        false
+
+! Key bindings to emulate arrow directions.  This is useful under
+! emacs without a GUI.
+! C-left  (equivalent C-;)
+URxvt.keysym.Control-semicolon:  \033Od
+! C-right (equivalent C-')
+URxvt.keysym.Control-apostrophe: \033Oc
+! C-up    (equivalent C-,)
+URxvt.keysym.Control-comma:      \033Oa
+! C-down  (equivalent C-.)
+URxvt.keysym.Control-period:     \033Ob

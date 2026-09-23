@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;;--------------------------------------------------------------------------
 ;; .emacs
 ;;  Settings for Emacs
@@ -198,6 +199,43 @@
 (global-set-key (kbd "M-.") #'xref-find-definitions)
 (global-set-key (kbd "M-,") #'xref-go-back)
 (global-set-key (kbd "M-*") #'xref-go-back)
+
+;;--------------------------------------------------------------------------
+;; Navigation map
+;;
+;; Granularity ladder, backward / forward.  Entries marked (default) are
+;; listed only for reference.
+;;
+;;   character        C-b     C-f       (default)
+;;   word             M-b     M-f       (default)
+;;   line             C-p     C-n       (default)
+;;   line ends        C-a     C-e       (default)
+;;   statement        M-a     M-e       (default; cc-mode c-*-of-statement)
+;;   block            M-{     M-{       (default)
+;;   function         C-M-a   C-M-e     (default)
+;;   sexp / braces    C-M-b   C-M-f     (default)
+;;   out of / into    C-M-u   C-M-d     (default)
+;;   screen           M-v     C-v       (default)
+;;   buffer           M-<     M->       (default)
+;;
+;; Control plus punctuation has no ASCII encoding, so under -nw it reaches
+;; Emacs only if the terminal is taught to send a sequence for it.  These
+;; need to be loaded with xrdb -merge ~/.xresources, to map the four arrow
+;; directions to equivalent punctuation bindings:
+;;
+;;   URxvt.keysym.Control-semicolon:  \033Od     ! C-left
+;;   URxvt.keysym.Control-apostrophe: \033Oc     ! C-right
+;;   URxvt.keysym.Control-comma:      \033Oa     ! C-up
+;;   URxvt.keysym.Control-period:     \033Ob     ! C-down
+;;--------------------------------------------------------------------------
+
+;; These would be key bindings that map with the xresources settings done
+;; above, and would make sense only if now using --no-window-system under
+;; a GUI, so they are commented out.
+;;(global-set-key (kbd "C-;") #'backward-word)
+;;(global-set-key (kbd "C-'") #'forward-word)
+;;(global-set-key (kbd "C-,") #'backward-paragraph)
+;;(global-set-key (kbd "C-.") #'forward-paragraph)
 
 ;;--------------------------------------------------------------------------
 ;; Load additional private settings

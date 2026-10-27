@@ -1,0 +1,44 @@
+#!/bin/bash
+#--------------------------------------------------------------------------
+# i3lock_wrapper
+#	Lock the screen with a single source image scaled to fit.
+#	Usage: i3lock_wrapper /path/to/image
+#
+#	In i3config, add as the following:
+#	exec --no-startup-id ~/bin/i3lock_wrapper ~/images/pix.jpg
+#	Copyright (c) 2010-2026, Michael Paquier
+#--------------------------------------------------------------------------
+
+set -euo pipefail
+
+if [[ $# -ne 1 ]]; then
+    echo "Usage: ${0##*/} IMAGE" >&2
+    exit 1
+fi
+
+SRC=$(realpath -- "$1")
+if [[ ! -f "$SRC" ]]; then
+    echo "${0##*/}: no such file: $SRC" >&2
+    exit 1
+fi
+
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/lock"
+mkdir -p "$CACHE_DIR"
+
+# Total size of the X screen (all monitors combined)
+RES=$(xdpyinfo | awk '/dimensions:/ {print $2}')   # e.g. 2560x1440
+
+# Cache key: source path hash + resolution
+KEY=$(printf '%s' "$SRC" | sha1sum | cut -c1-12)
+OUT="$CACHE_DIR/lock-$KEY-$RES.png"
+
+# Regenerate only if missing or the source is newer, as this can take a couple
+# of seconds to act.
+if [[ ! -f "$OUT" || "$SRC" -nt "$OUT" ]]; then
+    IM=$(command -v magick || command -v convert)
+    # Fill the screen, keep aspect ratio, crop the overflow from the center
+    "$IM" "$SRC" -resize "${RES}^" -gravity center -extent "$RES" "$OUT"
+fi
+
+# And lock
+exec i3lock -n -i "$OUT"

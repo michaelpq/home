@@ -71,14 +71,17 @@ bindsym $mod+Shift+Right move right
 bindsym $mod+f fullscreen
 
 # Split container (Horizontal=h and Vertical=v)
-bindsym $mod+h split h
-bindsym $mod+v split v
+# Note that the shortcuts are reversed.  Here I want a vertical
+# to be equal to a vertical LINE.  Same for horizontal.
+bindsym $mod+h split v
+bindsym $mod+v split h
 
 # Change container layout (stacked, tabbed, toggle split)
 bindsym $mod+shift+s layout stacking
 bindsym $mod+shift+t layout tabbed
-bindsym $mod+shift+h layout splith
-bindsym $mod+shift+v layout splitv
+# Like the previous splits, v and h are reversed.
+bindsym $mod+shift+h layout splitv
+bindsym $mod+shift+v layout splith
 
 # Toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
